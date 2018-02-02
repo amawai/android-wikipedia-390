@@ -420,6 +420,8 @@
     <string name="notification_syncing_pause_button">Pause</string>
     <string name="notification_syncing_resume_button">Resume</string>
     <string name="notification_syncing_cancel_button">Cancel</string>
+    <string name="notification_on_this_day_title">New On This Day Articles</string>
+    <string name="notification_on_this_day_desc">Tap to view</string>
     <!-- /Notifications -->
 
     <!-- The Feed -->
