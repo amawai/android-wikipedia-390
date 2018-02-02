@@ -333,5 +333,8 @@
 
         <receiver android:name=".savedpages.SavedPageSyncNotification" />
 
+        <receiver android:process=":remote" android:name=".feed.onthisday.OnThisDayNotifications"></receiver>
+
+
     </application>
 </manifest>
