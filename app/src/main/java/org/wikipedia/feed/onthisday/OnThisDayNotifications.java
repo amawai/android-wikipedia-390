@@ -23,14 +23,9 @@ public class OnThisDayNotifications extends BroadcastReceiver {
                 .setContentTitle(context.getString(R.string.notification_on_this_day_title))
                 .setContentText(context.getString(R.string.notification_on_this_day_desc))
                 .setContentIntent(pintent)
+                .setSmallIcon(R.drawable.ic_w_transparent)
                 .setAutoCancel(true);
-
-        if (true) {
-            notificationBuilder.setSmallIcon(R.drawable.ic_w_transparent);
-        } else {
-            notificationBuilder.setSmallIcon(R.mipmap.launcher);
-        }
-
+        
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(1, notificationBuilder.build());
     }
