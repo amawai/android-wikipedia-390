@@ -25,7 +25,7 @@ public class OnThisDayNotifications extends BroadcastReceiver {
                 .setContentIntent(pintent)
                 .setSmallIcon(R.drawable.ic_w_transparent)
                 .setAutoCancel(true);
-        
+
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(1, notificationBuilder.build());
     }

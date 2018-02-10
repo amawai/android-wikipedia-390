@@ -17,6 +17,11 @@
             android:defaultValue="true"
             android:title="@string/preference_title_show_link_previews"
             android:summary="@string/preference_summary_show_link_previews" />
+        <SwitchPreferenceCompat
+            android:key="onThisDayNotifications"
+            android:defaultValue="true"
+            android:title="Daily Notifications"
+            android:summary="Enable or disable on this day notifications" />
         <org.wikipedia.settings.PreferenceMultiLine
             android:key="@string/preference_key_color_theme"
             android:defaultValue="0"

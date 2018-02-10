@@ -45,6 +45,10 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
         findPreference(R.string.preference_key_sync_reading_lists)
                 .setOnPreferenceChangeListener(new SyncReadingListsListener());
 
+        //Mimicking Workflow of "syncReadingLists"
+        findPreference("onThisDayNotifications")
+                .setOnPreferenceChangeListener(new OnThisDayNotificationsListener());
+
         Preference eventLoggingOptInPref = findPreference(R.string.preference_key_eventlogging_opt_in);
         eventLoggingOptInPref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (!((boolean) newValue)) {
@@ -145,6 +149,18 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
             }
             // clicks are handled and preferences updated accordingly; don't pass the result through
             return false;
+        }
+    }
+
+    private final class OnThisDayNotificationsListener implements Preference.OnPreferenceChangeListener {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if (newValue == Boolean.FALSE) {
+                ((SwitchPreferenceCompat) preference).setChecked(false);
+                Prefs.setOnThisDayNotificationEnabled(false);
+            } else {
+                Prefs.setOnThisDayNotificationEnabled(true);
+            }
+            return true;
         }
     }
 

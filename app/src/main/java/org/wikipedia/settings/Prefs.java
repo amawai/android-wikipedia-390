@@ -483,6 +483,14 @@ public final class Prefs {
         return getBoolean(R.string.preference_key_sync_reading_lists, true);
     }
 
+    public static boolean isOnThisDayNotificationEnabled() {
+        return getBoolean("onThisDayNotifications", true);
+    }
+
+    public static void setOnThisDayNotificationEnabled(boolean enabled) {
+        setBoolean("onThisDayNotifications", enabled);
+    }
+
     public static void setReadingListSyncEnabled(boolean enabled) {
         setBoolean(R.string.preference_key_sync_reading_lists, enabled);
     }
