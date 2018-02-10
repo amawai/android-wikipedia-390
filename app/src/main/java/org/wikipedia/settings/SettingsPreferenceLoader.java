@@ -45,7 +45,7 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
         findPreference(R.string.preference_key_sync_reading_lists)
                 .setOnPreferenceChangeListener(new SyncReadingListsListener());
 
-        //Mimicking Workflow of "syncReadingLists"
+        //Mimicking Workflow of "syncReadingLists" (see final class for SyncReadlingListsListener for OnThisDayNotificaitonsListener class implementation)
         findPreference("onThisDayNotifications")
                 .setOnPreferenceChangeListener(new OnThisDayNotificationsListener());
 
@@ -152,6 +152,7 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
         }
     }
 
+    //OnThisDayNotificationsListener to dictate whether or not the OnThisDay Notification gets displayed
     private final class OnThisDayNotificationsListener implements Preference.OnPreferenceChangeListener {
         @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (newValue == Boolean.FALSE) {

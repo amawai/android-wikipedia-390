@@ -483,14 +483,6 @@ public final class Prefs {
         return getBoolean(R.string.preference_key_sync_reading_lists, true);
     }
 
-    public static boolean isOnThisDayNotificationEnabled() {
-        return getBoolean("onThisDayNotifications", true);
-    }
-
-    public static void setOnThisDayNotificationEnabled(boolean enabled) {
-        setBoolean("onThisDayNotifications", enabled);
-    }
-
     public static void setReadingListSyncEnabled(boolean enabled) {
         setBoolean(R.string.preference_key_sync_reading_lists, enabled);
     }
@@ -583,6 +575,16 @@ public final class Prefs {
 
     public static boolean suppressNotificationPolling() {
         return getBoolean(R.string.preference_key_suppress_notification_polling, false);
+    }
+
+    //OnThisDayNotifications Setting Check
+    public static boolean isOnThisDayNotificationEnabled() {
+        return getBoolean("onThisDayNotifications", true);
+    }
+
+    //OnThisDayNotificationsEnabled Setter
+    public static void setOnThisDayNotificationEnabled(boolean enabled) {
+        setBoolean("onThisDayNotifications", enabled);
     }
 
     public static boolean preferOfflineContent() {
