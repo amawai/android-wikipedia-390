@@ -231,6 +231,10 @@ dependencies {
     testImplementation mockitoCore
     testImplementation 'org.robolectric:robolectric:3.3.2'
     testImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+    testImplementation "org.powermock:powermock-module-junit4:1.6.6"
+    testImplementation "org.powermock:powermock-module-junit4-rule:1.6.6"
+    testImplementation "org.powermock:powermock-api-mockito:1.6.6"
+    testImplementation "org.powermock:powermock-classloading-xstream:1.6.6"
 
     androidTestImplementation mockitoCore
     androidTestRuntimeOnly 'com.crittercism.dexmaker:dexmaker:1.4'
@@ -242,6 +246,7 @@ dependencies {
     androidTestImplementation "com.android.support.test:rules:$testingSupportVersion" // JUnit Rules
     androidTestImplementation "com.android.support.test:runner:$testingSupportVersion" // Android JUnit Runner
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+
 }
 
 private setSigningConfigKey(config, Properties props) {

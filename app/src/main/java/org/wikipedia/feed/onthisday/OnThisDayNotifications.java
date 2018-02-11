@@ -33,7 +33,9 @@ public class OnThisDayNotifications extends BroadcastReceiver {
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID, NotificationManager.IMPORTANCE_LOW);
             manager.createNotificationChannel(notificationChannel);
         }
-        manager.notify(1, notificationBuilder.build());
+        if (manager != null) {
+            manager.notify(1, notificationBuilder.build());
+        }
     }
 
 }
