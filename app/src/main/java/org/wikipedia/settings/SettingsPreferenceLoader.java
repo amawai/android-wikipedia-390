@@ -158,12 +158,12 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
         @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (newValue == Boolean.TRUE) {
                 ((SwitchPreferenceCompat) preference).setChecked(true);
-                Prefs.setReadingListSyncEnabled(true);
+                Prefs.setOnThisDayNotificationEnabled(true);
                 ((BaseActivity) getActivity()).onThisDayNotificationTransition();
             }
             else {
                 ((SwitchPreferenceCompat) preference).setChecked(false);
-                Prefs.setReadingListSyncEnabled(false);
+                Prefs.setOnThisDayNotificationEnabled(false);
                 ((BaseActivity) getActivity()).onThisDayNotificationTransition();
             }
             return true;
