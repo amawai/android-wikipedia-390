@@ -1,5 +1,5 @@
 /*
-package org.wikipedia.settings;
+package org.wikipedia.activity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -28,11 +28,10 @@ import static org.powermock.api.mockito.PowerMockito.when;
 //@RunWith(RobolectricTestRunner.class)
 //@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
 //@PrepareForTest(Context.class)
-public class SettingsPreferenceLoaderTest {
+public class BaseActitivtyTest {
     @Test
-    public void testMockLoadPreferences() {
-        SettingsPreferenceLoader mockSettingsPreferenceLoader = mock(SettingsPreferenceLoader.class);
-        verify(mockSettingsPreferenceLoader).loadPreferences();
+    public void testMockOnThisDayNotificationTransition() {
+
     }
 }
 */

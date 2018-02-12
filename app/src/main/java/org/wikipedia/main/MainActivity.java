@@ -33,6 +33,10 @@ public class MainActivity extends SingleFragmentToolbarActivity<MainFragment>
         if (Prefs.isInitialOnboardingEnabled() && savedInstanceState == null) {
             startActivity(InitialOnboardingActivity.newIntent(this));
         }
+
+        //When the app is initially launched, the notification will either be enabled or disabled.
+        onThisDayNotificationTransition();
+
     }
 
     @Override protected MainFragment createFragment() {
