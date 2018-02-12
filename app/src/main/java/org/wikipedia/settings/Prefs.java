@@ -579,12 +579,12 @@ public final class Prefs {
 
     //OnThisDayNotifications Setting Check
     public static boolean isOnThisDayNotificationEnabled() {
-        return getBoolean("onThisDayNotifications", true);
+        return getBoolean(R.string.preference_key_on_this_day_notifications, true);
     }
 
     //OnThisDayNotificationsEnabled Setter
     public static void setOnThisDayNotificationEnabled(boolean enabled) {
-        setBoolean("onThisDayNotifications", enabled);
+        setBoolean(R.string.preference_key_on_this_day_notifications, enabled);
     }
 
     public static boolean preferOfflineContent() {

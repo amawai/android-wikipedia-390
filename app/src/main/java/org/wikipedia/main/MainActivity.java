@@ -33,11 +33,6 @@ public class MainActivity extends SingleFragmentToolbarActivity<MainFragment>
         if (Prefs.isInitialOnboardingEnabled() && savedInstanceState == null) {
             startActivity(InitialOnboardingActivity.newIntent(this));
         }
-
-        if (Prefs.isOnThisDayNotificationEnabled()) {
-            OnThisDayAlarmService onThisDayAlarmService = new OnThisDayAlarmService(this);
-            onThisDayAlarmService.startAlarm();
-        }
     }
 
     @Override protected MainFragment createFragment() {
