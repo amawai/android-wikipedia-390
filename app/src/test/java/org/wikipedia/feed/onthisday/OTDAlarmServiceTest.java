@@ -103,8 +103,7 @@ public class OTDAlarmServiceTest {
         //test that a new alarm is always scheduled
 
         alarm.startAlarm();
-        //assertNull(shadowAlarmManager.getNextScheduledAlarm());
-
+    
         ShadowAlarmManager.ScheduledAlarm scheduledAlarm = shadowAlarmManager.getNextScheduledAlarm();
         //test that alarmmanager sending intent every day
         assertEquals(AlarmManager.INTERVAL_DAY, scheduledAlarm.interval);
