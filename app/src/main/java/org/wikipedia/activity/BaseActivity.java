@@ -27,6 +27,7 @@ import org.wikipedia.crash.CrashReportActivity;
 import org.wikipedia.events.NetworkConnectEvent;
 import org.wikipedia.events.ThemeChangeEvent;
 import org.wikipedia.events.WikipediaZeroEnterEvent;
+import org.wikipedia.feed.onthisday.OnThisDayAlarmService;
 import org.wikipedia.offline.Compilation;
 import org.wikipedia.offline.OfflineManager;
 import org.wikipedia.recurring.RecurringTasksExecutor;
@@ -153,6 +154,19 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         } else {
             searchOfflineCompilations(force);
+        }
+    }
+
+    //This method will essentially create the alarm
+    //and start or stop it depending on the value of the isOnThisDayNotificationEnabled,
+    //set within the OnThisDayNotification listener inner class of the SettingsPreferenceLoader class
+    public void onThisDayNotificationTransition() {
+        OnThisDayAlarmService onThisDayAlarmService = new OnThisDayAlarmService(this);
+        if (Prefs.isOnThisDayNotificationEnabled() == true) {
+            onThisDayAlarmService.startAlarm();
+        }
+        else if (Prefs.isOnThisDayNotificationEnabled() == false) {
+            onThisDayAlarmService.cancelAlarm();
         }
     }
 

@@ -577,6 +577,16 @@ public final class Prefs {
         return getBoolean(R.string.preference_key_suppress_notification_polling, false);
     }
 
+    //OnThisDayNotifications Setting Check
+    public static boolean isOnThisDayNotificationEnabled() {
+        return getBoolean(R.string.preference_key_on_this_day_notifications, true);
+    }
+
+    //OnThisDayNotificationsEnabled Setter
+    public static void setOnThisDayNotificationEnabled(boolean enabled) {
+        setBoolean(R.string.preference_key_on_this_day_notifications, enabled);
+    }
+
     public static boolean preferOfflineContent() {
         return getBoolean(R.string.preference_key_prefer_offline_content, false);
     }

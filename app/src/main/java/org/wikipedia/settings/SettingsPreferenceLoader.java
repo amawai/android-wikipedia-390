@@ -12,6 +12,7 @@ import org.wikipedia.BuildConfig;
 import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.activity.BaseActivity;
+import org.wikipedia.feed.onthisday.OnThisDayAlarmService;
 import org.wikipedia.theme.ThemeFittingRoomActivity;
 import org.wikipedia.util.ReleaseUtil;
 import org.wikipedia.util.StringUtil;
@@ -44,6 +45,10 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
 
         findPreference(R.string.preference_key_sync_reading_lists)
                 .setOnPreferenceChangeListener(new SyncReadingListsListener());
+
+        //Mimicking Workflow of "syncReadingLists" (see OnThisDayNotificaitonsListener class implementation below)
+        findPreference(R.string.preference_key_on_this_day_notifications)
+                .setOnPreferenceChangeListener(new OnThisDayNotificationsListener());
 
         Preference eventLoggingOptInPref = findPreference(R.string.preference_key_eventlogging_opt_in);
         eventLoggingOptInPref.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -145,6 +150,23 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
             }
             // clicks are handled and preferences updated accordingly; don't pass the result through
             return false;
+        }
+    }
+
+    //OnThisDayNotificationsListener to dictate whether or not the OnThisDay Notification gets displayed
+    private final class OnThisDayNotificationsListener implements Preference.OnPreferenceChangeListener {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if (newValue == Boolean.TRUE) {
+                ((SwitchPreferenceCompat) preference).setChecked(true);
+                Prefs.setOnThisDayNotificationEnabled(true);
+                ((BaseActivity) getActivity()).onThisDayNotificationTransition();
+            }
+            else {
+                ((SwitchPreferenceCompat) preference).setChecked(false);
+                Prefs.setOnThisDayNotificationEnabled(false);
+                ((BaseActivity) getActivity()).onThisDayNotificationTransition();
+            }
+            return true;
         }
     }
 
