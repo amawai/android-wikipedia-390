@@ -101,10 +101,10 @@ public class OTDAlarmServiceTest {
         ShadowAlarmManager shadowAlarmManager = shadowOf(alarmManager);
         OnThisDayAlarmService alarm = new OnThisDayAlarmService(context);
 
-        //test that a new alarm is always scheduled
-        assertNotNull(shadowAlarmManager.getNextScheduledAlarm());
-
         alarm.startAlarm();
+
+        //Check to see if an alarm has been scheduled
+        assertNotNull(shadowAlarmManager.getNextScheduledAlarm());
 
         ShadowAlarmManager.ScheduledAlarm scheduledAlarm = shadowAlarmManager.getNextScheduledAlarm();
         //test that alarmmanager sending intent every day
