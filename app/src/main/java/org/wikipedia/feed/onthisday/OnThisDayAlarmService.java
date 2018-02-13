@@ -29,6 +29,10 @@ public class OnThisDayAlarmService {
         am.setRepeating(AlarmManager.RTC, daily, AlarmManager.INTERVAL_DAY, mAlarmSender);
     }
 
+    public void supercedeAlarmManage(AlarmManager alarmManager) {
+        am = alarmManager;
+    }
+
     //Cancels the alarm to disable the notification
     public void cancelAlarm() {
         if (mAlarmSender != null && am != null) {

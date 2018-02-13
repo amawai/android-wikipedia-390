@@ -54,14 +54,16 @@ public class OTDAlarmServiceTest {
     public void setUp() {
         context = PowerMockito.mock(Context.class);
         intent = mock(Intent.class);
-        alarmManager = mock(AlarmManager.class);
+        alarmManager = PowerMockito.mock(AlarmManager.class);
         mAlarmSender = mock(PendingIntent.class);
     }
 
     @Test
     public void testGetSystemService() {
         OnThisDayAlarmService alarmService = new OnThisDayAlarmService(context);
-        when(context.getSystemService(Context.ALARM_SERVICE)).thenReturn(mock(AlarmManager.class));
+        when(context.getSystemService(Context.ALARM_SERVICE)).thenReturn((AlarmManager) RuntimeEnvironment.application.getSystemService(Context.ALARM_SERVICE));
+
+        alarmService.supercedeAlarmManage(alarmManager);
 
         alarmService.startAlarm();
         //test to check that the getSystemService gets using Context.ALARM_SERVICE
