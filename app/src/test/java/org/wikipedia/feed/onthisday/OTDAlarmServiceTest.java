@@ -28,6 +28,7 @@ import org.robolectric.shadows.ShadowAlarmManager;
 import org.wikipedia.R;
 import org.wikipedia.main.MainActivity;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -101,9 +102,10 @@ public class OTDAlarmServiceTest {
         OnThisDayAlarmService alarm = new OnThisDayAlarmService(context);
 
         //test that a new alarm is always scheduled
+        assertNotNull(shadowAlarmManager.getNextScheduledAlarm());
 
         alarm.startAlarm();
-    
+
         ShadowAlarmManager.ScheduledAlarm scheduledAlarm = shadowAlarmManager.getNextScheduledAlarm();
         //test that alarmmanager sending intent every day
         assertEquals(AlarmManager.INTERVAL_DAY, scheduledAlarm.interval);
