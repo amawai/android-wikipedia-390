@@ -34,8 +34,9 @@ public class MainActivity extends SingleFragmentToolbarActivity<MainFragment>
             startActivity(InitialOnboardingActivity.newIntent(this));
         }
 
-        OnThisDayAlarmService onThisDayAlarmService = new OnThisDayAlarmService(this);
-        onThisDayAlarmService.startAlarm();
+        //When the app is initially launched, the notification will either be enabled or disabled.
+        onThisDayNotificationTransition();
+
     }
 
     @Override protected MainFragment createFragment() {
