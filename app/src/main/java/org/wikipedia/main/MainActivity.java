@@ -11,6 +11,7 @@ import android.view.View;
 import org.wikipedia.R;
 import org.wikipedia.activity.SingleFragmentToolbarActivity;
 import org.wikipedia.appshortcuts.AppShortcuts;
+import org.wikipedia.feed.onthisday.OnThisDayAlarmService;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.onboarding.InitialOnboardingActivity;
 import org.wikipedia.settings.Prefs;
@@ -32,6 +33,10 @@ public class MainActivity extends SingleFragmentToolbarActivity<MainFragment>
         if (Prefs.isInitialOnboardingEnabled() && savedInstanceState == null) {
             startActivity(InitialOnboardingActivity.newIntent(this));
         }
+
+        //When the app is initially launched, the notification will either be enabled or disabled.
+        onThisDayNotificationTransition();
+
     }
 
     @Override protected MainFragment createFragment() {

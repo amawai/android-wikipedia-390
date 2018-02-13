@@ -3,6 +3,7 @@ package org.wikipedia.recurring;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.alphaupdater.AlphaUpdateChecker;
 import org.wikipedia.concurrency.SaneAsyncTask;
+import org.wikipedia.feed.onthisday.OnThisDayNotifications;
 import org.wikipedia.page.shareafact.SharedImageCleanupTask;
 import org.wikipedia.settings.RemoteConfigRefreshTask;
 import org.wikipedia.util.ReleaseUtil;
