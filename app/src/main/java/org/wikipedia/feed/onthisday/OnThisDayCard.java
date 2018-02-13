@@ -29,7 +29,7 @@ public class OnThisDayCard extends Card {
         this.date = DateUtil.getDefaultDateFor(age);
         this.wiki = wiki;
         this.age = age;
-        int randomIndex = new Random().nextInt(events.size() - 1);
+        int randomIndex = new Random().nextInt(events.size());
         eventShownOnCard = events.get(randomIndex);
         this.nextYear = randomIndex + 1 < events.size() ? events.get(randomIndex + 1).year() : eventShownOnCard.year();
     }
@@ -72,6 +72,12 @@ public class OnThisDayCard extends Card {
 
     int nextYear() {
         return nextYear;
+    }
+
+    @NonNull public String shareString() {
+        return dayString() + ", " + year() + " (" + DateUtil.getYearDifferenceString(year()) + "): \n" +
+                text().toString() + "\n\n" +
+                "~ Via Wikipedia";
     }
 
     @NonNull public WikiSite wiki() {
