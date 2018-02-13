@@ -74,6 +74,12 @@ public class OnThisDayCard extends Card {
         return nextYear;
     }
 
+    @NonNull public String shareString() {
+        return dayString() + ", " + year() + " (" + DateUtil.getYearDifferenceString(year()) + "): \n" +
+                text().toString() + "\n\n" +
+                "~ Via Wikipedia";
+    }
+
     @NonNull public WikiSite wiki() {
         return wiki;
     }
