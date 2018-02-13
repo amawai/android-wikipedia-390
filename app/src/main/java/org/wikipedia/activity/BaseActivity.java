@@ -157,6 +157,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    //This method will essentially create the alarm
+    //and start or stop it depending on the value of the isOnThisDayNotificationEnabled,
+    //set within the OnThisDayNotification listener inner class of the SettingsPreferenceLoader class
     public void onThisDayNotificationTransition() {
         OnThisDayAlarmService onThisDayAlarmService = new OnThisDayAlarmService(this);
         if (Prefs.isOnThisDayNotificationEnabled() == true) {
