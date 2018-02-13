@@ -246,6 +246,7 @@ dependencies {
     androidTestImplementation "com.android.support.test:rules:$testingSupportVersion" // JUnit Rules
     androidTestImplementation "com.android.support.test:runner:$testingSupportVersion" // Android JUnit Runner
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+
 }
 
 private setSigningConfigKey(config, Properties props) {

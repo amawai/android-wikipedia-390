@@ -1,5 +1,6 @@
 package org.wikipedia.feed.onthisday;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -27,7 +28,14 @@ public class OnThisDayNotifications extends BroadcastReceiver {
                 .setAutoCancel(true);
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(1, notificationBuilder.build());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID, NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(notificationChannel);
+        }
+        if (manager != null) {
+            manager.notify(1, notificationBuilder.build());
+        }
     }
 
 }
