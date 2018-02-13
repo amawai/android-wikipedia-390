@@ -2,9 +2,12 @@ package org.wikipedia.feed.onthisday;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -40,6 +43,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 public class OnThisDayCardView extends DefaultFeedCardView<OnThisDayCard> implements ItemTouchHelperSwipeAdapter.SwipeableView, OnThisDayActionsDialog.Callback {
     @BindView(R.id.view_on_this_day_card_header) CardHeaderView headerView;
@@ -176,7 +181,13 @@ public class OnThisDayCardView extends DefaultFeedCardView<OnThisDayCard> implem
     }
 
     @OnClick({R.id.view_card_on_this_day_footer_share_button}) void onShareFooterClick() {
-
+        OnThisDayCard card = super.getCard();
+        Context ctx = getContext();
+        Intent intent = ShareCompat.IntentBuilder.from((Activity) ctx)
+                .setType("text/plain")
+                .setText(card.shareString())
+                .getIntent();
+        startActivity(ctx, intent, null);
     }
     
 
