@@ -28,7 +28,7 @@ import org.robolectric.shadows.ShadowAlarmManager;
 import org.wikipedia.R;
 import org.wikipedia.main.MainActivity;
 
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
