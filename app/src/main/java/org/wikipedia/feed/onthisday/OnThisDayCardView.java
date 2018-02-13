@@ -175,6 +175,11 @@ public class OnThisDayCardView extends DefaultFeedCardView<OnThisDayCard> implem
                 OnThisDayActivity.INVOKE_SOURCE_CARD_FOOTER), options.toBundle());
     }
 
+    @OnClick({R.id.view_card_on_this_day_footer_share_button}) void onShareFooterClick() {
+
+    }
+    
+
     private void setPagesRecycler(OnThisDayCard card) {
         if (card.pages() != null) {
             RecyclerAdapter recyclerAdapter = new RecyclerAdapter(card.pages(), card.wiki(), true);
