@@ -1,11 +1,4 @@
-/*
 package org.wikipedia.activity;
-
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,24 +7,24 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.Shadows;
-import org.wikipedia.R;
-import org.wikipedia.feed.onthisday.OnThisDayAlarmService;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
-//@RunWith(RobolectricTestRunner.class)
-//@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
-//@PrepareForTest(Context.class)
-public class BaseActitivtyTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(BaseActivity.class)
+public class BaseActivityTest {
     @Test
+    //Verify that the operation onThisDayNotification is being properly called
     public void testMockOnThisDayNotificationTransition() {
-
+        PowerMockito.mock(BaseActivity.class);
+        BaseActivity mockBaseActivity = mock(BaseActivity.class, Mockito.CALLS_REAL_METHODS);
+        PowerMockito.doAnswer((i) -> {
+            return null;
+        }).when(mockBaseActivity).onThisDayNotificationTransition();
     }
 }
-*/
+
+

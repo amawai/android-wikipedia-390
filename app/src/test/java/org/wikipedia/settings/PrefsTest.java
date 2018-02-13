@@ -1,7 +1,6 @@
 package org.wikipedia.settings;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -19,9 +18,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Prefs.class)
 public class PrefsTest {
-
     @Test
-    public void testIsOnThisDayNotificationEnabledTrueCase() {
+    public void testMockIsOnThisDayNotificationEnabledTrueCase() {
         PowerMockito.mockStatic(Prefs.class);
         Prefs mockPref = mock(Prefs.class);
         PowerMockito.when(mockPref.isOnThisDayNotificationEnabled()).thenReturn(true);
@@ -29,7 +27,7 @@ public class PrefsTest {
     }
 
     @Test
-    public void testIsOnThisDayNotificationFalseCase() {
+    public void testMockIsOnThisDayNotificationFalseCase() {
         PowerMockito.mockStatic(Prefs.class);
         Prefs mockPref = mock(Prefs.class);
         PowerMockito.when(mockPref.isOnThisDayNotificationEnabled()).thenReturn(false);
@@ -38,7 +36,7 @@ public class PrefsTest {
 
 
     @Test
-    public void testSetOnThisDayNotificationEnabled() {
+    public void testMockSetOnThisDayNotificationEnabled() {
         PowerMockito.mockStatic(Prefs.class);
         Prefs mockPref = mock(Prefs.class);
         verify(mockPref).setOnThisDayNotificationEnabled(true);

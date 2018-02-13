@@ -1,4 +1,3 @@
-/*
 package org.wikipedia.settings;
 
 import android.app.Notification;
@@ -35,4 +34,3 @@ public class SettingsPreferenceLoaderTest {
         verify(mockSettingsPreferenceLoader).loadPreferences();
     }
 }
-*/
