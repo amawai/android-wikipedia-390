@@ -49,57 +49,34 @@ public class OTDAlarmServiceTest {
     Intent intent;
     OnThisDayNotifications onThisDayNotifications;
     AlarmManager alarmManager;
-    Calendar calendar;
 
     @Before
     public void setUp() {
         context = PowerMockito.mock(Context.class);
-        calendar = mock(Calendar.class);
         intent = mock(Intent.class);
-        alarmManager = mock(AlarmManager.class);
+        alarmManager = PowerMockito.mock(AlarmManager.class);
         mAlarmSender = mock(PendingIntent.class);
-    }
-
-    @Test
-    public void testStartAlarm() {
-        intent = new Intent(RuntimeEnvironment.application, OnThisDayAlarmService.class);
-        mAlarmSender = PendingIntent.getBroadcast(RuntimeEnvironment.application, 0, intent, 0);
-
-        //mock the 2pm object
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, 14);
-        long daily = calendar.getTimeInMillis();
-        alarmManager.setRepeating(AlarmManager.RTC, daily, AlarmManager.INTERVAL_DAY, mAlarmSender);
-        //test that the alarm manager has scheduled the alarm
-        verify(alarmManager).setRepeating(AlarmManager.RTC, daily, AlarmManager.INTERVAL_DAY,mAlarmSender);
-    }
-
-    @Test
-    public void testStartAlarmService() {
-        OnThisDayAlarmService mockAlarm = mock(OnThisDayAlarmService.class);
-
-        mockAlarm.startAlarm();
-        //test to check that startAlarm method is called
-        verify(mockAlarm).startAlarm();
     }
 
     @Test
     public void testGetSystemService() {
         OnThisDayAlarmService alarmService = new OnThisDayAlarmService(context);
-        when(context.getSystemService(Context.ALARM_SERVICE)).thenReturn(mock(AlarmManager.class));
+        when(context.getSystemService(Context.ALARM_SERVICE)).thenReturn((AlarmManager) RuntimeEnvironment.application.getSystemService(Context.ALARM_SERVICE));
+
+        alarmService.supercedeAlarmManage(alarmManager);
 
         alarmService.startAlarm();
-        //test to check that the getSystemService gets called by the alarmservice object
+        //test to check that the getSystemService gets using Context.ALARM_SERVICE
         verify(context).getSystemService(Context.ALARM_SERVICE);
     }
 
 
     @Test
-    public void testAlarmManager() throws Exception {
-        Context context = RuntimeEnvironment.application.getApplicationContext();
+    public void testAlarmManagerInterval() throws Exception {
+        Context runTimeContext = RuntimeEnvironment.application.getApplicationContext();
         AlarmManager alarmManager = (AlarmManager) RuntimeEnvironment.application.getSystemService(Context.ALARM_SERVICE);
         ShadowAlarmManager shadowAlarmManager = shadowOf(alarmManager);
-        OnThisDayAlarmService alarm = new OnThisDayAlarmService(context);
+        OnThisDayAlarmService alarm = new OnThisDayAlarmService(runTimeContext);
 
         alarm.startAlarm();
 
