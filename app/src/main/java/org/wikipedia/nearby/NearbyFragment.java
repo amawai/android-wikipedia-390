@@ -397,8 +397,9 @@ public class NearbyFragment extends Fragment {
 
             onLoading();
 
-            Log.d("NEARBYTHING", "we are in fetchtaskrunnable");
-            String location = "Amsterdam";
+            String location = "Tokyo";
+            double lat = 0;
+            double longi = 0;
             Geocoder gc = new Geocoder(getContext());
             try {
                 List<Address> addresses= gc.getFromLocationName(location, 5);
@@ -407,6 +408,8 @@ public class NearbyFragment extends Fragment {
                 for(Address a : addresses){
                     if(a.hasLatitude() && a.hasLongitude()){
                         Log.d("LATSLONGS", "Lat: " + a.getLatitude() + ", Long: " + a.getLongitude());
+                        lat = a.getLatitude();
+                        longi = a.getLongitude();
                     }
                 }
             } catch (IOException e) {
@@ -415,8 +418,7 @@ public class NearbyFragment extends Fragment {
             }
 
             WikiSite wiki = WikipediaApp.getInstance().getWikiSite();
-            client.request(wiki, mapboxMap.getCameraPosition().target.getLatitude(),
-                    mapboxMap.getCameraPosition().target.getLongitude(), getMapRadius(),
+            client.request(wiki, lat,longi, getMapRadius(),
                     new NearbyClient.Callback() {
                         @Override public void success(@NonNull Call<MwQueryResponse> call,
                                                       @NonNull NearbyResult result) {
@@ -424,6 +426,10 @@ public class NearbyFragment extends Fragment {
                                 return;
                             }
                             lastResult = result;
+                            for (NearbyPage item : result.getList()) {
+                                Log.d("NEARBY_TITLE", "mM: " + item.getTitle());
+
+                            }
                             showNearbyPages(result);
                             onLoaded();
                         }
