@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +58,7 @@ import org.wikipedia.util.StringUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -392,6 +396,23 @@ public class NearbyFragment extends Fragment {
             }
 
             onLoading();
+
+            Log.d("NEARBYTHING", "we are in fetchtaskrunnable");
+            String location = "Amsterdam";
+            Geocoder gc = new Geocoder(getContext());
+            try {
+                List<Address> addresses= gc.getFromLocationName(location, 5);
+                Log.d("NEARBYTHING", "no error wow");
+                List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
+                for(Address a : addresses){
+                    if(a.hasLatitude() && a.hasLongitude()){
+                        Log.d("LATSLONGS", "Lat: " + a.getLatitude() + ", Long: " + a.getLongitude());
+                    }
+                }
+            } catch (IOException e) {
+                Log.d("NEARBY_ERROR", "something bad happened");
+                e.printStackTrace();
+            }
 
             WikiSite wiki = WikipediaApp.getInstance().getWikiSite();
             client.request(wiki, mapboxMap.getCameraPosition().target.getLatitude(),
