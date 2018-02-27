@@ -452,7 +452,7 @@ public class ReadingListDbHelper {
     }
 
     //Takes in a reading list and returns hashmap with the key being the title of the article and value, the link
-    private HashMap<String, String> getLinks(@NonNull ReadingList list) {
+    public HashMap<String, String> getLinks(@NonNull ReadingList list) {
         SQLiteDatabase db = getReadableDatabase();
         HashMap<String, String> linkMap = new HashMap();
         ReadingListPage savedLink;
