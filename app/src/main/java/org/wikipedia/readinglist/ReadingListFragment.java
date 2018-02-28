@@ -618,6 +618,11 @@ public class ReadingListFragment extends Fragment implements ReadingListItemActi
         public void onRemoveAllOffline(@NonNull ReadingList readingList) {
             removeSelectedPagesFromOffline(readingList.pages());
         }
+
+        @Override
+        public void onShare(@NonNull ReadingList readingList) {
+
+        }
     }
 
     private class ReadingListPageItemHolder extends DefaultViewHolder<PageItemView<ReadingListPage>>
