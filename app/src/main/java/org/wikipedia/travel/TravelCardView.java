@@ -37,7 +37,6 @@ public class TravelCardView extends StaticCardView<TravelCard> {
     protected void onActionClick(View v) { openTravelPlanner(); }
 
     private void openTravelPlanner() {
-        Toast.makeText(getContext(),"Action clicked", Toast.LENGTH_SHORT).show();
         getContext().startActivity(new Intent(TravelPlannerActivity.newIntent(getContext())));
     }
 }

@@ -13,9 +13,6 @@ import org.wikipedia.activity.SingleFragmentActivity;
  */
 
 public class TravelPlannerActivity extends SingleFragmentActivity<TravelFragment> {
-
-    protected static final String MOST_READ_CARD = "item";
-
     public static Intent newIntent(@NonNull Context context) {
         return new Intent(context, TravelPlannerActivity.class);
     }
