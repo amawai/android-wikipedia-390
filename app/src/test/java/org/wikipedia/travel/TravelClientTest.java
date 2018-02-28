@@ -2,10 +2,12 @@ package org.wikipedia.travel;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.wikipedia.dataclient.WikiSite;
 import org.wikipedia.feed.model.Card;
 import org.wikipedia.feed.model.CardType;
 import org.wikipedia.feed.travel.TravelCard;
+import org.wikipedia.test.TestRunner;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -14,7 +16,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by Artem on 2018-02-27.
  */
-
+@RunWith(TestRunner.class)
 public class TravelClientTest {
     private WikiSite wiki;
     private TravelClient client;
