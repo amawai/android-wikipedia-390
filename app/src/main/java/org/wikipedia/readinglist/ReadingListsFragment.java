@@ -337,19 +337,17 @@ public class ReadingListsFragment extends Fragment {
 
         @Override
         public void onShare(@NonNull ReadingList readingList) {
-            ReadingListDbHelper dbHelper = new ReadingListDbHelper();
-            HashMap<String, String> linkMap = dbHelper.getLinks(readingList);
-
-            String output = "Here is my reading list:\n\n";
-
-            for (String key : linkMap.keySet()){
-                output += (key + "- " + linkMap.get(key) + "\n");
+            String listOfArticles = shareList(readingList);
+            if (listOfArticles != null) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, listOfArticles);
+                startActivity(Intent.createChooser(sharingIntent, listOfArticles));
             }
-
-            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, output);
-            startActivity(Intent.createChooser(sharingIntent, output));
+            else {
+                String message = "Please add an article to this reading list.";
+                FeedbackUtil.showMessage(getActivity(), message);
+            }
         }
     }
 
@@ -383,6 +381,24 @@ public class ReadingListsFragment extends Fragment {
             funnel.logDeleteList(readingList, readingLists.size());
             updateLists();
         }
+    }
+
+    private String shareList(@NonNull ReadingList readingList) {
+        updateLists();
+        ReadingListDbHelper dbHelper = new ReadingListDbHelper();
+        HashMap<String, String> linkMap = dbHelper.getLinks(readingList);
+        if (linkMap.size() > 0) {
+            String output = "Here is my reading list:\n\n";
+
+            for (String key : linkMap.keySet()){
+                output += (key + ": " + linkMap.get(key) + "\n");
+            }
+            return output;
+        }
+        else {
+            return null;
+        }
+
     }
 
     private void showDeleteListUndoSnackbar(final ReadingList readingList) {
