@@ -228,6 +228,9 @@
             android:name=".feed.mostread.MostReadArticlesActivity"
             android:theme="@style/AppTheme.ActionBar"/>
 
+        <activity android:name=".travel.TravelPlannerActivity"
+            android:theme="@style/AppTheme.ActionBar" />
+
         <activity android:name=".feed.onthisday.OnThisDayActivity" />
 
         <activity android:name=".feed.configure.ConfigureActivity"

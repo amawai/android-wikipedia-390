@@ -20,6 +20,7 @@ import org.wikipedia.feed.searchbar.SearchCardView;
 import org.wikipedia.feed.view.FeedCardView;
 import org.wikipedia.model.EnumCode;
 import org.wikipedia.model.EnumCodeMap;
+import org.wikipedia.travel.TravelCardView;
 
 public enum CardType implements EnumCode {
     SEARCH_BAR(0) {
@@ -104,6 +105,11 @@ public enum CardType implements EnumCode {
     ONBOARDING_CUSTOMIZE_FEED(19) {
         @NonNull @Override public FeedCardView<?> newView(@NonNull Context ctx) {
             return new AnnouncementCardView(ctx);
+        }
+    },
+    TRAVEL(20) {
+        @NonNull @Override public FeedCardView<?> newView(@NonNull Context ctx) {
+            return new TravelCardView(ctx);
         }
     },
     OFFLINE(98) {
