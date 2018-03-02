@@ -11,20 +11,59 @@ import java.util.List;
 //This class constitutes a basic Trip class with a list of destinations (also implemented as an inner class below)
 //and a departure date
 public class Trip {
-
+    //trip id for database storage
+    private long id;
+    //trip title, also to be used to signfiy the germane list in the database
+    @NonNull private String title;
     @SuppressWarnings("unused") @Nullable private List<Destination> destinations;
+    @SuppressWarnings("unused") @Nullable private Destination singleDestination;
     @SuppressWarnings("unused") @Nullable private Date departureDate;
 
+    //Initialization of database table for trips with single destinations
+    public static final TripDatabaseTable DATABASE_TABLE = new TripDatabaseTable();
+
     //Parametrized constructor for a trip
-    public Trip(List<Destination> destinations, Date departureDate) {
+    public Trip(String title, List<Destination> destinations, Date departureDate) {
+        this.title = title;
         this.destinations = destinations;
         this.departureDate = departureDate;
+    }
+
+    //Parametrized constructor for a trip, only account for one destination (also will be constructor used for storage in database)
+    public Trip(String title, Destination singleDestination, Date departureDate) {
+        this.title = title;
+        this.singleDestination = singleDestination;
+        this.departureDate = departureDate;
+    }
+
+    //Setters and getters for the trip's id
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    //Setters and getters for the trip's title
+    @NonNull public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(@NonNull String title) {
+        this.title = title;
     }
 
     //Getter method for the list of destinations that the trip will entail
     @NonNull
     public List<Destination> getTripDestinations() {
         return (this.destinations != null) ? this.destinations : Collections.emptyList();
+    }
+
+    //Getter method for a single destination that the trip will entail (again this will be used for database storage for the time being)
+    @NonNull
+    public Destination getDestination() {
+        return (this.singleDestination != null) ? this.singleDestination : null;
     }
 
     //Method to add a destination to the list of destinations that the trip will entail
@@ -53,33 +92,38 @@ public class Trip {
 
     //Checking if the trip actually has destinations
     public boolean areThereDestinationsSelectedForTrip() {
-        return (!(this.destinations.isEmpty()));
+        return (!(this.destinations.isEmpty()) && this.destinations != null);
     }
 
     //Inner Destination Class
     public static class Destination {
-        @SuppressWarnings("unused,NullableProblems") @Required @NonNull private List<Location> placesToVisit;
+        @SuppressWarnings("unused,NullableProblems") @Required @Nullable private List<Location> landmarks;
         @SuppressWarnings("unused,NullableProblems") @Required @NonNull private String destinationName;
 
         //Parametrized constructor for a destination
         public Destination(List<Location> placesToVisit, String destinationName) {
-            this.placesToVisit = placesToVisit;
+            this.landmarks = placesToVisit;
             this.destinationName = destinationName;
         }
 
-        //Getter method for the list of attractive locations that a destination has
-        @NonNull
-        public List<Location> getDestinationPlacesToVisit() {
-            return (this.placesToVisit != null) ? this.placesToVisit : Collections.emptyList();
+        //Parametrized constructor for a destination, for storage in database
+        public Destination(String destinationName) {
+            this.destinationName = destinationName;
         }
 
-        //Method to add a location to the list of location that a destination has
-        public void addPlaceToVisit(Location location) {
+        //Getter method for the list of landmarks that a destination has
+        @NonNull
+        public List<Location> getDestinationPlacesToVisit() {
+            return (this.landmarks != null) ? this.landmarks : Collections.emptyList();
+        }
+
+        //Method to add a landmark to the list of landmarks that a destination has
+        public void addLandmark(Location location) {
             if (location != null) {
-                placesToVisit.add(location);
+                landmarks.add(location);
             }
             else
-                System.out.println("The place to visit object could not be added.");
+                System.out.println("The landmark could not be added.");
         }
 
         //Getter method for the trip's departure date
@@ -95,7 +139,7 @@ public class Trip {
 
         //Checking if the destination actually has places to visit
         public boolean areTherePlacesToVisitForDestination() {
-            return (!(this.placesToVisit.isEmpty()));
+            return (!(this.landmarks.isEmpty()) && this.landmarks != null);
         }
     }
 }
