@@ -13,7 +13,6 @@
         android:layout_marginEnd="4dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/mapbox_compass_icon"
         android:drawableRight="@drawable/ic_add_gray_24dp"
         android:text="@string/plan_new_trip_button"
         android:textSize="18sp"

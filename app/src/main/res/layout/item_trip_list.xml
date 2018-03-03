@@ -15,7 +15,7 @@
         android:layout_margin="4dp"
         android:background="@color/base100"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
 
         <TextView
@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:text="TextView"
             android:textAlignment="center"
-            android:textSize="24sp"
+            android:textSize="18sp"
             tools:text="tripname" />
 
         <TextView
