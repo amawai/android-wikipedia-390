@@ -11,6 +11,7 @@ import org.wikipedia.pageimages.PageImage;
 import org.wikipedia.readinglist.database.ReadingList;
 import org.wikipedia.readinglist.database.ReadingListPage;
 import org.wikipedia.search.RecentSearch;
+import org.wikipedia.travel.Trip;
 import org.wikipedia.util.log.L;
 
 public class Database extends SQLiteOpenHelper {
@@ -24,7 +25,9 @@ public class Database extends SQLiteOpenHelper {
             EditSummary.DATABASE_TABLE,
 
             ReadingList.DATABASE_TABLE,
-            ReadingListPage.DATABASE_TABLE
+            ReadingListPage.DATABASE_TABLE,
+            //Addition of trip databae table to the rest of database tables in app
+            Trip.DATABASE_TABLE
     };
 
     public Database(Context context) {

@@ -29,7 +29,7 @@ public class Trip {
         this.departureDate = departureDate;
     }
 
-    //Parametrized constructor for a trip, only account for one destination (also will be constructor used for storage in database)
+    //Parametrized constructor for a trip, only accounting for one destination (also will be constructor used for storage in database)
     public Trip(String title, Destination singleDestination, Date departureDate) {
         this.title = title;
         this.singleDestination = singleDestination;
@@ -64,6 +64,11 @@ public class Trip {
     @NonNull
     public Destination getDestination() {
         return (this.singleDestination != null) ? this.singleDestination : null;
+    }
+
+    //setter method for a single destination
+    public void setDestination(Destination singleDestination) {
+        this.singleDestination = singleDestination;
     }
 
     //Method to add a destination to the list of destinations that the trip will entail
