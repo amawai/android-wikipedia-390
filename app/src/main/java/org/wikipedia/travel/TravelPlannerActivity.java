@@ -7,19 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import org.wikipedia.activity.SingleFragmentActivity;
-import org.wikipedia.travel.trips.TripFragment;
 
 /**
  * Created by Artem on 2018-02-26.
  */
 
-public class TravelPlannerActivity extends SingleFragmentActivity<TripFragment> {
+public class TravelPlannerActivity extends SingleFragmentActivity<TravelFragment> {
     public static Intent newIntent(@NonNull Context context) {
         return new Intent(context, TravelPlannerActivity.class);
     }
 
     @Override
-    protected TripFragment createFragment() {
-        return new TripFragment();
+    protected TravelFragment createFragment() {
+        return new TravelFragment();
     }
 }

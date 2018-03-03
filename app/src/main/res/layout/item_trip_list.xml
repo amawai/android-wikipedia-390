@@ -2,19 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/trip_item_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:padding="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/trip_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:background="@color/base100"
         android:orientation="vertical"
         android:padding="16dp">
+
 
         <TextView
             android:id="@+id/trip_item_name"
@@ -36,6 +38,6 @@
             android:textAlignment="center"
             tools:text="location" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>

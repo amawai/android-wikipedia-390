@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import org.wikipedia.R;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,24 +42,30 @@ public class TripFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_trip_display, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        tripAdapter = new TripAdapter(getContext());
+        List<Trip> data = fill_with_data();
+
+        tripAdapter = new TripAdapter(data, getContext());
         tripList.setAdapter(tripAdapter);
         tripList.setLayoutManager(new LinearLayoutManager(getContext()));
-        Log.d("tripfragment", "oncreate vieww!!");
-        getAppCompatActivity().getSupportActionBar().setTitle("Why u tripping");
+        getAppCompatActivity().getSupportActionBar().setTitle("Trip Creation");
         return view;
+    }
+
+    //Mock data for now until database access is complete
+    public List<Trip> fill_with_data() {
+        List<Trip> data = new ArrayList<>();
+
+        data.add(new Trip("Moscow Trip", "January 1st ", 1));
+        data.add(new Trip("Japan Adventure", "February 25th ", 2));
+        data.add(new Trip("Canada Exploration", "March 12th", 3));
+        data.add(new Trip("Mountain Trek", "April 30th ", 4));
+        data.add(new Trip("whatever", "May 17th ",5));
+        data.add(new Trip("I want vacation", "September 9th:", 6));
+
+        return data;
     }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
-
-    /*
-    TODO: Create trip_row_layout.xml, i.e. the row displaying trips, that will populate recycle view
-    TODO: Discuss how database will be implemented
-    TODO: Fix up Holder and Adapter classes
-    TODO: Basically just copy paste the code sent on fb lmao
-
-    */
-
 }

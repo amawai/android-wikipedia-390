@@ -18,43 +18,50 @@ import java.util.List;
  */
 
 public final class TripAdapter extends RecyclerView.Adapter<TripItemHolder> {
-    private Cursor cursor;
-    Context mContext;
-    List<String> list = Collections.emptyList();
+    List<Trip> list = Collections.emptyList();
+    Context context;
 
-    public TripAdapter(Context context) {
-        mContext = context;
+    public TripAdapter(List<Trip> list, Context context) {
+        this.list = list;
+        this.context = context;
+    }
+
+    @Override
+    public TripItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_trip_list, parent, false);
+        TripItemHolder holder = new TripItemHolder(v);
+        return holder;
+
+    }
+
+    @Override
+    public void onBindViewHolder(TripItemHolder holder, int position) {
+        //Use the provided TripItemHolder on the onCreateViewHolder method to populate the trip row on the RecyclerView
+        holder.tripName.setText(list.get(position).tripName);
+        holder.tripDate.setText(list.get(position).date);
     }
 
     @Override
     public int getItemCount() {
-        return cursor == null ? 0 : cursor.getCount();
-    }
-
-    @Override
-    public TripItemHolder onCreateViewHolder(ViewGroup parent, int type) {
-        Log.d("tripitemholder", "in oncreateviewholder");
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_trip_list, parent, false);
-        return new TripItemHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(TripItemHolder holder, int pos) {
-        Log.d("tripitemholder", "in onbindviewholder");
-        /*if (cursor == null) {
-            return;
-        }
-        cursor.moveToPosition(pos);
-        holder.bindItem(cursor);
-        */
-        //lmao im retarded
-        holder.tripName.setText("TRIP NAME");
-        holder.tripDate.setText("some date heyhey");
+        return list.size();
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    // Insert a new item to the RecyclerView on a predefined position
+    public void insert(int position, Trip data) {
+        list.add(position, data);
+        notifyItemInserted(position);
+    }
+
+    // Remove a RecyclerView item containing a specified Data object
+    public void remove(Trip data) {
+        int position = list.indexOf(data);
+        list.remove(position);
+        notifyItemRemoved(position);
     }
 
 }
