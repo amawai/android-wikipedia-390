@@ -383,7 +383,7 @@ public class ReadingListsFragment extends Fragment {
         }
     }
 
-    private String shareList(@NonNull ReadingList readingList) {
+    public String shareList(@NonNull ReadingList readingList) {
         updateLists();
         ReadingListDbHelper dbHelper = new ReadingListDbHelper();
         HashMap<String, String> linkMap = dbHelper.getLinks(readingList);
