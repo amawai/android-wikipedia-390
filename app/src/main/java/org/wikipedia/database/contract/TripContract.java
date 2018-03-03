@@ -18,7 +18,7 @@ public interface TripContract {
         IdColumn ID = new IdColumn(TABLE);
         StrColumn TITLE = new StrColumn(TABLE, "tripTitle", "text not null");
         //Will only account for one destination for the trip
-        DestinationColumn DESTINATION = new DestinationColumn(TABLE, "tripDestinationName", "text");
+        DestinationColumn DESTINATION = new DestinationColumn(TABLE, "tripDestinationName", "text not null");
         DateColumn DATE = new DateColumn(TABLE, "tripDepartureDate", "text not null");
 
         String[] SELECTION = DbUtil.qualifiedNames(TITLE);
