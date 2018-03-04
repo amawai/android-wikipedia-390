@@ -385,7 +385,7 @@ public class ReadingListsFragment extends Fragment {
 
     public String shareList(@NonNull ReadingList readingList) {
         updateLists();
-        ReadingListDbHelper dbHelper = new ReadingListDbHelper();
+        ReadingListDbHelper dbHelper = ReadingListDbHelper.instance();
         HashMap<String, String> linkMap = dbHelper.getLinks(readingList);
         if (linkMap.size() > 0) {
             String output = "Here is my reading list:\n\n";
