@@ -1,13 +1,8 @@
 package org.wikipedia.travel.trips;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,15 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.wikipedia.R;
-import org.wikipedia.database.contract.PageHistoryContract;
-import org.wikipedia.database.contract.TripContract;
+import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +38,8 @@ public class TripFragment extends Fragment implements View.OnClickListener {
     private Button planNewTrip;
     private TripAdapter tripAdapter;
 
+    private List<Trip> userTripsList = new ArrayList<>();
+
     @BindView(R.id.trip_list) RecyclerView tripList;
 
     @Override
@@ -55,74 +51,89 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         planNewTrip = (Button) view.findViewById(R.id.trip_plan_new);
         planNewTrip.setOnClickListener(this);
 
-        List<Trip> data = TripDbHelper.instance().getAllLists();
-
-        tripAdapter = new TripAdapter(data, getContext());
+        updateUserTripList();
+        tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
         tripList.setLayoutManager(new LinearLayoutManager(getContext()));
-        getAppCompatActivity().getSupportActionBar().setTitle("Why u tripping");
+        getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
         return view;
     }
 
     @Override
     public void onClick(View v) {
         //TODO: Implement functionality of trip creation
+        //For now, this creates a random trip and updates the list accordingly
         TripDbHelper tripHelper = TripDbHelper.instance();
-        //Make something that checks uniqueness of names
         tripHelper.createList(getRandomTripName(), new Trip.Destination("Osaka"), new Date());
-        List<Trip> savedTrips = tripHelper.getAllLists();
+        updateUserTripList();
     }
 
     //Temporary measure to add mock trips, to be deleted once full functionality is complete
     protected String getRandomTripName() {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder salt = new StringBuilder();
+        String validCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder tripName = new StringBuilder();
         Random rnd = new Random();
-        while (salt.length() < 12) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
+        while (tripName.length() < 12) {
+            int index = (int) (rnd.nextFloat() * validCharacters.length());
+            tripName.append(validCharacters.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return tripName.toString();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserTripList();
+    }
+
+    @Override
+    public void onDestroyView() {
+        tripList.setAdapter(null);
+        unbinder.unbind();
+        unbinder = null;
+        super.onDestroyView();
     }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
-    
+
+    private void updateUserTripList() {
+        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(),  new CallbackTask.DefaultCallback<List<Trip>>(){
+            @Override
+            public void success(List<Trip> list) {
+                if (getActivity() == null) {
+                    return;
+                }
+                userTripsList = list;
+                tripAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     //Adapter for the RecyclerView
     public final class TripAdapter extends RecyclerView.Adapter<TripItemHolder> {
-        private List<Trip> list = Collections.emptyList();
         private Context context;
-        private Cursor mCursor;
 
-        public TripAdapter(List<Trip> list, Context context) {
-            this.list = list;
+        public TripAdapter(Context context) {
             this.context = context;
         }
 
-        public void setCursor(Cursor cursor) {
-            mCursor = cursor;
-        }
         @Override
         public TripItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_trip_list, parent, false);
-            TripItemHolder holder = new TripItemHolder(v);
-            return holder;
-
+            return new TripItemHolder(v);
         }
 
         @Override
         public void onBindViewHolder(TripItemHolder holder, int position) {
-            //Use the provided TripItemHolder on the onCreateViewHolder method to populate the trip row on the RecyclerView
-            holder.tripName.setText(list.get(position).getTitle());
-            holder.tripDate.setText(list.get(position).getTripDepartureDate().toString());
+            holder.bindItem(userTripsList.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return list.size();
+            return userTripsList.size();
         }
 
         @Override
@@ -130,22 +141,23 @@ public class TripFragment extends Fragment implements View.OnClickListener {
             super.onAttachedToRecyclerView(recyclerView);
         }
 
-        // Insert a new item to the RecyclerView on a predefined position
+        // Insert a new item to the RecyclerView on a predefined position, could be used in the future
         public void insert(int position, Trip data) {
-            list.add(position, data);
+            userTripsList.add(position, data);
             notifyItemInserted(position);
         }
 
-        // Remove a RecyclerView item containing a specified Data object
+        // Remove a RecyclerView item containing a specified Data object, could be used in the future
         public void remove(Trip data) {
-            int position = list.indexOf(data);
-            list.remove(position);
+            int position = userTripsList.indexOf(data);
+            userTripsList.remove(position);
             notifyItemRemoved(position);
         }
 
     }
 
-    public final class TripItemHolder extends RecyclerView.ViewHolder {
+    //Individual rows that hold information about a trip
+    public final class TripItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public RelativeLayout tripLayout;
         public TextView tripName;
         public TextView tripDate;
@@ -156,6 +168,21 @@ public class TripFragment extends Fragment implements View.OnClickListener {
             tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
             tripName = (TextView) tripView.findViewById(R.id.trip_item_name);
             tripDate = (TextView) tripView.findViewById(R.id.trip_item_date);
+
+            tripLayout.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position >= 0) {
+                Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        public void bindItem(Trip trip) {
+            tripName.setText(trip.getTitle());
+            tripDate.setText(trip.getTripDepartureDate().toString());
         }
 
     }
