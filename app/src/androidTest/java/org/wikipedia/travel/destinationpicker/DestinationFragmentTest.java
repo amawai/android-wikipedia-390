@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class DestinationFragmentTest {
 
+    // Expected: Fragment to not be null when invoked
     @Test
     public void onCreateView() throws Exception {
         DestinationFragment destinationFragment = new DestinationFragment();

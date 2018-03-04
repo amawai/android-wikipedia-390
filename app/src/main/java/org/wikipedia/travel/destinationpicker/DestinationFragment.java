@@ -30,6 +30,7 @@ public class DestinationFragment extends Fragment {
     private FloatingActionButton nextButton;
     private String[] destinationString;
 
+    // The method will assemble the destinationFragment and invoke the Google Place Autocomplete widget
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,12 +58,15 @@ public class DestinationFragment extends Fragment {
         return (AppCompatActivity) getActivity();
     }
 
+    // Grabs the user selected city and stores it in a 2 element array.
+    // The destinationName is the name of city, destinationAddress includes the city, state, and country
     private void setDestinationArray(String destinationName, String destinationAddress) {
         this.destinationString = new String[2];
         this.destinationString[0] = destinationName;
         this.destinationString[1] = destinationAddress;
     }
 
+    // Returns the destinationArray, to be used for getting wikipedia articles for city surrounding
     public String[] getDestinationString() {
         return this.destinationString;
     }

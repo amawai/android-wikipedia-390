@@ -27,9 +27,10 @@ public class DestinationActivityTest {
     DestinationActivity mDestinationActivity;
     DestinationFragment destinationFragment;
 
+    // Initial setup for DestinationActtvity tests
     @Before
     public void setUp() throws Exception {
-        mContext = PowerMockito.mock(Context.class); //Using PowerMockito so that we can mock final methods
+        mContext = PowerMockito.mock(Context.class);
 
 
         PowerMockito.mockStatic(DestinationActivity.class);
