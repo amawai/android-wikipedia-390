@@ -14,6 +14,7 @@ import org.wikipedia.feed.random.RandomClient;
 import org.wikipedia.model.EnumCode;
 import org.wikipedia.model.EnumCodeMap;
 import org.wikipedia.settings.Prefs;
+import org.wikipedia.travel.TravelClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,13 @@ public enum FeedContentType implements EnumCode {
         @Override
         public FeedClient newClient(AggregatedFeedContentClient aggregatedClient, int age, boolean isOnline) {
             return isEnabled() && isOnline ? new BecauseYouReadClient() : null;
+        }
+    },
+    TRAVEL(9, R.string.view_travel_card_title, R.string.view_travel_card_subtitle) {
+        @Nullable
+        @Override
+        public FeedClient newClient(AggregatedFeedContentClient aggregatedFeedContentClient, int age, boolean isOnline) {
+            return isEnabled() && isOnline ? new TravelClient() : null;
         }
     };
 

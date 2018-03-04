@@ -74,6 +74,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     sourceSets {
         test {
             java.srcDirs += 'src/testlib/java'

@@ -624,6 +624,11 @@
     <string name="events_count_text">%1$s events from %2$s–%3$d</string>
     <string name="this_year">This year</string>
     <string name="back_to_top">Back to top</string>
+    <string name="view_travel_card_title">Travel Planner</string>
+    <string name="view_travel_card_subtitle">Plan your next trip with Wikipedia</string>
+    <string name="view_travel_card_action">Plan a trip</string>
+    <string name="plan_new_trip_button">Plan a new trip</string>
+    <string name="fragment_travel_destination_title">Destinations</string>
     <plurals name="diff_years">
         <item quantity="one">Last year</item>
         <item quantity="other">%d years ago</item>
