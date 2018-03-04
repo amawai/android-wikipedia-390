@@ -54,6 +54,7 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
         mButton.setOnClickListener((OnClickListener) this);
         unbinder = ButterKnife.bind(this, view);
 
+        //setting the current date as the departure date
         String date = getMonth(month) + " " + day + ", " + year;
         mDisplayDate.setText(date);
 
@@ -64,28 +65,25 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
 
     @Override
     public void onClick(View view) {
-        Log.d("onCLICK", "ONCLICK WAS PRESSED");
         DatePickerDialog dialog;
 
+        //setting onclicklistener to change the selected date after button selection
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                Log.d("DATESETLISTEN", "STARTING THE LISTENER CALLBACK");
                 month = month + 1;
                 String date = getMonth(month) + " " + day + ", " + year;
                 mDisplayDate.setText(date);
-                Log.d("DATELISTENER", "DATE CHANGED");
             }
         };
 
+        //setting up the select date window
         dialog = new DatePickerDialog(this.getActivity(),
                 android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                 mDateSetListener,
                 year, month, day);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
-        Log.d("onCLICK", "onClick: SHOWING THE SELECTION DATES ");
-
 
     }
 
@@ -96,6 +94,5 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
-
 
 }
