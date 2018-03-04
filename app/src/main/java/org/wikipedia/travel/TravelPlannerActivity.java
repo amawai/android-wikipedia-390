@@ -12,13 +12,13 @@ import org.wikipedia.activity.SingleFragmentActivity;
  * Created by Artem on 2018-02-26.
  */
 
-public class TravelPlannerActivity extends SingleFragmentActivity<TravelFragment> {
+public class TravelPlannerActivity extends SingleFragmentActivity<TravelDatePickerFragment> {
     public static Intent newIntent(@NonNull Context context) {
         return new Intent(context, TravelPlannerActivity.class);
     }
 
     @Override
-    protected TravelFragment createFragment() {
-        return new TravelFragment();
+    protected TravelDatePickerFragment createFragment() {
+        return new TravelDatePickerFragment();
     }
 }

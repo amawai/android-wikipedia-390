@@ -11,9 +11,11 @@
 
     <TextView
         android:id="@+id/selected_date"
+        android:focusable="false"
         android:layout_width="199dp"
         android:layout_height="58dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="164dp"
         android:text="Selected Date"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -36,12 +38,12 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="144dp"
+        android:layout_width="255dp"
         android:layout_height="52dp"
-        android:layout_marginEnd="200dp"
+        android:layout_marginEnd="64dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Departure Date"
+        android:text="Select Departure Date"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

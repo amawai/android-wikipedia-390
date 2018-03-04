@@ -8,13 +8,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -23,90 +27,75 @@ import org.wikipedia.R;
 import org.wikipedia.main.MainActivity;
 
 import java.util.Calendar;
+import java.text.DateFormatSymbols;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TravelDatePickerFragment extends Fragment {
+public class TravelDatePickerFragment extends Fragment implements OnClickListener{
+    private Unbinder unbinder;
     private TextView mDisplayDate;
+    private Button mButton;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-
-    public TravelDatePickerFragment() {
-        // Required empty public constructor
-    }
-
-//    public static TravelDatePickerFragment newInstance(String param1, String param2) {
-//        TravelDatePickerFragment fragment = new TravelDatePickerFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mDisplayDate = (TextView) mDisplayDate.findViewById(R.id.button_select_date);
-
-        mDisplayDate.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-
-                DatePickerDialog dialog;
-                dialog = new DatePickerDialog(getContext(),
-                        android.R.style.Theme_DeviceDefault,
-                        mDateSetListener,
-                        year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                month = month + 1;
-                String date = day + "/" + month + "/" + year;
-                mDisplayDate.setText(date);
-            }
-        };
-    }
+    private Calendar cal = Calendar.getInstance();
+    private int year = cal.get(Calendar.YEAR);
+    private int month = cal.get(Calendar.MONTH) + 1;
+    private int day = cal.get(Calendar.DAY_OF_MONTH);
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_travel_date_picker, container, false);
-        return rootView;
-    }
-}
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_travel_date_picker, container, false);
+        mButton = (Button) view.findViewById(R.id.button_select_date);
+        mDisplayDate = (TextView) view.findViewById(R.id.selected_date);
+        mButton.setOnClickListener((OnClickListener) this);
+        unbinder = ButterKnife.bind(this, view);
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//
-//public interface OnFragmentInteractionListener {
-//    void onFragmentInteraction(Uri uri);
-//}
-//}
+        String date = getMonth(month) + " " + day + ", " + year;
+        mDisplayDate.setText(date);
+
+        getAppCompatActivity().getSupportActionBar().setTitle("Departure Date");
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Log.d("onCLICK", "ONCLICK WAS PRESSED");
+        DatePickerDialog dialog;
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Log.d("DATESETLISTEN", "STARTING THE LISTENER CALLBACK");
+                month = month + 1;
+                String date = getMonth(month) + " " + day + ", " + year;
+                mDisplayDate.setText(date);
+                Log.d("DATELISTENER", "DATE CHANGED");
+            }
+        };
+
+        dialog = new DatePickerDialog(this.getActivity(),
+                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                mDateSetListener,
+                year, month, day);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+        Log.d("onCLICK", "onClick: SHOWING THE SELECTION DATES ");
+
+
+    }
+
+    public String getMonth(int month) {
+        return new DateFormatSymbols().getMonths()[month-1];
+    }
+
+    private AppCompatActivity getAppCompatActivity() {
+        return (AppCompatActivity) getActivity();
+    }
+
+
+}
