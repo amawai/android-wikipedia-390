@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

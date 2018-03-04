@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 import org.wikipedia.database.DatabaseTable;
 import org.wikipedia.database.column.Column;
 import org.wikipedia.database.contract.TripContract;
+import org.wikipedia.travel.database.Trip;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 //Used the format/methods for the ReadlistTable, ReadingListPageTable in order to properly integrate a new table into the application
