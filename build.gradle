@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.facebook.testing.screenshot:plugin:0.4.2'
+        classpath 'com.google.android.gms:play-services-places:11.8.0'
     }
 }
 

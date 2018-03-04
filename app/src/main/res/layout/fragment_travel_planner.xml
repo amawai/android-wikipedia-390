@@ -13,22 +13,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="132dp">
-            <TextView
-                android:id="@+id/travel_destination_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fragment_travel_destination_title"
-                android:layout_margin="45dp"
-                android:textSize="30sp"
-                />
-
-            <Button
-                android:id="@+id/travel_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:background="@color/accent50"
-                android:text="NEXT" />
+           <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/travel_destination_title"
+              android:text="@string/fragment_travel_destination_title"
+              android:layout_margin="45dp"
+              android:textSize="30sp"
+              />
+          <Button
+              android:id="@+id/tp_next_button"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="40dp"
+              android:text="NEXT"
+              android:background="@color/accent50"/>
         </LinearLayout>
 
         <LinearLayout

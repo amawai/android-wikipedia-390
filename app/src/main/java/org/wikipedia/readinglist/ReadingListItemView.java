@@ -43,6 +43,7 @@ public class ReadingListItemView extends FrameLayout {
         void onDelete(@NonNull ReadingList readingList);
         void onSaveAllOffline(@NonNull ReadingList readingList);
         void onRemoveAllOffline(@NonNull ReadingList readingList);
+        void onShare(@NonNull ReadingList readingList);
     }
 
     public enum Description { DETAIL, SUMMARY }
@@ -260,6 +261,12 @@ public class ReadingListItemView extends FrameLayout {
                 case R.id.menu_reading_list_remove_all_offline:
                     if (callback != null && readingList != null) {
                         callback.onRemoveAllOffline(readingList);
+                        return true;
+                    }
+                    break;
+                case R.id.menu_reading_list_share:
+                    if (callback != null && readingList != null) {
+                        callback.onShare(readingList);
                         return true;
                     }
                     break;
