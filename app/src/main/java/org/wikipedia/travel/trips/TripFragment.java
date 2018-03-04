@@ -3,8 +3,6 @@ package org.wikipedia.travel.trips;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -13,24 +11,25 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.wikipedia.R;
 import org.wikipedia.database.contract.PageHistoryContract;
 import org.wikipedia.database.contract.TripContract;
-import org.wikipedia.travel.Trip;
+import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.database.TripDbHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,9 +39,9 @@ import butterknife.Unbinder;
  * Created by amawai on 28/02/18.
  */
 
-public class TripFragment extends Fragment {
+public class TripFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
-    private FloatingActionButton planNewTrip;
+    private Button planNewTrip;
     private TripAdapter tripAdapter;
 
     @BindView(R.id.trip_list) RecyclerView tripList;
@@ -53,7 +52,10 @@ public class TripFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_trip_display, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        List<Trip> data = fillWithMockData();
+        planNewTrip = (Button) view.findViewById(R.id.trip_plan_new);
+        planNewTrip.setOnClickListener(this);
+
+        List<Trip> data = TripDbHelper.instance().getAllLists();
 
         tripAdapter = new TripAdapter(data, getContext());
         tripList.setAdapter(tripAdapter);
@@ -62,28 +64,33 @@ public class TripFragment extends Fragment {
         return view;
     }
 
-    //Mock data for now until database access is complete
-    public List<Trip> fillWithMockData() {
-        List<Trip> data = new ArrayList<>();
+    @Override
+    public void onClick(View v) {
+        //TODO: Implement functionality of trip creation
+        TripDbHelper tripHelper = TripDbHelper.instance();
+        //Make something that checks uniqueness of names
+        tripHelper.createList(getRandomTripName(), new Trip.Destination("Osaka"), new Date());
+        List<Trip> savedTrips = tripHelper.getAllLists();
+    }
 
-        Date today = new Date();
-        Trip.Destination destination = new Trip.Destination("Osaka");
-        today.getTime();
+    //Temporary measure to add mock trips, to be deleted once full functionality is complete
+    protected String getRandomTripName() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 12) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
 
-        data.add(new Trip("I want vacation", destination, today));
-        data.add(new Trip("Japan Adventure", destination, today));
-        data.add(new Trip("Canada Exploration",destination, today ));
-        data.add(new Trip("Mountain Trek", destination, today));
-        data.add(new Trip("whatever", destination, today));
-
-
-        return data;
     }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
-
+    
     //Adapter for the RecyclerView
     public final class TripAdapter extends RecyclerView.Adapter<TripItemHolder> {
         private List<Trip> list = Collections.emptyList();
