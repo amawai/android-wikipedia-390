@@ -3,16 +3,14 @@ package org.wikipedia.travel;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
+
 import static org.mockito.Mockito.*;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
+
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.wikipedia.test.TestRunner;
-import org.wikipedia.travel.Trip;
+import org.wikipedia.travel.database.Trip;
 import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 

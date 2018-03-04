@@ -1,9 +1,10 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.database;
 
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

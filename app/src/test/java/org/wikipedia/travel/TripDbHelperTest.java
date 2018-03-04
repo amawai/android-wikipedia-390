@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.robolectric.RobolectricTestRunner;
+import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.database.TripDbHelper;
 
 import java.util.Date;
 
