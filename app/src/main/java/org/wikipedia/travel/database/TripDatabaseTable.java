@@ -15,7 +15,7 @@ import java.util.List;
 //Used the format/methods for the ReadlistTable, ReadingListPageTable in order to properly integrate a new table into the application
 //Only setup for a trip with a single destination
 public class TripDatabaseTable extends DatabaseTable<Trip> {
-    private static final int DB_VER_INTRODUCED = 1;
+    private static final int DB_VER_INTRODUCED = 19;
 
     public TripDatabaseTable() {
         super(TripContract.TABLE, TripContract.URI);

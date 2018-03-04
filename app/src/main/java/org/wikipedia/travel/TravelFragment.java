@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.wikipedia.R;
+import org.wikipedia.travel.trips.TripFragment;
 import org.wikipedia.travel.destinationpicker.DestinationActivity;
 
 import butterknife.ButterKnife;
@@ -25,6 +28,7 @@ import butterknife.Unbinder;
 public class TravelFragment extends Fragment implements View.OnClickListener{
     private Unbinder unbinder;
     private FloatingActionButton nextButton;
+    private Button goToPlanTrip;
     private Button destinationButton;
 
     @Nullable
@@ -40,7 +44,18 @@ public class TravelFragment extends Fragment implements View.OnClickListener{
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
+        goToPlanTrip = (Button) view.findViewById(R.id.trip_view);
+        goToPlanTrip.setOnClickListener(this);
         return view;
+    }
+
+    public void goToTripView(View v) {
+        Fragment fragment = new TripFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.travel_planner_main, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     private AppCompatActivity getAppCompatActivity() {
@@ -53,6 +68,9 @@ public class TravelFragment extends Fragment implements View.OnClickListener{
         switch(v.getId()) {
             case R.id.tp_next_button:
                 getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
+                break;
+            case R.id.trip_view:
+                goToTripView(v);
                 break;
         }
     }
