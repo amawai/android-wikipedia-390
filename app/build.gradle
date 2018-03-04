@@ -59,6 +59,7 @@ android {
         testApplicationId 'org.wikipedia.test'
         testInstrumentationRunner 'org.wikipedia.test.AndroidTestRunner'
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -187,6 +188,8 @@ dependencies {
     String mockitoCore = 'org.mockito:mockito-core:1.9.5'
     String leakCanaryVersion = '1.5'
 
+    compile 'com.google.android.gms:play-services-places:11.8.0'
+
     implementation "com.android.support:support-compat:$supportVersion"
     implementation "com.android.support:support-core-utils:$supportVersion"
     implementation "com.android.support:support-core-ui:$supportVersion"
@@ -234,6 +237,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation mockitoCore
     testImplementation 'org.robolectric:robolectric:3.3.2'
+    testCompile "org.robolectric:shadows-support-v4:3.3.2"
     testImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
     testImplementation "org.powermock:powermock-module-junit4:1.6.6"
     testImplementation "org.powermock:powermock-module-junit4-rule:1.6.6"
