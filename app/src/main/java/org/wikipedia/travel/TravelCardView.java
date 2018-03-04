@@ -1,17 +1,14 @@
 package org.wikipedia.travel;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ShareCompat;
 import android.view.View;
-import android.widget.Toast;
 
 import org.wikipedia.R;
 import org.wikipedia.feed.travel.TravelCard;
 import org.wikipedia.feed.view.StaticCardView;
+import org.wikipedia.travel.planner.TravelPlannerActivity;
 
 /**
  * Created by Artem on 2018-02-26.
