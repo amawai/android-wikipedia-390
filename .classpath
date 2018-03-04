@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="app/build/generated/source/buildConfig/alpha/debug"/>
+	<classpathentry kind="src" path="app/build/generated/source/buildConfig/androidTest/alpha/debug"/>
+	<classpathentry kind="src" path="app/build/generated/source/r/alpha/debug"/>
+	<classpathentry kind="src" path="app/build/generated/source/r/androidTest/alpha/debug"/>
+	<classpathentry kind="src" path="app/src/androidTest/java"/>
+	<classpathentry kind="src" path="app/src/main/java"/>
+	<classpathentry kind="src" path="app/src/test/java"/>
+	<classpathentry kind="src" path="app/src/testlib/java"/>
+	<classpathentry kind="lib" path="app/build/generated/mockable-android-27.v3.jar"/>
+	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
