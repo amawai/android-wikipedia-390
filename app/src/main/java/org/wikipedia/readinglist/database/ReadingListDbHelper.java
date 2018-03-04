@@ -14,6 +14,7 @@ import org.wikipedia.savedpages.SavedPageSyncService;
 import org.wikipedia.util.log.L;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -448,6 +449,30 @@ public class ReadingListDbHelper {
                 list.pages().add(ReadingListPage.DATABASE_TABLE.fromCursor(cursor));
             }
         }
+    }
+
+    public HashMap<String, String> getLinks(@NonNull ReadingList list) {
+        SQLiteDatabase db = getReadableDatabase();
+        return getLinks(list, db);
+    }
+
+    //Takes in a reading list and returns hashmap with the key being the title of the article and value, the link
+    public HashMap<String, String> getLinks(@NonNull ReadingList list, SQLiteDatabase db) {
+        HashMap<String, String> linkMap = new HashMap();
+        ReadingListPage savedLink;
+        String link;
+        try (Cursor cursor = db.query(ReadingListPageContract.TABLE, null,
+                ReadingListPageContract.Col.LISTID.getName() + " = ? AND "
+                        + ReadingListPageContract.Col.STATUS.getName() + " != ?",
+                new String[]{Long.toString(list.id()), Integer.toString(ReadingListPage.STATUS_QUEUE_FOR_DELETE)},
+                null, null, null)) {
+            while (cursor.moveToNext()) {
+                savedLink = ReadingListPage.DATABASE_TABLE.fromCursor(cursor);
+                link = savedLink.wiki().url() + "/wiki/" + savedLink.title().toString();
+                linkMap.put(savedLink.title(), link.replace(" ", "_"));
+            }
+        }
+        return linkMap;
     }
 
     private boolean pageExistsInList(SQLiteDatabase db, @NonNull ReadingList list, @NonNull PageTitle title) {
