@@ -70,6 +70,14 @@
         <meta-data android:name="net.hockeyapp.android.appIdentifier"
             android:value="@string/hockeyapp_app_id" />
 
+        <!--
+        The following is used for getting list autocomplete search for trip planner.
+        API is restricted to 1,000 requests per day.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDX8Zsx8Md32uajS-rutHk_CrE5APr0w3k"/>
+
         <activity
             android:name=".main.MainActivity"
             android:windowSoftInputMode="adjustResize"
@@ -231,7 +239,11 @@
         <activity android:name=".travel.TravelPlannerActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
+
         <activity android:name=".travel.PlacesToVisitActivity"
+            android:theme="@style/AppTheme.ActionBar" />
+
+        <activity android:name=".travel.destinationpicker.DestinationActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
         <activity android:name=".feed.onthisday.OnThisDayActivity" />
