@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -18,6 +19,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import org.wikipedia.R;
+import org.wikipedia.travel.PlacesToVisitActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -40,7 +42,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
-        nextButton = (FloatingActionButton) view.findViewById(R.id.tp_next_button);
+        nextButton = (FloatingActionButton) view.findViewById(R.id.travel_next_button);
         nextButton.setOnClickListener(this);
 
         PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -58,7 +60,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    public void onClickView(View v) {
+    public void onClick(View v) {
         Intent i = new Intent(getActivity(), PlacesToVisitActivity.class);
         startActivity(i);
     }
