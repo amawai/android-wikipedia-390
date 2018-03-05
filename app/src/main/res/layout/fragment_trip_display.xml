@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#EAECF0">
 
     <Button
         android:id="@+id/trip_plan_new"
@@ -13,8 +14,8 @@
         android:layout_marginEnd="4dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:drawableRight="@drawable/ic_add_gray_24dp"
         android:background="@color/accent90"
+        android:drawableRight="@drawable/ic_add_gray_24dp"
         android:text="@string/plan_new_trip_button"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,8 +31,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:padding="0dp"
         android:background="#EAECF0"
+        android:padding="0dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

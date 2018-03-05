@@ -1,6 +1,7 @@
 package org.wikipedia.travel.trips;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import org.wikipedia.R;
 import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.travel.destinationpicker.DestinationActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,6 +71,7 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         TripDbHelper tripHelper = TripDbHelper.instance();
         tripHelper.createList(getRandomTripName(), new Trip.Destination("Osaka"), new Date());
         updateUserTripList();
+        getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
     }
 
     //Temporary measure to add mock trips, to be deleted once full functionality is complete

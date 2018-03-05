@@ -1,5 +1,6 @@
 package org.wikipedia.travel.destinationpicker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +26,7 @@ import butterknife.Unbinder;
  * Created by aman_ on 3/3/2018.
  */
 
-public class DestinationFragment extends Fragment {
+public class DestinationFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
     private FloatingActionButton nextButton;
     private String[] destinationString;
@@ -38,6 +39,9 @@ public class DestinationFragment extends Fragment {
         View view = inflater.inflate(R.layout.travel_destination_picker_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
+
+        nextButton = (FloatingActionButton) view.findViewById(R.id.tp_next_button);
+        nextButton.setOnClickListener(this);
 
         PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -52,6 +56,11 @@ public class DestinationFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void onClickView(View v) {
+        Intent i = new Intent(getActivity(), PlacesToVisitActivity.class);
+        startActivity(i);
     }
 
     private AppCompatActivity getAppCompatActivity() {
