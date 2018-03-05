@@ -32,11 +32,11 @@
                     android:id="@+id/search_cab_view"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:focusable="true"
-                    android:inputType="text"
                     android:imeOptions="actionGo|flagNoExtractUi"
+                    android:inputType="text"
                     app:cabEnabled="false" />
 
                 <FrameLayout
