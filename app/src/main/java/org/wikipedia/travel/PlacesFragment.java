@@ -24,7 +24,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 /**
  * Created by mnhn3 on 2018-03-04.
@@ -33,7 +32,6 @@ import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 public class PlacesFragment extends Fragment {
     private Unbinder unbinder;
     private RecyclerView recyclerView;
-    //private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<PlacesCard> cardsList = new ArrayList<>();
 
@@ -49,7 +47,6 @@ public class PlacesFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
         if (recyclerView!=null) {
             recyclerView.setHasFixedSize(true);
-//            recyclerView.setLayoutManager(new LinearLayoutManager(PlacesToVisitActivity.getApplicationContext()));//check for error
             linearLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(linearLayoutManager);
         }
@@ -80,7 +77,7 @@ public class PlacesFragment extends Fragment {
         country.setText(destinationString[1]);
     }
 
-
+//      currently has an exception error that make it hard to consistently make a list from
 //    public List <PlacesCard> listNearbyPlaces(String location){ //use geocoder to take address list and and return placecard list with titles
 //        List <PlacesCard> placesList = new ArrayList<PlacesCard>();
 //        List<Address> addresses;
