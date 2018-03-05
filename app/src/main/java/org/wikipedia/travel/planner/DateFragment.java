@@ -13,17 +13,23 @@ import org.wikipedia.R;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by Artem on 2018-03-02.
  */
 
-public class TripsFragment extends Fragment {
+public class DateFragment extends Fragment {
+    public static DateFragment newInstance() {
 
-    public static TripsFragment newInstance() {
-        return new TripsFragment();
+        return new DateFragment();
+    }
+
+    public static TripsFragment newInstance(ArrayList<String> trips) {
+        Bundle args = new Bundle();
+        TripsFragment fragment = new TripsFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -34,7 +40,7 @@ public class TripsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_travel_trips, container, false);
+        View view = inflater.inflate(R.layout.fragment_travel_data, container, false);
         ButterKnife.bind(this, view);
 
         return view;

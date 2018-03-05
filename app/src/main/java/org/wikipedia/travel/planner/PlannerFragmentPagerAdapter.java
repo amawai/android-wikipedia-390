@@ -1,5 +1,6 @@
 package org.wikipedia.travel.planner;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public class PlannerFragmentPagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<Fragment> pages = new ArrayList<Fragment>(); //TODO: Should this be here?
+    private ArrayList<Fragment> pages = new ArrayList<>();
 
     public PlannerFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,7 +24,17 @@ public class PlannerFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public int getItemPosition(@NonNull Object object) {
+        return super.getItemPosition(object);
+    }
+
+    @Override
     public int getCount() {
         return pages.size();
+    }
+
+    public void addFragment(Fragment fragment) {
+        pages.add(fragment);
+        notifyDataSetChanged();
     }
 }

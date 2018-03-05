@@ -19,4 +19,11 @@ public class TravelPlannerActivity extends SingleFragmentActivity<MainPlannerFra
     protected MainPlannerFragment createFragment() {
         return new MainPlannerFragment();
     }
+
+    @Override
+    public void onBackPressed() {
+        if(!getFragment().onBackPressed()) {
+            super.onBackPressed();
+        };
+    }
 }

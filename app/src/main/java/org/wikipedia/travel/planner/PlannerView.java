@@ -12,7 +12,7 @@ import org.wikipedia.model.EnumCodeMap;
  * Here we can store the different types of views. Enum serves as a factory.
  */
 
-public enum PlannerViewsFactory implements EnumCode {
+public enum PlannerView implements EnumCode {
     TRIPS(R.string.planner_view_trips) {
         public Fragment newInstance() {
             //Just as an example for now
@@ -21,13 +21,13 @@ public enum PlannerViewsFactory implements EnumCode {
     };
 
     private final int header;
-    private static final EnumCodeMap<PlannerViewsFactory> MAP = new EnumCodeMap<>(PlannerViewsFactory.class);
+    private static final EnumCodeMap<PlannerView> MAP = new EnumCodeMap<>(PlannerView.class);
 
-    PlannerViewsFactory(int header) {
+    PlannerView(int header) {
         this.header = header;
     }
 
-    public static PlannerViewsFactory of(int code) {
+    public static PlannerView of(int code) {
         return MAP.get(code);
     }
 
