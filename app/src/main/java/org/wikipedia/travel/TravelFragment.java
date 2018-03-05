@@ -50,7 +50,6 @@ public class TravelFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v){
         Intent i = new Intent(getActivity(),PlacesToVisitActivity.class);
         startActivity(i);
-        //getContext().startActivity(new Intent(PlacesToVisitActivity.newIntent(getContext())));
     }
 
 }

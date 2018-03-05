@@ -1,5 +1,7 @@
 package org.wikipedia.travel;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.wikipedia.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -36,7 +41,10 @@ public class PlacesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.travel_planner_places, container, false);//change xml to fragment
+        View view = inflater.inflate(R.layout.fragment_places, container, false);//change xml to fragment
+
+        //sets destination string in xml
+//        setDestination(DestinationFragment.destinationString, view);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
         if (recyclerView!=null) {
@@ -61,10 +69,43 @@ public class PlacesFragment extends Fragment {
         return (AppCompatActivity) getActivity();
     }
 
+    private void setDestination(String[] destinationString, View view){//to be implemented with destination fragment
+        //placeholder city/country for destination input
+        destinationString[0]="Tokyo";
+        destinationString[1]="Japan";
+
+        TextView city = (TextView) view.findViewById(R.id.city);
+        TextView country = (TextView) view.findViewById(R.id.country);
+        city.setText(destinationString[0]);
+        country.setText(destinationString[1]);
+    }
+
+
+//    public List <PlacesCard> listNearbyPlaces(String location){ //use geocoder to take address list and and return placecard list with titles
+//        List <PlacesCard> placesList = new ArrayList<PlacesCard>();
+//        List<Address> addresses;
+//        Geocoder gc = new Geocoder(getContext());
+//
+//        try {
+//            addresses = gc.getFromLocationName(location, 10);
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        for (int i=0; i<addresses.size(); i++){
+//            placesList.get(i).setTitle(addresses.get(i).toString());
+//        }
+//
+//        return placesList;
+//    }
+
     private void fillList(List cardsList){//dummy list filler, make it into a function later
-        for (int i=0; i<=10; i++){
+        //placeholder for geocoder function
+        String[] tokyo = {"Edo", "Tokyo", "Greater Tokyo Area", "Shinjuku Station","Yoyogi Station", "Shinjuku Ni-chōme",
+                "Tokyo subway sarin attack","Kabukichō, Tokyo","Tokyo Metropolitan Government Building","Sangūbashi Station"};
+        for (int i=0; i<tokyo.length; i++){
             PlacesCard place = new PlacesCard(
-                    "location" +(i+1),
+                    tokyo[i],
                     "this is a great location for tourists..."
             );
             cardsList.add(place);
