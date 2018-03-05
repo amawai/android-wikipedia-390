@@ -633,6 +633,6 @@
         <item quantity="one">Last year</item>
         <item quantity="other">%d years ago</item>
     </plurals>
-    <!-- /On This Day -->
+
 
 </resources>

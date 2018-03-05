@@ -22,56 +22,68 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by Artem on 2018-02-26.
+ * Created by Artem and his peeps on 2018-02-26.
  */
 
-public class TravelFragment extends Fragment implements View.OnClickListener{
-    private Unbinder unbinder;
-    private FloatingActionButton nextButton;
-    private Button goToPlanTrip;
-    private Button destinationButton;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_travel_planner, container, false);
+public class TravelFragment extends Fragment implements View.OnClickListener {
 
-        // Sets listeners for button clicks
-        destinationButton = (Button) view.findViewById(R.id.tp_next_button);
-        destinationButton.setOnClickListener(this);
+        private Unbinder unbinder;
+        private FloatingActionButton nextButton;
+        private Button goToPlanTrip;
+        private Button destinationButton;
 
-        unbinder = ButterKnife.bind(this, view);
-        getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
+        private Button dNextButton;
 
-        goToPlanTrip = (Button) view.findViewById(R.id.trip_view);
-        goToPlanTrip.setOnClickListener(this);
-        return view;
-    }
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            super.onCreateView(inflater, container, savedInstanceState);
+            View view = inflater.inflate(R.layout.fragment_travel_planner, container, false);
 
-    public void goToTripView(View v) {
-        Fragment fragment = new TripFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.travel_planner_main, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+            dNextButton = (Button) view.findViewById(R.id.dNext);//currently the button on the 1st travel planner activity
+            dNextButton.setOnClickListener(this);
 
-    private AppCompatActivity getAppCompatActivity() {
-        return (AppCompatActivity) getActivity();
-    }
+            // Sets listeners for button clicks
+            destinationButton = (Button) view.findViewById(R.id.tp_next_button);
+            destinationButton.setOnClickListener(this);
 
-    // When the next button selected it will create a new destination picker activity
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.tp_next_button:
-                getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
-                break;
-            case R.id.trip_view:
-                goToTripView(v);
-                break;
+            goToPlanTrip = (Button) view.findViewById(R.id.trip_view);
+            goToPlanTrip.setOnClickListener(this);
+
+
+                    unbinder = ButterKnife.bind(this, view);
+            getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
+            
+            return view;
+        }
+
+        public void goToTripView(View v) {
+            Fragment fragment = new TripFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.travel_planner_main, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+        private AppCompatActivity getAppCompatActivity() {
+            return (AppCompatActivity) getActivity();
+        }
+
+        // When the next button selected it will create a new destination picker activity
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()) {
+                case R.id.tp_next_button:
+                    getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
+                    break;
+                case R.id.trip_view:
+                    goToTripView(v);
+                    break;
+                case R.id.dNext:
+                    Intent i = new Intent(getActivity(),PlacesToVisitActivity.class);
+                    startActivity(i);
+            }
         }
     }
-}
