@@ -1,11 +1,15 @@
 package org.wikipedia.readinglist;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -45,11 +49,14 @@ import org.wikipedia.views.SearchEmptyView;
 import org.wikipedia.views.TextInputDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 public class ReadingListsFragment extends Fragment {
     private Unbinder unbinder;
@@ -327,6 +334,21 @@ public class ReadingListsFragment extends Fragment {
             updateLists();
             showMultiSelectOfflineStateChangeSnackbar(readingList.pages(), false);
         }
+
+        @Override
+        public void onShare(@NonNull ReadingList readingList) {
+            String listOfArticles = shareList(readingList);
+            if (listOfArticles != null) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, listOfArticles);
+                startActivity(Intent.createChooser(sharingIntent, listOfArticles));
+            }
+            else {
+                String message = "Please add an article to this reading list.";
+                FeedbackUtil.showMessage(getActivity(), message);
+            }
+        }
     }
 
     private void showMultiSelectOfflineStateChangeSnackbar(List<ReadingListPage> pages, boolean offline) {
@@ -359,6 +381,24 @@ public class ReadingListsFragment extends Fragment {
             funnel.logDeleteList(readingList, readingLists.size());
             updateLists();
         }
+    }
+
+    public String shareList(@NonNull ReadingList readingList) {
+        updateLists();
+        ReadingListDbHelper dbHelper = ReadingListDbHelper.instance();
+        HashMap<String, String> linkMap = dbHelper.getLinks(readingList);
+        if (linkMap.size() > 0) {
+            String output = "Here is my reading list:\n\n";
+
+            for (String key : linkMap.keySet()){
+                output += (key + ": " + linkMap.get(key) + "\n");
+            }
+            return output;
+        }
+        else {
+            return null;
+        }
+
     }
 
     private void showDeleteListUndoSnackbar(final ReadingList readingList) {

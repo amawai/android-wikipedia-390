@@ -2,7 +2,7 @@
 <resources>
 
     <!-- https://phabricator.wikimedia.org/M82 -->
-    <color name="base100">#fff</color> <!-- B AAA: Base background, Highlight from grey -->
+    <color name="base100">#ffffff</color> <!-- B AAA: Base background, Highlight from grey -->
     <color name="base90">#f8f9fa</color> <!-- B AAA: Button / 3D widget background -->
     <color name="base80">#eaecf0</color> <!-- B AAA: Disabled text input background -->
     <color name="base70">#c8ccd1</color> <!-- B AAA: Disabled button / 3D widget background -->
