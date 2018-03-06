@@ -31,7 +31,7 @@ import butterknife.Unbinder;
 public class DestinationFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
     private FloatingActionButton nextButton;
-    private String[] destinationString;
+    private static String[] destinationString;
 
     // The method will assemble the destinationFragment and invoke the Google Place Autocomplete widget
     @Nullable
@@ -78,8 +78,8 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
     }
 
     // Returns the destinationArray, to be used for getting wikipedia articles for city surrounding
-    public String[] getDestinationString() {
-        return this.destinationString;
+    public static String[] getDestinationString() {
+        return destinationString;
     }
 
 }

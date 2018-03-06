@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.wikipedia.R;
+import org.wikipedia.travel.destinationpicker.DestinationFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class PlacesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_places, container, false);//change xml to fragment
 
         //sets destination string in xml
-//        setDestination(DestinationFragment.destinationString, view);
+        setDestination(DestinationFragment.getDestinationString(), view);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
         if (recyclerView!=null) {
@@ -67,13 +68,11 @@ public class PlacesFragment extends Fragment {
     }
 
     private void setDestination(String[] destinationString, View view){//to be implemented with destination fragment
-        //placeholder city/country for destination input
-        destinationString[0]="Tokyo";
-        destinationString[1]="Japan";
 
-        TextView city = (TextView) view.findViewById(R.id.city);
+        //city textview editors are removed for city for now, since address includes both
+        //TextView city = (TextView) view.findViewById(R.id.city);
         TextView country = (TextView) view.findViewById(R.id.country);
-        city.setText(destinationString[0]);
+        //city.setText(destinationString[0]);
         country.setText(destinationString[1]);
     }
 
