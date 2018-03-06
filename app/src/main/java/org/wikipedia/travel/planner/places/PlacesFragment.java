@@ -32,12 +32,7 @@ public class PlacesFragment extends Fragment {
     private List<PlacesCard> cardsList = new ArrayList<>();
 
     public static PlacesFragment newInstance() {
-        
-        Bundle args = new Bundle();
-        
-        PlacesFragment fragment = new PlacesFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new PlacesFragment();
     }
 
     @Nullable
@@ -65,6 +60,12 @@ public class PlacesFragment extends Fragment {
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
     }
 
     private AppCompatActivity getAppCompatActivity() {

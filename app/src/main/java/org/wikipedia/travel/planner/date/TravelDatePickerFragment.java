@@ -72,6 +72,12 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
     }
 
     @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onClick(View view) {
         DatePickerDialog dialog;
 

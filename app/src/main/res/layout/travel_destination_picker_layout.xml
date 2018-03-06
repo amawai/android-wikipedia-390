@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/place_autocomplete_fragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
         android:layout_width="360dp"
         android:layout_height="42dp"
         android:layout_marginBottom="420dp"

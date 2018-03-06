@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.planner.date.TravelDatePickerFragment;
@@ -60,12 +61,12 @@ public class PlannerFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public void setupTripPages(Trip trip) {
         tripPages =  new ArrayList<>();
-        tripPages.add(new DestinationFragment()); //TODO: Populate destination
+        tripPages.add(DestinationFragment.newInstance()); //TODO: Populate destination
         if(trip.getDestination() != null) {
-            tripPages.add(new TravelDatePickerFragment()); // TODO: Populate date
+            tripPages.add(TravelDatePickerFragment.newInstance());
         }
         if(trip.getTripDepartureDate() != null) {
-            tripPages.add(new PlacesFragment()); // TODO: Iterate for multiple places, populate places
+            tripPages.add(PlacesFragment.newInstance());
         }
         notifyDataSetChanged();
     }

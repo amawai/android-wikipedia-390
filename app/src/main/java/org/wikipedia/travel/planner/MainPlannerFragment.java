@@ -50,10 +50,16 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler{
         adapter = new PlannerFragmentPagerAdapter(getChildFragmentManager());
         adapter.setTripListFragment(TripFragment.newInstance(userTripsList));
         viewPager.setAdapter((PagerAdapter) adapter);
+        setupButtonListener();
         updateUserTripList();
 
-        setupButtonListener();
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
     }
 
     private AppCompatActivity getAppCompatActivity() {
@@ -83,6 +89,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler{
     }
 
     private void prevPage() {
+        int current = viewPager.getCurrentItem();
         viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
     }
 
