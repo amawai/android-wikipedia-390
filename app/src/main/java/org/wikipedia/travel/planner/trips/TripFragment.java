@@ -21,6 +21,7 @@ import org.wikipedia.R;
 import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.travel.planner.MainPlannerFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,10 +38,10 @@ import butterknife.Unbinder;
 
 public class TripFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
-    private Button planNewTrip;
     private TripAdapter tripAdapter;
 
     @BindView(R.id.trip_list) RecyclerView tripList;
+    @BindView(R.id.trip_plan_new) Button newTripButton;
 
     public static TripFragment newInstance(List<Trip> trips) {
 
@@ -54,18 +55,15 @@ public class TripFragment extends Fragment implements View.OnClickListener {
     public static Bundle tripListToBundle(List<Trip> trips) {
         Bundle args = new Bundle();
         String[] titles = new String[trips.size()];
-        long[] ids = new long[trips.size()];
         String[] dates = new String[trips.size()];
 
         for(int i = 0; i < trips.size(); i++) {
             Trip trip = trips.get(i);
             titles[i] = trip.getTitle();
-            ids[i] = trip.getId();
             dates[i] = trip.getTripDepartureDate().toString();
         }
 
         args.putStringArray("TITLE", titles);
-        args.putLongArray("ID", ids);
         args.putStringArray("DATE", dates);
 
         return args;
@@ -78,8 +76,13 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_trip_display, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        planNewTrip = (Button) view.findViewById(R.id.trip_plan_new);
-        planNewTrip.setOnClickListener(this);
+        newTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainPlannerFragment parent = (MainPlannerFragment) getParentFragment();
+                parent.newTrip();
+            }
+        });
 
         tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
@@ -135,7 +138,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
     //Adapter for the RecyclerView
     public final class TripAdapter extends RecyclerView.Adapter<TripItemHolder> {
         private Context context;
-        private long[] ids;
         private String[] titles;
         private String[] dates;
         private int count;
@@ -153,17 +155,15 @@ public class TripFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(TripItemHolder holder, int position) {
-            long id = ids[position];
             String title = titles[position];
             String date = dates[position];
-            holder.bindItem(id, title, date);
+            holder.bindItem(title, date);
         }
 
         public void updateData(Bundle args) {
-            ids = args.getLongArray("ID");
             titles = args.getStringArray("TITLE");
             dates = args.getStringArray("DATE");
-            count = ids.length;
+            count = titles.length;
             notifyDataSetChanged();
         }
 
@@ -184,7 +184,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         public RelativeLayout tripLayout;
         public TextView tripName;
         public TextView tripDate;
-        private long id;
 
         public TripItemHolder(View tripView) {
             super(tripView);
@@ -199,15 +198,14 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position >= 0) {
-                Toast.makeText(getContext(), "You selected the trip: " + id
-                        , Toast.LENGTH_SHORT).show();
+                MainPlannerFragment parent = (MainPlannerFragment) getParentFragment();
+                parent.openTrip(position);
             }
         }
 
-        public void bindItem(long id, String title, String date) {
+        public void bindItem(String title, String date) {
             tripName.setText(title);
             tripDate.setText(date);
-            this.id = id;
         }
 
     }

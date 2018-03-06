@@ -60,13 +60,17 @@ public class PlannerFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public void setupTripPages(Trip trip) {
         tripPages =  new ArrayList<>();
-        tripPages.add(new DestinationFragment());
+        tripPages.add(new DestinationFragment()); //TODO: Populate destination
         if(trip.getDestination() != null) {
-            tripPages.add(new TravelDatePickerFragment());
+            tripPages.add(new TravelDatePickerFragment()); // TODO: Populate date
         }
         if(trip.getTripDepartureDate() != null) {
-            tripPages.add(new PlacesFragment());
+            tripPages.add(new PlacesFragment()); // TODO: Iterate for multiple places, populate places
         }
         notifyDataSetChanged();
+    }
+
+    public void makeNewTrip() {
+        setupTripPages(new Trip());
     }
 }

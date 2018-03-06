@@ -93,16 +93,24 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler{
                 if (getActivity() == null) {
                     return;
                 }
-                userTripsList = list;
-                adapter.getTripListFragment().updateUserTripList(list);
+                updateTripList(list);
             }
         });
     }
 
     private void updateTripList(List<Trip> trips) {
-
+        userTripsList = trips;
+        adapter.getTripListFragment().updateUserTripList(trips);
     }
 
-    private void openTrip(long id) {
+    public void newTrip() {
+        adapter.makeNewTrip();
+        nextPage();
+    }
+
+    public void openTrip(long id) {
+        Trip trip = userTripsList.get((int)id);
+        adapter.setupTripPages(trip);
+        nextPage();
     }
 }

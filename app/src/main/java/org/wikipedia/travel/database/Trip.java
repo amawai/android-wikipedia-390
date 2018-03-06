@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,10 @@ public class Trip {
         this.title = title;
         this.singleDestination = singleDestination;
         this.departureDate = departureDate;
+    }
+
+    public Trip() {
+        this(null, (Destination) null, null);
     }
 
     //Setters and getters for the trip's id
