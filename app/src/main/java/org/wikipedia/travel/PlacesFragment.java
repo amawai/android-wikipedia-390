@@ -12,9 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.wikipedia.R;
+import org.wikipedia.util.FeedbackUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -29,7 +32,8 @@ import butterknife.Unbinder;
  * Created by mnhn3 on 2018-03-04.
  */
 
-public class PlacesFragment extends Fragment {
+public class PlacesFragment extends Fragment implements View.OnClickListener {
+    private Button mbutton;
     private Unbinder unbinder;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager linearLayoutManager;
@@ -40,7 +44,8 @@ public class PlacesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_places, container, false);//change xml to fragment
-
+        mbutton = (Button) view.findViewById(R.id.placetrip_next);
+        mbutton.setOnClickListener((View.OnClickListener) this);
         //sets destination string in xml
 //        setDestination(DestinationFragment.destinationString, view);
 
@@ -77,6 +82,8 @@ public class PlacesFragment extends Fragment {
         country.setText(destinationString[1]);
     }
 
+
+
 //      currently has an exception error that make it hard to consistently make a list from
 //    public List <PlacesCard> listNearbyPlaces(String location){ //use geocoder to take address list and and return placecard list with titles
 //        List <PlacesCard> placesList = new ArrayList<PlacesCard>();
@@ -109,4 +116,9 @@ public class PlacesFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        String message = "Your trip has been saved.";
+        FeedbackUtil.showMessage(getActivity(), message);
+    }
 }
