@@ -1,4 +1,4 @@
-package org.wikipedia.travel.destinationpicker;
+package org.wikipedia.travel.planner.destination;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package org.wikipedia.travel.destinationpicker;
+package org.wikipedia.travel.planner.destination;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

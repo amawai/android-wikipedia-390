@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.planner.date;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -43,6 +43,14 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
     private int month = cal.get(Calendar.MONTH) + 1;
     private int day = cal.get(Calendar.DAY_OF_MONTH);
 
+    public static TravelDatePickerFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        TravelDatePickerFragment fragment = new TravelDatePickerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
