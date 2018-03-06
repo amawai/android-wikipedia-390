@@ -20,6 +20,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import org.wikipedia.R;
 import org.wikipedia.travel.PlacesToVisitActivity;
+import org.wikipedia.travel.TravelDatePickerActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -61,7 +62,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
     }
 
     public void onClick(View v) {
-        Intent i = new Intent(getActivity(), PlacesToVisitActivity.class);
+        Intent i = new Intent(getActivity(), TravelDatePickerActivity.class);
         startActivity(i);
     }
 
