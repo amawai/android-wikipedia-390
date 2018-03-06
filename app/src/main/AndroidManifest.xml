@@ -239,6 +239,8 @@
         <activity android:name=".travel.TravelPlannerActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
+        <activity android:name=".travel.TravelDatePickerActivity"
+            android:theme="@style/AppTheme.ActionBar" />
 
         <activity android:name=".travel.PlacesToVisitActivity"
             android:theme="@style/AppTheme.ActionBar" />

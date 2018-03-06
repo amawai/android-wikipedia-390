@@ -1,5 +1,6 @@
 package org.wikipedia.travel.destinationpicker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -17,6 +19,8 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import org.wikipedia.R;
+import org.wikipedia.travel.PlacesToVisitActivity;
+import org.wikipedia.travel.TravelDatePickerActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -25,10 +29,10 @@ import butterknife.Unbinder;
  * Created by aman_ on 3/3/2018.
  */
 
-public class DestinationFragment extends Fragment {
+public class DestinationFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
     private FloatingActionButton nextButton;
-    private String[] destinationString;
+    private static String[] destinationString;
 
     // The method will assemble the destinationFragment and invoke the Google Place Autocomplete widget
     @Nullable
@@ -38,6 +42,9 @@ public class DestinationFragment extends Fragment {
         View view = inflater.inflate(R.layout.travel_destination_picker_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
+
+        nextButton = (FloatingActionButton) view.findViewById(R.id.travel_next_button);
+        nextButton.setOnClickListener(this);
 
         PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -54,6 +61,11 @@ public class DestinationFragment extends Fragment {
         return view;
     }
 
+    public void onClick(View v) {
+        Intent i = new Intent(getActivity(), TravelDatePickerActivity.class);
+        startActivity(i);
+    }
+
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
@@ -67,8 +79,8 @@ public class DestinationFragment extends Fragment {
     }
 
     // Returns the destinationArray, to be used for getting wikipedia articles for city surrounding
-    public String[] getDestinationString() {
-        return this.destinationString;
+    public static String[] getDestinationString() {
+        return destinationString;
     }
 
 }
