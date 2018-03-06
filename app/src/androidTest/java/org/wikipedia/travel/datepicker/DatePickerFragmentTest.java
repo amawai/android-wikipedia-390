@@ -2,8 +2,7 @@ package org.wikipedia.travel.datepicker;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.wikipedia.travel.TravelDatePickerFragment;
+import org.wikipedia.travel.planner.date.TravelDatePickerFragment;
 
 import static junit.framework.Assert.assertNotNull;
 

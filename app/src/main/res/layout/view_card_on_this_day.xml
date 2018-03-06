@@ -163,7 +163,6 @@
                 android:contentDescription="@string/share_via"/>
         </RelativeLayout>
 
-
     </LinearLayout>
 
 </LinearLayout>

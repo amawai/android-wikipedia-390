@@ -8,6 +8,7 @@ import android.view.View;
 import org.wikipedia.R;
 import org.wikipedia.feed.travel.TravelCard;
 import org.wikipedia.feed.view.StaticCardView;
+import org.wikipedia.travel.planner.TravelPlannerActivity;
 
 /**
  * Created by Artem on 2018-02-26.

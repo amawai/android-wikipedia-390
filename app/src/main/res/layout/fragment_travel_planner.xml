@@ -1,78 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/travel_planner_main"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_travel_planner">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/travel_destination_title"
-                android:text="@string/fragment_travel_destination_title"
-                android:layout_margin="45dp"
-                android:textSize="30sp" />
+                android:text="A TITLE"
+                android:textSize="30sp"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="NEXT"
-                android:id="@+id/dNext"
-                android:background="@color/accent50" />
-        </LinearLayout>
-
-
-        <LinearLayout
+                android:layout_alignParentRight="true"
+                android:id="@+id/planner_next"
+                android:text="NEXT"/>
+        </RelativeLayout>
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/fragment_travel_planner_coordinator"
             android:layout_width="match_parent"
-            android:layout_height="132dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/travel_destination_title2"
-                android:text="@string/fragment_travel_destination_title"
-                android:layout_margin="45dp"
-                android:textSize="30sp"
-                />
-            <Button
-                android:id="@+id/tp_next_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="NEXT"
-                android:background="@color/accent50"/>
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="132dp"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="45dp"
-                android:paddingRight="30dp"
-                android:text="@string/view_travel_card_action"
-                android:textSize="30sp" />
+            <org.wikipedia.readinglist.NoSwipeViewPager
+                android:id="@+id/fragment_travel_planner_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="507dp"
+                tools:layout_editor_absoluteY="4dp" />
 
-            <Button
-                android:id="@+id/trip_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:background="@color/accent50"
-                android:text="NEXT" />
-
-        </LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.planner.places;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;

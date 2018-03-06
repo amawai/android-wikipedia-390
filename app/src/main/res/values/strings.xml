@@ -629,6 +629,7 @@
     <string name="view_travel_card_action">Plan a trip</string>
     <string name="plan_new_trip_button">Plan a new trip</string>
     <string name="fragment_travel_destination_title">Destinations</string>
+    <string name="planner_view_trips">Saved trips</string>
     <plurals name="diff_years">
         <item quantity="one">Last year</item>
         <item quantity="other">%d years ago</item>

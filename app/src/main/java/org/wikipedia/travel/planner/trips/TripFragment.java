@@ -1,4 +1,4 @@
-package org.wikipedia.travel.trips;
+package org.wikipedia.travel.planner.trips;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -21,6 +21,7 @@ import org.wikipedia.R;
 import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.travel.planner.MainPlannerFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,12 +38,37 @@ import butterknife.Unbinder;
 
 public class TripFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
-    private Button planNewTrip;
     private TripAdapter tripAdapter;
 
-    private List<Trip> userTripsList = new ArrayList<>();
-
     @BindView(R.id.trip_list) RecyclerView tripList;
+    @BindView(R.id.trip_plan_new) Button newTripButton;
+
+    public static TripFragment newInstance(List<Trip> trips) {
+
+        Bundle args = tripListToBundle(trips);
+
+        TripFragment fragment = new TripFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static Bundle tripListToBundle(List<Trip> trips) {
+        Bundle args = new Bundle();
+        String[] titles = new String[trips.size()];
+        String[] dates = new String[trips.size()];
+
+        for(int i = 0; i < trips.size(); i++) {
+            Trip trip = trips.get(i);
+            titles[i] = trip.getTitle();
+            dates[i] = trip.getTripDepartureDate().toString();
+        }
+
+        args.putStringArray("TITLE", titles);
+        args.putStringArray("DATE", dates);
+
+        return args;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,10 +76,14 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_trip_display, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        planNewTrip = (Button) view.findViewById(R.id.trip_plan_new);
-        planNewTrip.setOnClickListener(this);
+        newTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainPlannerFragment parent = (MainPlannerFragment) getParentFragment();
+                parent.newTrip();
+            }
+        });
 
-        updateUserTripList();
         tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
         tripList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -68,7 +98,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         //For now, this creates a random trip and updates the list accordingly
         TripDbHelper tripHelper = TripDbHelper.instance();
         tripHelper.createList(getRandomTripName(), new Trip.Destination("Osaka"), new Date());
-        updateUserTripList();
     }
 
     //Temporary measure to add mock trips, to be deleted once full functionality is complete
@@ -87,7 +116,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        updateUserTripList();
     }
 
     @Override
@@ -102,25 +130,21 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         return (AppCompatActivity) getActivity();
     }
 
-    private void updateUserTripList() {
-        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(),  new CallbackTask.DefaultCallback<List<Trip>>(){
-            @Override
-            public void success(List<Trip> list) {
-                if (getActivity() == null) {
-                    return;
-                }
-                userTripsList = list;
-                tripAdapter.notifyDataSetChanged();
-            }
-        });
+    public void updateUserTripList(List<Trip> trips) {
+        tripAdapter.updateData(tripListToBundle(trips));
     }
+
 
     //Adapter for the RecyclerView
     public final class TripAdapter extends RecyclerView.Adapter<TripItemHolder> {
         private Context context;
+        private String[] titles;
+        private String[] dates;
+        private int count;
 
         public TripAdapter(Context context) {
             this.context = context;
+            updateData(getArguments());
         }
 
         @Override
@@ -131,30 +155,26 @@ public class TripFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(TripItemHolder holder, int position) {
-            holder.bindItem(userTripsList.get(position));
+            String title = titles[position];
+            String date = dates[position];
+            holder.bindItem(title, date);
+        }
+
+        public void updateData(Bundle args) {
+            titles = args.getStringArray("TITLE");
+            dates = args.getStringArray("DATE");
+            count = titles.length;
+            notifyDataSetChanged();
         }
 
         @Override
         public int getItemCount() {
-            return userTripsList.size();
+            return count;
         }
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
-        }
-
-        // Insert a new item to the RecyclerView on a predefined position, could be used in the future
-        public void insert(int position, Trip data) {
-            userTripsList.add(position, data);
-            notifyItemInserted(position);
-        }
-
-        // Remove a RecyclerView item containing a specified Data object, could be used in the future
-        public void remove(Trip data) {
-            int position = userTripsList.indexOf(data);
-            userTripsList.remove(position);
-            notifyItemRemoved(position);
         }
 
     }
@@ -164,7 +184,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         public RelativeLayout tripLayout;
         public TextView tripName;
         public TextView tripDate;
-        private int index;
 
         public TripItemHolder(View tripView) {
             super(tripView);
@@ -179,13 +198,14 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position >= 0) {
-                Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                MainPlannerFragment parent = (MainPlannerFragment) getParentFragment();
+                parent.openTrip(position);
             }
         }
 
-        public void bindItem(Trip trip) {
-            tripName.setText(trip.getTitle());
-            tripDate.setText(trip.getTripDepartureDate().toString());
+        public void bindItem(String title, String date) {
+            tripName.setText(title);
+            tripDate.setText(date);
         }
 
     }

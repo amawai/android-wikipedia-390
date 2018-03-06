@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.planner.places;
 
 /**
  * Created by mnhn3 on 2018-03-04.

@@ -1,4 +1,4 @@
-package org.wikipedia.travel.destinationpicker;
+package org.wikipedia.travel.planner.destination;
 
 import org.junit.Test;
 

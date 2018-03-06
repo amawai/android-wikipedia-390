@@ -236,14 +236,14 @@
             android:name=".feed.mostread.MostReadArticlesActivity"
             android:theme="@style/AppTheme.ActionBar"/>
 
-        <activity android:name=".travel.TravelPlannerActivity"
+        <activity android:name=".travel.planner.TravelPlannerActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
 
-        <activity android:name=".travel.PlacesToVisitActivity"
+        <activity android:name=".travel.planner.places.PlacesToVisitActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
-        <activity android:name=".travel.destinationpicker.DestinationActivity"
+        <activity android:name=".travel.planner.destination.DestinationActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
         <activity android:name=".feed.onthisday.OnThisDayActivity" />
