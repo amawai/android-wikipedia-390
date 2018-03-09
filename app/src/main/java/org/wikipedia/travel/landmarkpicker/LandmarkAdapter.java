@@ -29,7 +29,7 @@ public class LandmarkAdapter extends RecyclerView.Adapter<LandmarkAdapter.ViewHo
     @Override
     public LandmarkAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.travel_planner_places_cardview, parent, false);
+                .inflate(R.layout.view_card_travel_landmark_picker_landmarks, parent, false);
         return new ViewHolder(v);
     }
 
@@ -73,9 +73,9 @@ public class LandmarkAdapter extends RecyclerView.Adapter<LandmarkAdapter.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
 
-            cv = (CardView) itemView.findViewById(R.id.cardView);
-            textViewTitle = (TextView) itemView.findViewById(R.id.title);
-            textViewDesc = (TextView) itemView.findViewById(R.id.desc);
+            cv = (CardView) itemView.findViewById(R.id.view_card);
+            textViewTitle = (TextView) itemView.findViewById(R.id.landmark_title_text_view);
+            textViewDesc = (TextView) itemView.findViewById(R.id.landmark_desc_text_view);
         }
     }
 

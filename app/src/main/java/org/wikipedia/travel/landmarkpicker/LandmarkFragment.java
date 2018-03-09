@@ -39,13 +39,13 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_places, container, false);//change xml to fragment
-        mbutton = (Button) view.findViewById(R.id.placetrip_next);
+        View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
+        mbutton = (Button) view.findViewById(R.id.landmark_button_next);
         mbutton.setOnClickListener((View.OnClickListener) this);
         //sets destination string in xml
         setDestination(DestinationFragment.getDestinationString(), view);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -68,17 +68,17 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setDestination(String[] destinationString, View view) { //to be implemented with destination fragment
-        //city textview editors are removed for city for now, since address includes it
-        //TextView city = (TextView) view.findViewById(R.id.city);
-        TextView country = (TextView) view.findViewById(R.id.country);
-        //city.setText(destinationString[0]);
-        country.setText(destinationString[1]);
+        //city_view_text textview editors are removed for city_view_text for now, since address includes it
+        //TextView city_view_text = (TextView) view.findViewById(R.id.city_view_text);
+        TextView country_view_text = (TextView) view.findViewById(R.id.country_view_text);
+        //city_view_text.setText(destinationString[0]);
+        country_view_text.setText(destinationString[1]);
     }
 
     /*
     //Currently has an exception error that make it hard to consistently make a list from
-    public List<LandmarkCard> listNearbyPlaces(String location) { //use geocoder to take address list and and return placecard list with titles
-        List<LandmarkCard> placesList = new ArrayList<LandmarkCard>();
+    public List<LandmarkCard> listNearbylandmarks(String location) { //use geocoder to take address list and and return landmarkcard list with titles
+        List<LandmarkCard> landmarksList = new ArrayList<LandmarkCard>();
         List<Address> addresses;
         Geocoder gc = new Geocoder(getContext());
 
@@ -88,23 +88,23 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
         for (int i = 0; i < addresses.size(); i++) {
-            placesList.get(i).setTitle(addresses.get(i).toString());
+            landmarksList.get(i).setTitle(addresses.get(i).toString());
         }
 
-        return placesList;
+        return landmarksList;
     }
     */
 
     private void fillList(List cardsList) {//dummy list filler, make it into a function later
-        //placeholder for geocoder function
+        //landmarkholder for geocoder function
         String[] tokyo = {"Edo", "Tokyo", "Greater Tokyo Area", "Shinjuku Station", "Yoyogi Station", "Shinjuku Ni-chōme",
                 "Tokyo subway sarin attack", "Kabukichō, Tokyo", "Tokyo Metropolitan Government Building", "Sangūbashi Station"};
         for (int i = 0; i < tokyo.length; i++) {
-            LandmarkCard place = new LandmarkCard(
+            LandmarkCard landmark = new LandmarkCard(
                     tokyo[i],
                     "this is a great location for tourists..."
             );
-            cardsList.add(place);
+            cardsList.add(landmark);
         }
     }
 

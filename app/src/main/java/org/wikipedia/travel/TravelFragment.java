@@ -32,23 +32,22 @@ public class TravelFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton nextButton;
     private Button goToPlanTrip;
     private Button destinationButton;
-
     private Button dNextButton;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_travel_planner, container, false);
+        View view = inflater.inflate(R.layout.fragment_travel_trip, container, false);
 
-        dNextButton = (Button) view.findViewById(R.id.dNext);//currently the button on the 1st travel planner activity
+        dNextButton = (Button) view.findViewById(R.id.travel_dnext_button_next); //currently the button on the 1st travel planner activity
         dNextButton.setOnClickListener(this);
 
-        // Sets listeners for button clicks
-        destinationButton = (Button) view.findViewById(R.id.tp_next_button);
+        //Sets listeners for button clicks
+        destinationButton = (Button) view.findViewById(R.id.travel_destination_button_next);
         destinationButton.setOnClickListener(this);
 
-        goToPlanTrip = (Button) view.findViewById(R.id.trip_view);
+        goToPlanTrip = (Button) view.findViewById(R.id.travel_go_plan_trip_button_next);
         goToPlanTrip.setOnClickListener(this);
 
 
@@ -71,17 +70,17 @@ public class TravelFragment extends Fragment implements View.OnClickListener {
         return (AppCompatActivity) getActivity();
     }
 
-    // When the next button selected it will create a new destination picker activity
+    //When the next button selected it will create a new destination picker activity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tp_next_button:
+            case R.id.travel_destination_button_next:
                 getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
                 break;
-            case R.id.trip_view:
+            case R.id.travel_go_plan_trip_button_next:
                 goToTripView(v);
                 break;
-            case R.id.dNext:
+            case R.id.travel_dnext_button_next:
                 Intent i = new Intent(getActivity(), LandmarkActivity.class);
                 startActivity(i);
         }

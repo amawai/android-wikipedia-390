@@ -41,15 +41,15 @@ public class TripFragment extends Fragment implements View.OnClickListener {
 
     private List<Trip> userTripsList = new ArrayList<>();
 
-    @BindView(R.id.trip_list) RecyclerView tripList;
+    @BindView(R.id.trip_list_view_recycler) RecyclerView tripList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_trip_display, container, false);
+        View view = inflater.inflate(R.layout.fragment_travel_trip, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        planNewTrip = (Button) view.findViewById(R.id.trip_plan_new);
+        planNewTrip = (Button) view.findViewById(R.id.trip_button_new);
         planNewTrip.setOnClickListener(this);
 
         updateUserTripList();
@@ -169,8 +169,8 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         public TripItemHolder(View tripView) {
             super(tripView);
             tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
-            tripName = (TextView) tripView.findViewById(R.id.trip_item_name);
-            tripDate = (TextView) tripView.findViewById(R.id.trip_item_date);
+            tripName = (TextView) tripView.findViewById(R.id.trip_name_view_text);
+            tripDate = (TextView) tripView.findViewById(R.id.trip_date_view_text);
 
             tripLayout.setOnClickListener(this);
         }

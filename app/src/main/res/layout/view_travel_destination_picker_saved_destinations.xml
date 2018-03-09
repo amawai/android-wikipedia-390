@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/destination_view_list"
         android:layout_width="346dp"
         android:layout_height="75dp"
         android:layout_marginBottom="8dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton5"
+        android:id="@+id/destination_button_floating_action_1"
         android:layout_width="44dp"
         android:layout_height="34dp"
         android:layout_marginBottom="8dp"
@@ -37,7 +37,7 @@
         app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/destination_view_text_1"
         android:layout_width="121dp"
         android:layout_height="20dp"
         android:layout_marginBottom="8dp"
@@ -53,7 +53,7 @@
         app:layout_constraintVertical_bias="0.47" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/destination_view_text_2"
         android:layout_width="121dp"
         android:layout_height="20dp"
         android:layout_marginBottom="8dp"
@@ -69,7 +69,7 @@
         app:layout_constraintVertical_bias="0.529" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton6"
+        android:id="@+id/destination_button_floating_action_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

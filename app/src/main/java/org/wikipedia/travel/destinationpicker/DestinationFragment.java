@@ -38,18 +38,18 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.travel_destination_picker_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_travel_destination_picker, container, false);
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
-        nextButton = (FloatingActionButton) view.findViewById(R.id.travel_next_button);
+        nextButton = (FloatingActionButton) view.findViewById(R.id.destination_button_next);
         nextButton.setOnClickListener(this);
 
-        PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.fragment_place_autocomplete);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                setDestinationArray((String)place.getName(), (String)place.getAddress());
+                setDestinationArray((String) place.getName(), (String) place.getAddress());
             }
 
             @Override
