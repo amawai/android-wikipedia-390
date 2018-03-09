@@ -1,15 +1,12 @@
-package org.wikipedia.travel.trips;
+package org.wikipedia.travel.trip;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import android.widget.Toast;
 
 import org.wikipedia.R;
 import org.wikipedia.concurrency.CallbackTask;
-import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.destinationpicker.DestinationActivity;
 
@@ -38,6 +34,7 @@ import butterknife.Unbinder;
  */
 
 public class TripFragment extends Fragment implements View.OnClickListener {
+
     private Unbinder unbinder;
     private Button planNewTrip;
     private TripAdapter tripAdapter;
@@ -192,4 +189,5 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         }
 
     }
+
 }

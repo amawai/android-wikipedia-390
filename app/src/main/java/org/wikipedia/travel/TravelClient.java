@@ -12,8 +12,10 @@ import org.wikipedia.feed.travel.TravelCard;
  */
 
 public class TravelClient extends DummyClient {
+
     @Override
     public Card getNewCard(@NonNull WikiSite wiki) {
         return new TravelCard();
     }
+
 }

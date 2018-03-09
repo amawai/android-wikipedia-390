@@ -22,12 +22,13 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DestinationActivity.class)
 public class DestinationActivityTest {
+
     Context mContext;
     Intent mIntent;
     DestinationActivity mDestinationActivity;
     DestinationFragment destinationFragment;
 
-    // Initial setup for DestinationActtvity tests
+    //Initial setup for DestinationActtvity tests
     @Before
     public void setUp() throws Exception {
         mContext = PowerMockito.mock(Context.class);
@@ -41,14 +42,14 @@ public class DestinationActivityTest {
         when(mDestinationActivity.createFragment()).thenReturn(destinationFragment);
     }
 
-    // Asserts that newIntent returns an Intent type
+    //Asserts that newIntent returns an Intent type
     @Test
     public void newIntent() throws Exception {
 
         assertEquals(mIntent, DestinationActivity.newIntent(mContext));
     }
 
-    // Asserts that the return type is an instance of Destination Fragment
+    //Asserts that the return type is an instance of Destination Fragment
     @Test
     public void createFragment() throws Exception {
         assertThat(mDestinationActivity.createFragment(), instanceOf(DestinationFragment.class));

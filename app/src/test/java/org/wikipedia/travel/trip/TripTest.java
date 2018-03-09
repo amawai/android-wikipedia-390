@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.trip;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.wikipedia.test.TestRunner;
-import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.trip.Trip;
 import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -124,4 +124,5 @@ public class TripTest {
         mockTrip.setDestination(testDestination);
         assertTrue(mockTrip.getDestination().getDestinationName().equals(testDestination.getDestinationName()));
     }
+
 }

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.database.contract.TripContract;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.log.L;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 
 //As with the database table, use the ReadingListDbHelper as a basis in constructing this class
 public class TripDbHelper {
+
     private static TripDbHelper INSTANCE;
 
     public static TripDbHelper instance() {
@@ -111,4 +113,5 @@ public class TripDbHelper {
     private SQLiteDatabase getWritableDatabase() {
         return WikipediaApp.getInstance().getDatabase().getWritableDatabase();
     }
+
 }

@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.landmarkpicker;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -16,35 +16,35 @@ import java.util.List;
  * Created by mnhn3 on 2018-03-04.
  */
 
-public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder> {
+public class LandmarkAdapter extends RecyclerView.Adapter<LandmarkAdapter.ViewHolder> {
 
-    private List<PlacesCard> placesCardList;
+    private List<LandmarkCard> landmarkCardList;
     private Context context;
 
-    public PlacesAdapter(List<PlacesCard> placesCards, Context context) {
-        this.placesCardList = placesCards;
+    public LandmarkAdapter(List<LandmarkCard> landmarkCards, Context context) {
+        this.landmarkCardList = landmarkCards;
         this.context = context;
     }
 
     @Override
-    public PlacesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LandmarkAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.travel_planner_places_cardview, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(PlacesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(LandmarkAdapter.ViewHolder holder, int position) {
 
-        PlacesCard placesCard = placesCardList.get(position);
+        LandmarkCard landmarkCard = landmarkCardList.get(position);
 
-        holder.textViewTitle.setText(placesCard.getTitle());
-        holder.textViewDesc.setText(placesCard.getDesc());
+        holder.textViewTitle.setText(landmarkCard.getTitle());
+        holder.textViewDesc.setText(landmarkCard.getDesc());
     }
 
     @Override
     public int getItemCount() {
-        return placesCardList.size();
+        return landmarkCardList.size();
     }
 
     @Override
@@ -53,14 +53,14 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     }
 
     // Insert and remove for implementation of view closing feature
-    public void insert(int position, PlacesCard placesCard) {
-        placesCardList.add(position, placesCard);
+    public void insert(int position, LandmarkCard landmarkCard) {
+        landmarkCardList.add(position, landmarkCard);
         notifyItemInserted(position);
     }
 
-    public void remove(PlacesCard placesCard) {
-        int position = placesCardList.indexOf(placesCard);
-        placesCardList.remove(position);
+    public void remove(LandmarkCard landmarkCard) {
+        int position = landmarkCardList.indexOf(landmarkCard);
+        landmarkCardList.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -76,7 +76,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             cv = (CardView) itemView.findViewById(R.id.cardView);
             textViewTitle = (TextView) itemView.findViewById(R.id.title);
             textViewDesc = (TextView) itemView.findViewById(R.id.desc);
-
         }
     }
+
 }

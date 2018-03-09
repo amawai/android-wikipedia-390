@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.datepicker;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import org.wikipedia.R;
+import org.wikipedia.travel.landmarkpicker.LandmarkActivity;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -26,7 +27,8 @@ import java.util.Calendar;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TravelDatePickerFragment extends Fragment implements OnClickListener{
+public class DateFragment extends Fragment implements OnClickListener {
+
     private Unbinder unbinder;
     private TextView mDisplayDate;
     private Button mButton;
@@ -64,7 +66,7 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
 
         switch (view.getId()) {
             case R.id.date_next_button:
-                getContext().startActivity(new Intent(PlacesToVisitActivity.newIntent(getContext())));
+                getContext().startActivity(new Intent(LandmarkActivity.newIntent(getContext())));
                 break;
             case R.id.button_select_date:
                 dateSelector();
