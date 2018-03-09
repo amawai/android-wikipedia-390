@@ -68,11 +68,11 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setDestination(String[] destinationString, View view) { //to be implemented with destination fragment
-        //city_view_text textview editors are removed for city_view_text for now, since address includes it
-        //TextView city_view_text = (TextView) view.findViewById(R.id.city_view_text);
-        TextView country_view_text = (TextView) view.findViewById(R.id.country_view_text);
-        //city_view_text.setText(destinationString[0]);
-        country_view_text.setText(destinationString[1]);
+        //landmark_city_text textview editors are removed for landmark_city_text for now, since address includes it
+        //TextView landmark_city_text = (TextView) view.findViewById(R.id.landmark_city_text);
+        TextView landmark_country_view_text = (TextView) view.findViewById(R.id.landmark_country_view_text);
+        //landmark_city_text.setText(destinationString[0]);
+        landmark_country_view_text.setText(destinationString[1]);
     }
 
     /*
