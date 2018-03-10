@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.datepicker;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -19,14 +19,17 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import org.wikipedia.R;
+import org.wikipedia.travel.landmarkpicker.LandmarkActivity;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TravelDatePickerFragment extends Fragment implements OnClickListener{
+public class DateFragment extends Fragment implements OnClickListener {
+
     private Unbinder unbinder;
     private TextView mDisplayDate;
     private Button mButton;
@@ -43,9 +46,9 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_date_picker, container, false);
-        mButton = (Button) view.findViewById(R.id.button_select_date);
-        nextButton = (FloatingActionButton) view.findViewById(R.id.date_next_button);
-        mDisplayDate = (TextView) view.findViewById(R.id.selected_date);
+        mButton = (Button) view.findViewById(R.id.date_button_select);
+        nextButton = (FloatingActionButton) view.findViewById(R.id.date_button_next);
+        mDisplayDate = (TextView) view.findViewById(R.id.selected_date_view_text);
         mButton.setOnClickListener((OnClickListener) this);
         nextButton.setOnClickListener((OnClickListener) this);
         unbinder = ButterKnife.bind(this, view);
@@ -63,10 +66,10 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.date_next_button:
-                getContext().startActivity(new Intent(PlacesToVisitActivity.newIntent(getContext())));
+            case R.id.date_button_next:
+                getContext().startActivity(new Intent(LandmarkActivity.newIntent(getContext())));
                 break;
-            case R.id.button_select_date:
+            case R.id.date_button_select:
                 dateSelector();
                 break;
 
@@ -98,7 +101,7 @@ public class TravelDatePickerFragment extends Fragment implements OnClickListene
     }
 
     public String getMonth(int month) {
-        return new DateFormatSymbols().getMonths()[month-1];
+        return new DateFormatSymbols().getMonths()[month - 1];
     }
 
     private AppCompatActivity getAppCompatActivity() {

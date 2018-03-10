@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.database;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -7,8 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.robolectric.RobolectricTestRunner;
-import org.wikipedia.travel.database.Trip;
-import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.travel.trip.Trip;
 
 import java.util.Date;
 
@@ -19,6 +18,7 @@ import static org.mockito.Mockito.mock;
 //These tests will be likely be further expanded once the database is finalized.
 @RunWith(RobolectricTestRunner.class)
 public class TripDbHelperTest {
+
     SQLiteDatabase mockDb;
     TripDbHelper mockDbHelper;
 
@@ -42,4 +42,5 @@ public class TripDbHelperTest {
         //Verify interaction with the mock has taken place
         assertNull(mockDbHelper.createList(mockDb, "Trip of a lifetime", new Trip.Destination("New Zealand"), new Date()));
     }
+
 }

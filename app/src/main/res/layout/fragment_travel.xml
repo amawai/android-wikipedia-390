@@ -5,49 +5,53 @@
     android:id="@+id/travel_planner_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/travel_dnext_title_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/travel_destination_title"
-                android:text="@string/fragment_travel_destination_title"
                 android:layout_margin="45dp"
+                android:text="@string/fragment_travel_destination_title"
                 android:textSize="30sp" />
+
             <Button
+                android:id="@+id/travel_dnext_button_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="NEXT"
-                android:id="@+id/dNext"
-                android:background="@color/accent50" />
+                android:background="@color/accent50"
+                android:text="NEXT" />
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="132dp">
+
             <TextView
+                android:id="@+id/travel_destination_title_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/travel_destination_title2"
-                android:text="@string/fragment_travel_destination_title"
                 android:layout_margin="45dp"
-                android:textSize="30sp"
-                />
+                android:text="@string/fragment_travel_destination_title"
+                android:textSize="30sp" />
+
             <Button
-                android:id="@+id/tp_next_button"
+                android:id="@+id/travel_destination_button_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="NEXT"
-                android:background="@color/accent50"/>
+                android:background="@color/accent50"
+                android:text="NEXT" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,7 +60,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/travel_go_plan_trip_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="45dp"
@@ -65,7 +69,7 @@
                 android:textSize="30sp" />
 
             <Button
-                android:id="@+id/trip_view"
+                android:id="@+id/travel_go_plan_trip_button_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"

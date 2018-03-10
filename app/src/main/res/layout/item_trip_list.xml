@@ -19,7 +19,7 @@
 
 
         <TextView
-            android:id="@+id/trip_item_name"
+            android:id="@+id/trip_name_view_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,10 +29,10 @@
             tools:text="tripname" />
 
         <TextView
-            android:id="@+id/trip_item_date"
+            android:id="@+id/trip_date_view_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/trip_item_name"
+            android:layout_below="@+id/trip_name_view_text"
             android:layout_weight="1"
             android:text="TextView"
             android:textAlignment="center"

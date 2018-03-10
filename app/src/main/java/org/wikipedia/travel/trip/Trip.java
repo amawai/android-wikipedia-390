@@ -1,9 +1,10 @@
-package org.wikipedia.travel.database;
+package org.wikipedia.travel.trip;
 
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
+import org.wikipedia.travel.database.TripDatabaseTable;
 
 import java.util.Collections;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.List;
 //This class constitutes a basic Trip class with a list of destinations (also implemented as an inner class below)
 //and a departure date
 public class Trip {
+
     //trip id for database storage
     private long id;
     //trip title, also to be used to signfiy the germane list in the database
@@ -147,5 +149,7 @@ public class Trip {
         public boolean areTherePlacesToVisitForDestination() {
             return (!(this.landmarks.isEmpty()) && this.landmarks != null);
         }
+
     }
+
 }
