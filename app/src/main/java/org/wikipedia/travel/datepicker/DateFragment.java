@@ -48,9 +48,10 @@ public class DateFragment extends Fragment implements OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_date_picker, container, false);
 
+        unbinder = ButterKnife.bind(this, view);
+
         selectButton.setOnClickListener((OnClickListener) this);
         nextButton.setOnClickListener((OnClickListener) this);
-        unbinder = ButterKnife.bind(this, view);
 
         //setting the current date as the departure date
         String date = getMonth(month) + " " + day + ", " + year;

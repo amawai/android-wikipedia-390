@@ -3,6 +3,7 @@ package org.wikipedia.travel.landmarkpicker;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.wikipedia.R;
@@ -34,7 +34,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
 
-    @BindView(R.id.landmark_button_next) Button nextButton;
+    @BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
 
     @Nullable
@@ -43,7 +43,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
 
-        nextButton.setOnClickListener((View.OnClickListener) this);
         //sets destination string in xml
         setDestination(DestinationFragment.getDestinationString(), view);
 
@@ -56,9 +55,11 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         fillList(cardsList);
 
         LandmarkAdapter adapter = new LandmarkAdapter(cardsList, getContext());
-        recyclerView.setAdapter(adapter);
 
         unbinder = ButterKnife.bind(this, view);
+        recyclerView.setAdapter(adapter);
+        nextButton.setOnClickListener((View.OnClickListener) this);
+
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
         return view;

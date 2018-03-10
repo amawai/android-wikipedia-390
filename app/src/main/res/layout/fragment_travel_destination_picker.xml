@@ -26,7 +26,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
-        android:text="Destinations"
+        android:text="@string/destination_picker"
         android:textSize="35sp"
         app:layout_constraintBottom_toTopOf="@+id/fragment_place_autocomplete"
         app:layout_constraintEnd_toStartOf="@+id/destination_button_next"
