@@ -20,6 +20,7 @@ import org.wikipedia.util.FeedbackUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -29,23 +30,23 @@ import butterknife.Unbinder;
 
 public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
-    private Button mbutton;
     private Unbinder unbinder;
-    private RecyclerView recyclerView;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
+
+    @BindView(R.id.landmark_button_next) Button nextButton;
+    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
-        mbutton = (Button) view.findViewById(R.id.landmark_button_next);
-        mbutton.setOnClickListener((View.OnClickListener) this);
+
+        nextButton.setOnClickListener((View.OnClickListener) this);
         //sets destination string in xml
         setDestination(DestinationFragment.getDestinationString(), view);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             linearLayoutManager = new LinearLayoutManager(getActivity());

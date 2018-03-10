@@ -31,14 +31,15 @@ import butterknife.Unbinder;
 public class DateFragment extends Fragment implements OnClickListener {
 
     private Unbinder unbinder;
-    private TextView mDisplayDate;
-    private Button mButton;
-    private FloatingActionButton nextButton;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Calendar cal = Calendar.getInstance();
     private int year = cal.get(Calendar.YEAR);
     private int month = cal.get(Calendar.MONTH) + 1;
     private int day = cal.get(Calendar.DAY_OF_MONTH);
+
+    @BindView(R.id.date_button_select) Button selectButton;
+    @BindView(R.id.date_button_next) FloatingActionButton nextButton;
+    @BindView(R.id.selected_date_view_text) TextView mDisplayDate;
 
 
     @Override
@@ -46,10 +47,8 @@ public class DateFragment extends Fragment implements OnClickListener {
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_date_picker, container, false);
-        mButton = (Button) view.findViewById(R.id.date_button_select);
-        nextButton = (FloatingActionButton) view.findViewById(R.id.date_button_next);
-        mDisplayDate = (TextView) view.findViewById(R.id.selected_date_view_text);
-        mButton.setOnClickListener((OnClickListener) this);
+
+        selectButton.setOnClickListener((OnClickListener) this);
         nextButton.setOnClickListener((OnClickListener) this);
         unbinder = ButterKnife.bind(this, view);
 

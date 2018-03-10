@@ -19,6 +19,7 @@ import org.wikipedia.travel.landmarkpicker.LandmarkActivity;
 import org.wikipedia.travel.trip.TripFragment;
 import org.wikipedia.travel.destinationpicker.DestinationActivity;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -30,9 +31,10 @@ public class TravelFragment extends Fragment implements View.OnClickListener {
 
     private Unbinder unbinder;
     private FloatingActionButton nextButton;
-    private Button goToPlanTrip;
-    private Button destinationButton;
-    private Button dNextButton;
+
+    @BindView(R.id.travel_dnext_button_next) Button dNextButton;
+    @BindView(R.id.travel_destination_button_next) Button destinationButton;
+    @BindView(R.id.travel_go_plan_trip_button_next) Button goToPlanTrip;
 
     @Nullable
     @Override
@@ -40,14 +42,12 @@ public class TravelFragment extends Fragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_trip, container, false);
 
-        dNextButton = (Button) view.findViewById(R.id.travel_dnext_button_next); //currently the button on the 1st travel planner activity
+        //currently the button on the 1st travel planner activity
         dNextButton.setOnClickListener(this);
 
         //Sets listeners for button clicks
-        destinationButton = (Button) view.findViewById(R.id.travel_destination_button_next);
         destinationButton.setOnClickListener(this);
 
-        goToPlanTrip = (Button) view.findViewById(R.id.travel_go_plan_trip_button_next);
         goToPlanTrip.setOnClickListener(this);
 
 
