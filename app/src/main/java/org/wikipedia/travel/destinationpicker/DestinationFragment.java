@@ -20,6 +20,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import org.wikipedia.R;
 import org.wikipedia.travel.datepicker.DateActivity;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -30,8 +31,9 @@ import butterknife.Unbinder;
 public class DestinationFragment extends Fragment implements View.OnClickListener {
 
     private Unbinder unbinder;
-    private FloatingActionButton nextButton;
     private static String[] destinationString;
+
+    @BindView(R.id.destination_button_next) FloatingActionButton nextButton;
 
     //The method will assemble the destinationFragment and invoke the Google Place Autocomplete widget
     @Nullable
@@ -42,7 +44,6 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
-        nextButton = (FloatingActionButton) view.findViewById(R.id.destination_button_next);
         nextButton.setOnClickListener(this);
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.fragment_place_autocomplete);

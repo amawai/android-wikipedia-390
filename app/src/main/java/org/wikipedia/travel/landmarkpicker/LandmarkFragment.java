@@ -3,6 +3,7 @@ package org.wikipedia.travel.landmarkpicker;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.wikipedia.R;
@@ -20,6 +20,7 @@ import org.wikipedia.util.FeedbackUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -29,23 +30,22 @@ import butterknife.Unbinder;
 
 public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
-    private Button mbutton;
     private Unbinder unbinder;
-    private RecyclerView recyclerView;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
+
+    @BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
+    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
-        mbutton = (Button) view.findViewById(R.id.landmark_button_next);
-        mbutton.setOnClickListener((View.OnClickListener) this);
+
         //sets destination string in xml
         setDestination(DestinationFragment.getDestinationString(), view);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -55,9 +55,11 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         fillList(cardsList);
 
         LandmarkAdapter adapter = new LandmarkAdapter(cardsList, getContext());
-        recyclerView.setAdapter(adapter);
 
         unbinder = ButterKnife.bind(this, view);
+        recyclerView.setAdapter(adapter);
+        nextButton.setOnClickListener((View.OnClickListener) this);
+
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
         return view;

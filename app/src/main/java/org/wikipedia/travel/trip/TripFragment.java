@@ -36,12 +36,13 @@ import butterknife.Unbinder;
 public class TripFragment extends Fragment implements View.OnClickListener {
 
     private Unbinder unbinder;
-    private Button planNewTrip;
+
     private TripAdapter tripAdapter;
 
     private List<Trip> userTripsList = new ArrayList<>();
 
     @BindView(R.id.trip_list_view_recycler) RecyclerView tripList;
+    @BindView(R.id.trip_button_new) Button planNewTrip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +50,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_travel_trip, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        planNewTrip = (Button) view.findViewById(R.id.trip_button_new);
         planNewTrip.setOnClickListener(this);
 
         updateUserTripList();
@@ -171,7 +171,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
             tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
             tripName = (TextView) tripView.findViewById(R.id.trip_name_view_text);
             tripDate = (TextView) tripView.findViewById(R.id.trip_date_view_text);
-
             tripLayout.setOnClickListener(this);
         }
 
