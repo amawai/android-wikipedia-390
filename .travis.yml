@@ -11,3 +11,13 @@ before_script:
   - chmod +x gradlew
 script:
   - ./gradlew testDevDebug
+stages:
+  - compile
+  - test
+  - deploy
+jobs:
+  include:
+    - stage: compile
+      script: ./compile
+    - stage: deploy
+      script: ./deploy
