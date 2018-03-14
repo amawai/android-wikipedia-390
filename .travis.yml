@@ -17,10 +17,29 @@ jobs:
       language: android
       script: ./gradlew -q app:dependencies --configuration compile
     # will run all tests of the application
-    - stage: test
+    - stage: All Tests
       language: android
       before_script: chmod +x gradlew
       script: ./gradlew testDevDebug
+    # will run the release 1 unit tests added by our team
+    - stage: Release 1 Unit Tests
+      language: android
+      before_script: cd app/test/java/org.wikipedia/feed/onthisday
+      script: ./gradlew testDevDebug
+      before_script: cd app/test/java/org.wikipedia/activity
+      script: ./gradlew testDevDebug
+      before_script: cd app/test/java/org.wikipedia/settings
+      script: ./gradlew testDevDebug
+    # will run the release 2 unit tests added by our team
+    - stage: Release 2 Unit Tests
+      language: android
+      before_script: cd app/test/java/org.wikipedia/travel
+      script: ./gradlew testDevDebug
+    # will run the espresso tests added by our team (WILL ADD ONCE ESPRESSO TESTS ARE INTEGRATED INTO DEVELOP BRANCH)
+    # - stage: Release 2 Espresso Tests
+    #  language: android
+    #  before_script:
+    #  script: ./gradlew testDevDebug
     # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
