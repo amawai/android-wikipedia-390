@@ -26,21 +26,13 @@ jobs:
     # will run the release 1 tests added by our team
     - stage: Release 1 Tests
       language: android
-      before_script:
-       - cd app/src/test/java/org/wikipedia/feed/onthisday
-      script: ./gradlew 
-      before_script:
-       - cd app/src/test/java/org/wikipedia/activity
-      script: ./gradlew
-      before_script:
-       - cd app/src/test/java/org/wikipedia/settings
-      script: ./gradlew
+      script: ./gradlew -p app/src/test/java/org/wikipedia/feed/onthisday
+      script: ./gradlew -p app/src/test/java/org/wikipedia/activity
+      script: ./gradlew -p app/src/test/java/org/wikipedia/settings
     # will run the release 2 tests added by our team
     - stage: Release 2 Tests
       language: android
-      before_script:
-      - cd app/src/test/java/org/wikipedia/travel
-      script: ./gradlew
+      script: ./gradlew -p app/src/test/java/org/wikipedia/travel
     # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
