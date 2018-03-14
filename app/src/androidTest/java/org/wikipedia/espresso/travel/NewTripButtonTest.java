@@ -1,4 +1,4 @@
-package org.wikipedia.espresso;
+package org.wikipedia.espresso.travel;
 
 
 import android.support.test.espresso.UiController;

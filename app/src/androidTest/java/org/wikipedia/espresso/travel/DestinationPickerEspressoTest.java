@@ -44,18 +44,18 @@ public class DestinationPickerEspressoTest {
     @Test
     public void allUiComponentsShouldExist() {
         //Ensures that all relevant components are rendered
-        ViewInteraction textView = onView(
+        ViewInteraction destination = onView(
                 allOf(withId(R.id.destinations_view_text)));
-        textView.check(matches(withText(R.string.fragment_travel_destination_title)));
+        destination.check(matches(withText(R.string.fragment_travel_destination_title)));
 
-        ViewInteraction imageButton = onView(
+        ViewInteraction nextButton = onView(
                 allOf(withId(R.id.destination_button_next)));
-        imageButton.check(matches(isDisplayed()));
+        nextButton.check(matches(isDisplayed()));
 
-        ViewInteraction editText = onView(
+        ViewInteraction searchInput = onView(
                 allOf(withId(R.id.place_autocomplete_search_input),
                         isDisplayed()));
-        editText.check(matches(isDisplayed()));
+        searchInput.check(matches(isDisplayed()));
     }
 
     @Test
