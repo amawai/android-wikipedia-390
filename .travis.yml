@@ -12,11 +12,10 @@ android:
 
 jobs:
   include:
-    # will build app folder
+    # will compile build the app's dependencies
     - stage: compile
       language: android
-      before_script: cd app
-      script: ./gradlew
+      script: ./gradlew -q app:dependencies --configuration compile
     # will run all tests of the application
     - stage: test
       language: android
