@@ -23,6 +23,10 @@ notifications:
       on_success: always
       on_failure: always
 
+    slack: '<jadmalek92@gmail.com>:<B8X4ZQGnC9UWzFKxsGDR7PGL>#general'
+      on_success: always
+      on_failure: always
+
 jobs:
   # note that the reason for the no language set is an issue with the beta version of the build stages
   # for the android language
