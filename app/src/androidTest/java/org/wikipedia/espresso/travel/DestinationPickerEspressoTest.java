@@ -71,7 +71,7 @@ public class DestinationPickerEspressoTest {
             searchBar.setText("Montreal");
             closeSoftKeyboard();
         } catch (UiObjectNotFoundException e) {
-            System.out.println("Not found");
+            e.printStackTrace();
         }
 
         //Select one of the options from the dropdpown
