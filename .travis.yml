@@ -12,7 +12,19 @@ android:
 
 jobs:
   include:
+    # will use default build.gradle to build project
+    - stage: compile
+      language: android
+    # will run all tests of the application
     - stage: test
       language: android
       before_script: chmod +x gradlew
       script: ./gradlew testDevDebug
+    - stage: GitHub Release
+      script: echo "Deploying to GitHub releases ..."
+      deploy:
+        provider: releases
+        api_key: $GITHUB_OAUTH_TOKEN
+        skip_cleanup: true
+        on:
+          tags: true
