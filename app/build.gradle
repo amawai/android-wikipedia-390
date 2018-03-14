@@ -259,6 +259,7 @@ dependencies {
     // Android JUnit Runner
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:2.1.1"
 }
 
 private setSigningConfigKey(config, Properties props) {
