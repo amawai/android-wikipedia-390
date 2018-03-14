@@ -2,13 +2,16 @@ package org.wikipedia.espresso.travel;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.widget.DatePicker;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +26,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -99,5 +103,36 @@ public class DatePickerEspressoTest {
         }
 
         dateDisplay.check(matches(withText(today)));
+    }
+
+    @Test
+    public void shouldDisplayUserSetDate() {
+        ViewInteraction dateDisplay = onView(
+                allOf(withId(R.id.selected_date_view_text)));
+        dateDisplay.check(matches(withText(today)));
+
+        ViewInteraction selectDateButton = onView(
+                allOf(withId(R.id.date_button_select), withText(R.string.date_select_date)));
+        selectDateButton.perform(click());
+
+        onView(withClassName(
+                Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(2018, 5, 1));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        UiObject submitDateButton = mDevice.findObject(new UiSelector()
+                .text("OK"));
+
+        try {
+            submitDateButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        dateDisplay.check(matches(withText("May 1, 2018")));
     }
 }
