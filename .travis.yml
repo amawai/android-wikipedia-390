@@ -11,19 +11,18 @@ android:
     - 'android-sdk-license-.+'
 
 notifications:
-    email:
+    - email:
       recipients:
         - sophiaquach16@gmail.com
         - jadmalek92@gmail.com
         - amawai.731@gmail.com
         - mnhn329@gmail.com
-        - am_bhand@live.concordia.ca
+        - pxaman@gmail.com
         - roger_lu_dude@hotmail.com
         - artemmikhalitsin@gmail.com
       on_success: always
       on_failure: always
-
-    slack: '<jadmalek92@gmail.com>:<B8X4ZQGnC9UWzFKxsGDR7PGL>#general'
+    - slack: '<jadmalek92@gmail.com>:<B8X4ZQGnC9UWzFKxsGDR7PGL>#general'
       on_success: always
       on_failure: always
 
