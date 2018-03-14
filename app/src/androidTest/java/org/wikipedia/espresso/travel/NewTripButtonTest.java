@@ -96,7 +96,7 @@ public class NewTripButtonTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(allOf(withId(R.id.trip_button_new))).check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.trip_button_new))).check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(
