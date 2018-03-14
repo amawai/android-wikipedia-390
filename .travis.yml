@@ -10,6 +10,19 @@ android:
   licenses:
     - 'android-sdk-license-.+'
 
+notifications:
+    email:
+      recipients:
+        - sophiaquach16@gmail.com
+        - jadmalek92@gmail.com
+        - amawai.731@gmail.com
+        - mnhn329@gmail.com
+        - am_bhand@live.concordia.ca
+        - roger_lu_dude@hotmail.com
+        - artemmikhalitsin@gmail.com
+      on_success: always
+      on_failure: always
+
 jobs:
   # note that the reason for the no language set is an issue with the beta version of the build stages
   # for the android language
