@@ -12,14 +12,17 @@ android:
 
 jobs:
   include:
-    # will use default build.gradle to build project
+    # will build app folder
     - stage: compile
       language: android
+      before_script: cd app
+      script: ./gradlew
     # will run all tests of the application
     - stage: test
       language: android
       before_script: chmod +x gradlew
       script: ./gradlew testDevDebug
+    # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
       deploy:
