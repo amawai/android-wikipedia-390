@@ -11,8 +11,8 @@ android:
     - 'android-sdk-license-.+'
 
 notifications:
-    # travis updates notifications for email
-    - email:
+    # travis update notifications for email on sucesss and on failure
+    email:
       recipients:
         - sophiaquach16@gmail.com
         - jadmalek92@gmail.com
