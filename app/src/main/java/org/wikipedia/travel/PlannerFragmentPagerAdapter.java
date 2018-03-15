@@ -8,10 +8,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.wikipedia.travel.datepicker.DateFragment;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
+import org.wikipedia.travel.landmarkpicker.LandmarkFragment;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.travel.trip.TripFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Artem on 2018-03-02.
@@ -59,13 +61,15 @@ public class PlannerFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void setupTripPages(Trip trip) {
+        String destinationName = trip.getDestination().getDestinationName();
+        Date departureDate = trip.getTripDepartureDate();
         tripPages =  new ArrayList<>();
-        tripPages.add(DestinationFragment.newInstance(trip.getDestination().getDestinationName())); //TODO: Populate destination
+        tripPages.add(DestinationFragment.newInstance(destinationName));
         if(trip.getDestination() != null) {
-            tripPages.add(DateFragment.newInstance(trip));
+            tripPages.add(DateFragment.newInstance(departureDate.getYear(), departureDate.getMonth(), departureDate.getDay()));
         }
         if(trip.getTripDepartureDate() != null) {
-        //    tripPages.add(LandmarkFragment.newInstance());
+            tripPages.add(LandmarkFragment.newInstance(destinationName));
         }
         notifyDataSetChanged();
     }

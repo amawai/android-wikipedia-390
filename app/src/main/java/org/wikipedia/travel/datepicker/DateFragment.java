@@ -20,11 +20,8 @@ import android.widget.TextView;
 
 import org.wikipedia.R;
 import org.wikipedia.activity.FragmentUtil;
-import org.wikipedia.travel.landmarkpicker.LandmarkActivity;
-import org.wikipedia.travel.trip.Trip;
 
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,11 +40,11 @@ public class DateFragment extends Fragment{
         public void onDateChanged(int year, int month, int day);
     }
 
-    public static DateFragment newInstance(Trip trip) {
+    public static DateFragment newInstance(int year, int month, int day) {
         Bundle args = new Bundle();
-        args.putInt("YEAR", trip.getTripDepartureDate().getYear());
-        args.putInt("MONTH", trip.getTripDepartureDate().getMonth());
-        args.putInt("DAY", trip.getTripDepartureDate().getDay());
+        args.putInt("YEAR", year);
+        args.putInt("MONTH", month);
+        args.putInt("DAY", day);
 
         DateFragment fragment = new DateFragment();
         fragment.setArguments(args);
