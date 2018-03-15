@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import org.wikipedia.database.DatabaseTable;
 import org.wikipedia.database.column.Column;
 import org.wikipedia.database.contract.TripContract;
-import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.trip.Trip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.List;
 //Used the format/methods for the ReadlistTable, ReadingListPageTable in order to properly integrate a new table into the application
 //Only setup for a trip with a single destination
 public class TripDatabaseTable extends DatabaseTable<Trip> {
+
     private static final int DB_VER_INTRODUCED = 19;
 
     public TripDatabaseTable() {
@@ -63,5 +64,6 @@ public class TripDatabaseTable extends DatabaseTable<Trip> {
     @Override protected int getDBVersionIntroducedAt() {
         return DB_VER_INTRODUCED;
     }
+
 }
 

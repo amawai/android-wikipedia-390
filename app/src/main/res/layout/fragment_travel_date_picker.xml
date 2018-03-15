@@ -4,12 +4,12 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.wikipedia.travel.TravelDatePickerFragment">
+    tools:context="org.wikipedia.travel.datepicker.DateFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/date_next_button"
+        android:id="@+id/date_button_next"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginEnd="32dp"
@@ -24,13 +24,13 @@
         app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
     <TextView
-        android:id="@+id/selected_date"
-        android:focusable="false"
+        android:id="@+id/selected_date_view_text"
         android:layout_width="199dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="164dp"
-        android:text="Selected Date"
+        android:focusable="false"
+        android:text="@string/date_selected_date"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintRight_toRightOf="parent"
@@ -38,28 +38,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_select_date"
+        android:id="@+id/date_button_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Select Date"
+        android:text="@string/date_select_date"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selected_date"
+        app:layout_constraintTop_toBottomOf="@+id/selected_date_view_text"
         app:layout_constraintVertical_bias="0.313" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/select_departure_date_view_text"
         android:layout_width="255dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Select Departure Date"
+        android:text="@string/date_departure"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/date_next_button"
+        app:layout_constraintEnd_toStartOf="@+id/date_button_next"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

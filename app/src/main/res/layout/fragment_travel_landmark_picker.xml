@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/country"
+        android:id="@+id/landmark_country_view_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30sp"
@@ -11,8 +12,8 @@
         android:text="" />
 
     <TextView
-        android:id="@+id/city"
-        android:layout_below="@+id/country"
+        android:id="@+id/landmark_city_view_text"
+        android:layout_below="@+id/landmark_country_view_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -20,18 +21,20 @@
         android:text="" />
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_below="@+id/city"
-        android:id="@+id/places_recycler_view"
+        android:layout_below="@+id/landmark_city_view_text"
+        android:id="@+id/landmark_view_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/placetrip_next"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/landmark_button_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/city"
+        android:layout_above="@+id/landmark_city_view_text"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="11dp"
-        android:text="Next" />
+        android:clickable="true"
+        android:tint="#ffffff"
+        app:backgroundTint="#295dce"
+        app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
 </RelativeLayout>

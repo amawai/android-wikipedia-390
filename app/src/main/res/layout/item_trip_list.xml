@@ -20,7 +20,7 @@
 
 
         <TextView
-            android:id="@+id/trip_item_name"
+            android:id="@+id/trip_name_view_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -33,7 +33,7 @@
             tools:text="tripname" />
 
         <TextView
-            android:id="@+id/trip_item_date"
+            android:id="@+id/trip_date_view_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/trip_item_name"
@@ -41,7 +41,8 @@
             android:layout_marginEnd="42dp"
             android:clickable="true"
             android:text="TextView"
-            tools:text="location" />
+            tools:text="location"
+            tools:ignore="UnknownId" />
 
         <ImageView
             android:id="@+id/trip_item_edit"

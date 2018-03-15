@@ -7,7 +7,7 @@
     android:background="#EAECF0">
 
     <Button
-        android:id="@+id/trip_plan_new"
+        android:id="@+id/trip_button_new"
         style="@style/App.Button.White"
         android:layout_width="354dp"
         android:layout_height="77dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/trip_list"
+        android:id="@+id/trip_list_view_recycler"
         android:layout_width="368dp"
         android:layout_height="438dp"
         android:layout_marginBottom="8dp"
@@ -37,6 +37,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trip_plan_new" />
+        app:layout_constraintTop_toBottomOf="@+id/trip_button_new" />
 
 </android.support.constraint.ConstraintLayout>

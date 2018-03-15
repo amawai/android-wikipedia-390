@@ -11,7 +11,7 @@ import org.wikipedia.pageimages.PageImage;
 import org.wikipedia.readinglist.database.ReadingList;
 import org.wikipedia.readinglist.database.ReadingListPage;
 import org.wikipedia.search.RecentSearch;
-import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.log.L;
 
 public class Database extends SQLiteOpenHelper {

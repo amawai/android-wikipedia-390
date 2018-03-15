@@ -1,15 +1,12 @@
-package org.wikipedia.travel.trips;
+package org.wikipedia.travel.trip;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 
 import org.wikipedia.R;
 import org.wikipedia.concurrency.CallbackTask;
-import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.destinationpicker.DestinationActivity;
 import org.wikipedia.util.FeedbackUtil;
@@ -43,21 +39,22 @@ import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
  */
 
 public class TripFragment extends Fragment implements View.OnClickListener {
+
     private Unbinder unbinder;
-    private Button planNewTrip;
+
     private TripAdapter tripAdapter;
 
     private List<Trip> userTripsList = new ArrayList<>();
 
-    @BindView(R.id.trip_list) RecyclerView tripList;
+    @BindView(R.id.trip_list_view_recycler) RecyclerView tripList;
+    @BindView(R.id.trip_button_new) Button planNewTrip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_trip_display, container, false);
+        View view = inflater.inflate(R.layout.fragment_travel_trip, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        planNewTrip = (Button) view.findViewById(R.id.trip_plan_new);
         planNewTrip.setOnClickListener(this);
 
         updateUserTripList();
@@ -189,7 +186,6 @@ public class TripFragment extends Fragment implements View.OnClickListener {
             tripDate.setOnClickListener(this);
             tripEdit.setOnClickListener(this);
             tripDelete.setOnClickListener(this);
-        }
 
         @Override
         public void onClick(View v) {
@@ -217,4 +213,5 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         }
 
     }
+
 }

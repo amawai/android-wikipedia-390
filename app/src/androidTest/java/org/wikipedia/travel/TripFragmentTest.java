@@ -1,7 +1,7 @@
 package org.wikipedia.travel;
 
 import org.junit.Test;
-import org.wikipedia.travel.trips.TripFragment;
+import org.wikipedia.travel.trip.TripFragment;
 
 import static org.junit.Assert.assertNotNull;
 

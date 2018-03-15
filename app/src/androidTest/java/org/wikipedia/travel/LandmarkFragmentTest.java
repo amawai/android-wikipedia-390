@@ -1,6 +1,7 @@
 package org.wikipedia.travel;
 
 import org.junit.Test;
+import org.wikipedia.travel.landmarkpicker.LandmarkFragment;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -10,12 +11,12 @@ import static org.junit.Assert.assertNotNull;
  */
 
 
-public class PlacesFragmentTest {
+public class LandmarkFragmentTest {
 
     @Test
     public void onCreateView() throws Exception {
-        PlacesFragment placesFragment = new PlacesFragment();
-        assertNotNull(placesFragment);
+        LandmarkFragment landmarkFragment = new LandmarkFragment();
+        assertNotNull(landmarkFragment);
     }
 
 }
