@@ -60,9 +60,9 @@ public class DestinationPickerEspressoTest {
 
     @Test
     public void selectedDestinationShouldAppearOnScreen() throws UiObjectNotFoundException {
-        ViewInteraction layout = onView(withId(R.id.fragment_place_autocomplete));
+        ViewInteraction destinationInput = onView(withId(R.id.fragment_place_autocomplete));
 
-        layout.perform(click());
+        destinationInput.perform(click());
 
         UiObject searchBar = mDevice.findObject(new UiSelector()
                 .className("android.widget.EditText"));
@@ -82,6 +82,7 @@ public class DestinationPickerEspressoTest {
                 allOf(withId(R.id.place_autocomplete_search_input),
                         isDisplayed()));
 
+        //Check that the destination selected from the dropdown appears
         editText.check(matches(withText("Montreal")));
     }
 }

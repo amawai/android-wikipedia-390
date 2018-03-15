@@ -69,7 +69,7 @@ public class TravelPlannerIntentTest {
         buttonToDestination.perform(click());
         intended(hasComponent(DestinationActivity.class.getName()));
 
-        selectDestination();
+        selectDestination(); //This method is called in order to simulate user behavior
 
         ViewInteraction buttonToDate = onView(
                 allOf(withId(R.id.destination_button_next)));
@@ -88,6 +88,7 @@ public class TravelPlannerIntentTest {
                 () -> waitFor(2000));
     }
 
+    //Private helper to select destination (necessary in order to move on to the next view)
     private void selectDestination() throws UiObjectNotFoundException {
         UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         ViewInteraction layout = onView(withId(R.id.fragment_place_autocomplete));

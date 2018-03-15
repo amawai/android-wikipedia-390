@@ -50,7 +50,7 @@ public class DatePickerEspressoTest {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
         Calendar c = Calendar.getInstance();
-        //Formatting the date as it is in the datepicker
+        //Formatting the default date as it is displayed in the datepicker fragment
         SimpleDateFormat theDate = new SimpleDateFormat("LLLL dd, yyyy", Locale.getDefault());
         today = theDate.format(c.getTime());
     }
@@ -91,6 +91,7 @@ public class DatePickerEspressoTest {
         UiObject cancelButton = mDevice.findObject(new UiSelector()
                 .text("Cancel"));
         try {
+            //Cancel the datepicker without changing the date
             cancelButton.click();
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
@@ -101,12 +102,13 @@ public class DatePickerEspressoTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        //Ensure that the date hasn't changed after opening and subsequently canceling date change from datepicker
         dateDisplay.check(matches(withText(today)));
     }
 
     @Test
     public void shouldDisplayUserSetDate() {
+        //Check that the datepicker's default displays shows today's date
         ViewInteraction dateDisplay = onView(
                 allOf(withId(R.id.selected_date_view_text)));
         dateDisplay.check(matches(withText(today)));
@@ -115,6 +117,7 @@ public class DatePickerEspressoTest {
                 allOf(withId(R.id.date_button_select), withText(R.string.date_select_date)));
         selectDateButton.perform(click());
 
+        //Change the date in datepicker
         onView(withClassName(
                 Matchers.equalTo(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(2018, 5, 1));
@@ -128,11 +131,12 @@ public class DatePickerEspressoTest {
                 .text("OK"));
 
         try {
+            //Use the UiAutomator framework to submit the new date
             submitDateButton.click();
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
         }
-
+        //Ensure that the displayed date corresponds to the date selected from the datepicker
         dateDisplay.check(matches(withText("May 1, 2018")));
     }
 }
