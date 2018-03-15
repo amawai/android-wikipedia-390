@@ -5,41 +5,11 @@
     android:layout_height="match_parent">
 
 
-    <android.support.design.widget.FloatingActionButton
-    android:id="@+id/destination_button_next"
-    android:layout_width="wrap_content"
-    android:layout_height="40dp"
-    android:layout_marginEnd="36dp"
-    android:layout_marginTop="32dp"
-    android:clickable="true"
-    android:tint="#ffffff"
-    app:backgroundTint="#295dce"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
-
-    <TextView
-        android:id="@+id/destinations_view_text"
-        android:layout_width="211dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="21dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/destination_picker"
-        android:textSize="35sp"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_place_autocomplete"
-        app:layout_constraintEnd_toStartOf="@+id/destination_button_next"
-        app:layout_constraintHorizontal_bias="0.376"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <fragment
         android:id="@+id/fragment_place_autocomplete"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
         android:layout_width="360dp"
-        android:layout_height="42dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="420dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -47,5 +17,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/destination_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fragment_place_autocomplete"
+        android:layout_margin="16dp"
+        android:textSize="16dp" />
 
 </android.support.constraint.ConstraintLayout>
