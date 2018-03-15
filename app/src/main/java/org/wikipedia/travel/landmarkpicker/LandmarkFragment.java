@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private List<LandmarkCard> cardsList = new ArrayList<>();
 
     @BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
-    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
+//    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -45,6 +47,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
         //sets destination string in xml
         setDestination(DestinationFragment.getDestinationString(), view);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
