@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import org.wikipedia.R;
+import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.travel.landmarkpicker.LandmarkActivity;
 
 import java.text.DateFormatSymbols;
@@ -28,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class DateFragment extends Fragment implements OnClickListener {
+public class DateFragment extends Fragment{
 
     private Unbinder unbinder;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -38,9 +39,17 @@ public class DateFragment extends Fragment implements OnClickListener {
     private int day = cal.get(Calendar.DAY_OF_MONTH);
 
     @BindView(R.id.date_button_select) Button selectButton;
-    @BindView(R.id.date_button_next) FloatingActionButton nextButton;
     @BindView(R.id.selected_date_view_text) TextView mDisplayDate;
+    DatePickerDialog mDatePicker;
 
+    public interface Callback {
+        public void onDateChanged(int year, int month, int day);
+    }
+
+    public static DateFragment newInstance() {
+        DateFragment fragment = new DateFragment();
+        return fragment;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -50,8 +59,31 @@ public class DateFragment extends Fragment implements OnClickListener {
 
         unbinder = ButterKnife.bind(this, view);
 
-        selectButton.setOnClickListener((OnClickListener) this);
-        nextButton.setOnClickListener((OnClickListener) this);
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month = month + 1;
+                String date = getMonth(month) + " " + day + ", " + year;
+                mDisplayDate.setText(date);
+                if(getCallback() != null) {
+                    getCallback().onDateChanged(year, month, day);
+                }
+            }
+        };
+
+        //setting up the select date window
+        mDatePicker = new DatePickerDialog(this.getActivity(),
+                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                mDateSetListener,
+                year, month, day);
+        mDatePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        selectButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatePicker.show();
+            }
+        });
 
         //setting the current date as the departure date
         String date = getMonth(month) + " " + day + ", " + year;
@@ -62,47 +94,11 @@ public class DateFragment extends Fragment implements OnClickListener {
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.date_button_next:
-                getContext().startActivity(new Intent(LandmarkActivity.newIntent(getContext())));
-                break;
-            case R.id.date_button_select:
-                dateSelector();
-                break;
-
-        }
-    }
-
-    public void dateSelector() {
-
-            DatePickerDialog dialog;
-
-            //setting onclicklistener to change the selected date after button selection
-            mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int day) {
-                    month = month + 1;
-                    String date = getMonth(month) + " " + day + ", " + year;
-                    mDisplayDate.setText(date);
-                }
-            };
-
-            //setting up the select date window
-            dialog = new DatePickerDialog(this.getActivity(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    mDateSetListener,
-                    year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-
-    }
-
     public String getMonth(int month) {
         return new DateFormatSymbols().getMonths()[month - 1];
     }
+
+    public Callback getCallback() { return FragmentUtil.getCallback(this, Callback.class); }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();

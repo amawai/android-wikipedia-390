@@ -39,7 +39,7 @@ import butterknife.Unbinder;
  */
 
 public class MainPlannerFragment extends Fragment implements BackPressedHandler, TripFragment.Callback,
-        DestinationFragment.Callback {
+        DestinationFragment.Callback, DateFragment.Callback {
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
     @BindView(R.id.planner_save) Button bSave;
@@ -137,9 +137,14 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip.setDestinationName((String) destination.getName());
     }
 
+    @Override
+    public void onDateChanged(int year, int month, int day) {
+        openTrip.setTripDepartureDate(year, month, day);
+    }
+
     /*
-        BackPressedListener
-     */
+            BackPressedListener
+         */
     @Override
     public boolean onBackPressed() {
         if(viewPager.getCurrentItem() > 0) {

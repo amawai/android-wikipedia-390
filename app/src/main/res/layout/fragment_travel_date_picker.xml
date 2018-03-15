@@ -6,23 +6,6 @@
     android:layout_height="match_parent"
     tools:context="org.wikipedia.travel.datepicker.DateFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/date_button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:clickable="true"
-        android:tint="#ffffff"
-        app:backgroundTint="#295dce"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
-
     <TextView
         android:id="@+id/selected_date_view_text"
         android:layout_width="199dp"
@@ -49,17 +32,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selected_date_view_text"
         app:layout_constraintVertical_bias="0.313" />
-
-    <TextView
-        android:id="@+id/select_departure_date_view_text"
-        android:layout_width="255dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/date_departure"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/date_button_next"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
