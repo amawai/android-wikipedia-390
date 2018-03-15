@@ -21,6 +21,7 @@ import android.widget.TextView;
 import org.wikipedia.R;
 import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.travel.landmarkpicker.LandmarkActivity;
+import org.wikipedia.travel.trip.Trip;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -33,10 +34,6 @@ public class DateFragment extends Fragment{
 
     private Unbinder unbinder;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private Calendar cal = Calendar.getInstance();
-    private int year = cal.get(Calendar.YEAR);
-    private int month = cal.get(Calendar.MONTH) + 1;
-    private int day = cal.get(Calendar.DAY_OF_MONTH);
 
     @BindView(R.id.date_button_select) Button selectButton;
     @BindView(R.id.selected_date_view_text) TextView mDisplayDate;
@@ -46,8 +43,14 @@ public class DateFragment extends Fragment{
         public void onDateChanged(int year, int month, int day);
     }
 
-    public static DateFragment newInstance() {
+    public static DateFragment newInstance(Trip trip) {
+        Bundle args = new Bundle();
+        args.putInt("YEAR", trip.getTripDepartureDate().getYear());
+        args.putInt("MONTH", trip.getTripDepartureDate().getMonth());
+        args.putInt("DAY", trip.getTripDepartureDate().getDay());
+
         DateFragment fragment = new DateFragment();
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -58,6 +61,9 @@ public class DateFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_travel_date_picker, container, false);
 
         unbinder = ButterKnife.bind(this, view);
+        int year = getArguments().getInt("YEAR");
+        int month = getArguments().getInt("MONTH");
+        int day = getArguments().getInt("DAY");
 
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -88,8 +94,6 @@ public class DateFragment extends Fragment{
         //setting the current date as the departure date
         String date = getMonth(month) + " " + day + ", " + year;
         mDisplayDate.setText(date);
-
-        getAppCompatActivity().getSupportActionBar().setTitle("Departure Date");
 
         return view;
     }

@@ -300,13 +300,4 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             openTrip.getDestination().setDestinationName(destinationName);
         }
     }
-
-    public void setOpenTripDepartureDate(Date date) {
-        openTrip.setTripDepartureDate(date.getYear(), date.getMonth(), date.getDay());
-    }
-
-    public Date getOpenTripDepartureDate() {
-        return openTrip.getTripDepartureDate();
-
-    }
 }

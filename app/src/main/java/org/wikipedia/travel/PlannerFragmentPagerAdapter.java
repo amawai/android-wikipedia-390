@@ -62,7 +62,7 @@ public class PlannerFragmentPagerAdapter extends FragmentPagerAdapter {
         tripPages =  new ArrayList<>();
         tripPages.add(DestinationFragment.newInstance(trip.getDestination().getDestinationName())); //TODO: Populate destination
         if(trip.getDestination() != null) {
-            tripPages.add(DateFragment.newInstance());
+            tripPages.add(DateFragment.newInstance(trip));
         }
         if(trip.getTripDepartureDate() != null) {
         //    tripPages.add(LandmarkFragment.newInstance());
