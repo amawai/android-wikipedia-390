@@ -72,6 +72,7 @@ public class TripDbHelper {
         } finally {
             db.endTransaction();
         }
+        return null;
     }
 
     public void deleteList(@NonNull Trip list) {
