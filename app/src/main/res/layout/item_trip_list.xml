@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/trip_item_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clickable="true"
+    android:clickable="false"
     android:focusable="true"
     android:padding="8dp">
 
     <RelativeLayout
         android:id="@+id/trip_info"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:background="@color/base100"
@@ -22,9 +23,12 @@
             android:id="@+id/trip_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="42dp"
+            android:layout_marginStart="42dp"
+            android:clickable="true"
             android:text="TextView"
-            android:textAlignment="center"
             android:textSize="18sp"
             tools:text="tripname" />
 
@@ -32,11 +36,30 @@
             android:id="@+id/trip_item_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/trip_item_name"
             android:layout_below="@+id/trip_item_name"
-            android:layout_weight="1"
+            android:layout_marginEnd="42dp"
+            android:clickable="true"
             android:text="TextView"
-            android:textAlignment="center"
             tools:text="location" />
+
+        <ImageView
+            android:id="@+id/trip_item_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_mode_edit_white_24dp" />
+
+        <ImageView
+            android:id="@+id/trip_item_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
     </RelativeLayout>
 

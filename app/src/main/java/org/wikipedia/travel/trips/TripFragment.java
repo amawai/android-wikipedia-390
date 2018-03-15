@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.travel.database.Trip;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.destinationpicker.DestinationActivity;
+import org.wikipedia.util.FeedbackUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +34,9 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
+import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 
 /**
  * Created by amawai on 28/02/18.
@@ -58,7 +63,7 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         updateUserTripList();
         tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
-        tripList.setLayoutManager(new LinearLayoutManager(getContext()));
+        tripList.setLayoutManager(new LinearLayoutManager(getContext(), VERTICAL, false));
         getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
         return view;
     }
@@ -167,6 +172,8 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         public RelativeLayout tripLayout;
         public TextView tripName;
         public TextView tripDate;
+        public ImageView tripEdit;
+        public ImageView tripDelete;
         private int index;
 
         public TripItemHolder(View tripView) {
@@ -174,15 +181,33 @@ public class TripFragment extends Fragment implements View.OnClickListener {
             tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
             tripName = (TextView) tripView.findViewById(R.id.trip_item_name);
             tripDate = (TextView) tripView.findViewById(R.id.trip_item_date);
+            tripEdit = (ImageView) tripView.findViewById(R.id.trip_item_edit);
+            tripDelete = (ImageView) tripView.findViewById(R.id.trip_item_delete);
 
-            tripLayout.setOnClickListener(this);
+
+            tripName.setOnClickListener(this);
+            tripDate.setOnClickListener(this);
+            tripEdit.setOnClickListener(this);
+            tripDelete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position >= 0) {
-                Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                switch (v.getId()){
+                    case (R.id.trip_item_name): case (R.id.trip_item_date):
+                        Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.trip_item_edit:
+                        Toast.makeText(getContext(), "Edit the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.trip_item_delete:
+                        Toast.makeText(getContext(), "Delete the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        FeedbackUtil.showMessage(getActivity(), "Error");
+                }
             }
         }
 
