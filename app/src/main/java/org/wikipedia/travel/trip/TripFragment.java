@@ -161,38 +161,35 @@ public class TripFragment extends Fragment implements View.OnClickListener {
             userTripsList.remove(position);
             notifyItemRemoved(position);
         }
-
     }
 
     //Individual rows that hold information about a trip
     public final class TripItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public RelativeLayout tripLayout;
-        public TextView tripName;
-        public TextView tripDate;
-        public ImageView tripEdit;
-        public ImageView tripDelete;
+
         private int index;
+
+        @BindView(R.id.trip_info) RelativeLayout tripLayout;
+        @BindView(R.id.trip_name_view_text) TextView tripName;
+        @BindView(R.id.trip_date_view_text) TextView tripDate;
+        @BindView(R.id.trip_item_edit) ImageView tripEdit;
+        @BindView(R.id.trip_item_delete) ImageView tripDelete;
 
         public TripItemHolder(View tripView) {
             super(tripView);
-            tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
-            tripName = (TextView) tripView.findViewById(R.id.trip_item_name);
-            tripDate = (TextView) tripView.findViewById(R.id.trip_item_date);
-            tripEdit = (ImageView) tripView.findViewById(R.id.trip_item_edit);
-            tripDelete = (ImageView) tripView.findViewById(R.id.trip_item_delete);
 
-
+            unbinder = ButterKnife.bind(this, tripView);
             tripName.setOnClickListener(this);
             tripDate.setOnClickListener(this);
             tripEdit.setOnClickListener(this);
             tripDelete.setOnClickListener(this);
+        }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position >= 0) {
                 switch (v.getId()){
-                    case (R.id.trip_item_name): case (R.id.trip_item_date):
+                    case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
                         Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.trip_item_edit:
