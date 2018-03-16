@@ -2,6 +2,7 @@ package org.wikipedia.travel.landmarkpicker;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,11 +20,14 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
+import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.dataclient.WikiSite;
 import org.wikipedia.dataclient.mwapi.MwQueryResponse;
+import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.nearby.NearbyClient;
 import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
+import org.wikipedia.page.PageTitle;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
@@ -42,7 +46,9 @@ import retrofit2.Call;
  */
 
 public class LandmarkFragment extends Fragment implements View.OnClickListener {
-
+    public interface Callback {
+        void onLoadPage(PageTitle title, HistoryEntry entry);
+    }
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
@@ -175,11 +181,22 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         FeedbackUtil.showMessage(getActivity(), message);
     }
 
-    //TODO: Implement functionality of displaying articles
+    private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
+        Callback callback = getCallback();
+        if (callback != null) {
+            callback.onLoadPage(title, entry);
+        }
+    }
+
+    //TODO: Implement UI functionality of displaying articles
     public void displayLandmarkArticles(NearbyResult nearbyArticles) {
         for (NearbyPage item : nearbyArticles.getList()) {
-            Log.d("NEARBY_TITLE", "mM: " + item.getTitle());
+            Log.d("Landmark", "Landmark: " + item.getTitle());
         }
+        //The following code snippet would load a page:
+        /*NearbyPage item = nearbyArticles.getList().get(0);
+        PageTitle title = new PageTitle(item.getTitle(), lastResult.getWiki(), item.getThumbUrl());
+        onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_LANDMARK, 1000));*/
     }
 
     //Location can be entered as followed: "City, State/Province/Country" or simply "City"
@@ -222,5 +239,10 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                         L.e(caught);
                     }
                 });
+    }
+
+    @Nullable
+    private Callback getCallback() {
+        return FragmentUtil.getCallback(this, Callback.class);
     }
 }

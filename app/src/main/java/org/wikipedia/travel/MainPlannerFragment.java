@@ -19,9 +19,13 @@ import com.google.android.gms.location.places.Place;
 import org.wikipedia.BackPressedHandler;
 import org.wikipedia.R;
 import org.wikipedia.concurrency.CallbackTask;
+import org.wikipedia.history.HistoryEntry;
+import org.wikipedia.page.PageActivity;
+import org.wikipedia.page.PageTitle;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.datepicker.DateFragment;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
+import org.wikipedia.travel.landmarkpicker.LandmarkFragment;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.travel.trip.TripFragment;
 
@@ -39,7 +43,7 @@ import butterknife.Unbinder;
  */
 
 public class MainPlannerFragment extends Fragment implements BackPressedHandler, TripFragment.Callback,
-        DestinationFragment.Callback, DateFragment.Callback {
+        DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback{
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
     @BindView(R.id.planner_save) Button bSave;
@@ -116,6 +120,10 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     /*
         Child fragment callbacks
      */
+
+    public void onLoadPage(PageTitle title, HistoryEntry entry) {
+        startActivity(PageActivity.newIntentForNewTab(getContext(), entry, entry.getTitle()));
+    }
 
     @Override
     public void onNewTrip() {
@@ -300,4 +308,5 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             openTrip.getDestination().setDestinationName(destinationName);
         }
     }
+
 }
