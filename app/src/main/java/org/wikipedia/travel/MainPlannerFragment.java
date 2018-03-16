@@ -76,7 +76,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         setupButtonListeners();
         updateUserTripList();
         setPageTitle(viewPager.getCurrentItem());
-
         return view;
     }
 
@@ -129,11 +128,30 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip(id);
     }
 
+    public Trip onGetTrip(long id) {
+        return getTrip(id);
+    }
+
     @Override
     public void onRequestTripListUpdate() {
         updateUserTripList();
     }
 
+
+    @Override
+    public void onDeleteTrip(long id) {
+        CallbackTask.execute(() -> TripDbHelper.instance().deleteList(getTrip(id)), new CallbackTask.DefaultCallback<Object>() {
+            @Override
+            public void success(Object result) {
+                updateUserTripList();
+            }
+
+            @Override
+            public void failure(Throwable caught) {
+                Toast.makeText(getActivity(), "Failed to delete the trip", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public void onPlaceSelected(Place destination) {
@@ -254,9 +272,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         goToPage(getCurrentPage()-1);
     }
 
-    /*
-        Navigation
-     */
     private void setPageTitle(int page) {
         switch(page) {
             case 0:
@@ -272,9 +287,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
                 tvTitle.setText("Landmarks");
         }
     }
-
-
-
+    
     private void setButtonVisibility(int page) {
         if(page == 0) {
             // Hide all buttons on the first page

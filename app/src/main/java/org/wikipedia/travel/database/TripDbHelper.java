@@ -81,7 +81,7 @@ public class TripDbHelper {
         return null;
     }
 
-    public void deleteList(@NonNull Trip list) {
+    public Object deleteList(@NonNull Trip list) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -94,6 +94,7 @@ public class TripDbHelper {
         } finally {
             db.endTransaction();
         }
+        return null;
     }
 
     @Nullable
