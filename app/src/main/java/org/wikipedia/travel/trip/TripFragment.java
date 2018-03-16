@@ -221,8 +221,10 @@ public class TripFragment extends Fragment{
                             getCallback().onShareTrip(index);
                         }
                         break;
+                    /* no longer need this default as edit and delete buttons have been integrated into trip item views
                     default:
                         FeedbackUtil.showMessage(getActivity(), "Error");
+                     */
                 }
             }
         }
