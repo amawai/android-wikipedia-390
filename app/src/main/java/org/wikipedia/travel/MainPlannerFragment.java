@@ -47,13 +47,14 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback{
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
-        void setLmDestinationName(String location);
+        String getLmDestinationName();
     }
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
     @BindView(R.id.planner_save) Button bSave;
     @BindView(R.id.planner_title) TextView tvTitle;
     PlannerFragmentPagerAdapter adapter;
+    public String lmDestination;
     Trip openTrip;
 
     private Unbinder unbinder;
@@ -156,9 +157,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip.setTripDepartureDate(year, month, day);
     }
 
-    public void setLmDestinationName(String location){
-        getDestinationTrip();
-        location = openTrip.getDestination().getDestinationName();
+    public String getLmDestinationName(){
+        return openTrip.getDestination().getDestinationName();
     }
 
     /*

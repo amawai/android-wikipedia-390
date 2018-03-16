@@ -29,6 +29,8 @@ import org.wikipedia.nearby.NearbyClient;
 import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
 import org.wikipedia.page.PageTitle;
+import org.wikipedia.travel.MainPlannerFragment;
+import org.wikipedia.travel.destinationpicker.DestinationFragment;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
@@ -52,6 +54,7 @@ import retrofit2.Call;
 public class LandmarkFragment extends Fragment implements View.OnClickListener {
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
+        String getLmDestinationName();
     }
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
@@ -81,7 +84,11 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
         unbinder = ButterKnife.bind(this, view);
-        destinationName = getArguments().getString("DESTINATION");
+        //destinationName = getArguments().getString("DESTINATION");
+
+        //set, display and get results using desName
+        //destinationName = DestinationFragment.destination.getName().toString();
+        destinationName = getCallback().getLmDestinationName();
         destinationText.setText(destinationName);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
@@ -95,7 +102,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         adapter = new LandmarkAdapter(cardsList, getContext());
 
         recyclerView.setAdapter(adapter);
-        retrieveArticles("Tokyo");
+        retrieveArticles(destinationName);
         selectedLandmarks = new ArrayList<LandmarkCard>();
         return view;
     }
@@ -135,8 +142,17 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private String getLmDestinationName(){
+        Callback callback = getCallback();
+        if (callback != null) {
+            callback.getLmDestinationName();
+        }
+            return "";
+    }
+
     //Provide the adapter with new landmark data to display
     private void fillList(Map<String, String> landMarkList){
+        cardsList.clear();
         for (String key : landMarkList.keySet()){
             LandmarkCard card = new LandmarkCard(
                     key, "some description", landMarkList.get(key)
