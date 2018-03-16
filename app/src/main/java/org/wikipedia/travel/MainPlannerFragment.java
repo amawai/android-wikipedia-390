@@ -126,6 +126,10 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip(id);
     }
 
+    public Trip onGetTrip(long id) {
+        return getTrip(id);
+    }
+
     @Override
     public void onRequestTripListUpdate() {
         updateUserTripList();

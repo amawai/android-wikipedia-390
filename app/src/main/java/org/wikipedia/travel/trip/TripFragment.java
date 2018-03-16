@@ -65,6 +65,7 @@ public class TripFragment extends Fragment{
         void onOpenTrip(long id);
         void onRequestTripListUpdate();
         void onDeleteTrip(long id);
+        Trip onGetTrip(long id);
     }
 
     public Callback getCallback() {
@@ -196,20 +197,18 @@ public class TripFragment extends Fragment{
             int position = getAdapterPosition();
             if (position >= 0) {
                 switch (v.getId()){
-                    case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
-                        Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-                        break;
+//                    case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
+//                        break;
                     case R.id.trip_item_edit:
                         if (getCallback() != null) {
                             getCallback().onOpenTrip(id);
                         }
-                        Toast.makeText(getContext(), "Edit the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.trip_item_delete:
                         if(getCallback()!=null) {
+//                            tripAdapter.remove(getCallback().onGetTrip(id));
                             getCallback().onDeleteTrip(id);
                         }
-                        Toast.makeText(getContext(), "Delete the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         FeedbackUtil.showMessage(getActivity(), "Error");
