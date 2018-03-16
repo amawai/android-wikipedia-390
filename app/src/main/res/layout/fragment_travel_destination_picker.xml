@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <fragment
         android:id="@+id/fragment_place_autocomplete"
         android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"

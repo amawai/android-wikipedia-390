@@ -18,7 +18,9 @@ import com.google.android.gms.location.places.Place;
 
 import org.wikipedia.BackPressedHandler;
 import org.wikipedia.R;
+import org.wikipedia.WikipediaApp;
 import org.wikipedia.concurrency.CallbackTask;
+import org.wikipedia.main.MainActivity;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.datepicker.DateFragment;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
@@ -132,10 +134,12 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         updateUserTripList();
     }
 
+
     @Override
     public void onPlaceSelected(Place destination) {
         openTrip.setDestinationName((String) destination.getName());
     }
+
 
     @Override
     public void onDateChanged(int year, int month, int day) {
@@ -153,8 +157,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     /*
-                    BackPressedListener
-                 */
+        BackPressedListener
+     */
     @Override
     public boolean onBackPressed() {
         if(viewPager.getCurrentItem() > 0) {
@@ -174,8 +178,9 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             @Override
             public void success(Object o) {
                 super.success(o);
-                Toast.makeText(getActivity(),"Trip saved", Toast.LENGTH_SHORT).show();
-                goToHomePage();
+                Toast.makeText(getActivity(),"Trip has been saved", Toast.LENGTH_SHORT).show();
+                //There is no need to go the lists page automatically
+                //goToHomePage();
             }
 
             @Override
@@ -187,7 +192,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     public void updateUserTripList() {
-        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(),  new CallbackTask.DefaultCallback<List<Trip>>(){
+        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>() {
             @Override
             public void success(List<Trip> list) {
                 if (getActivity() == null) {

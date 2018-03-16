@@ -40,7 +40,6 @@ public class DestinationFragment extends Fragment {
     }
 
     public static DestinationFragment newInstance(String destination) {
-
         Bundle args = new Bundle();
         args.putString("DESTINATION", destination);
 
@@ -73,8 +72,8 @@ public class DestinationFragment extends Fragment {
                 Log.i("Autocomplete Failed", status.getStatusMessage());
             }
         });
-
-        tvDestination.setText(getArguments().getString("DESTINATION"));
+        //There is no need to always display the search bar result everytime the view is created
+        //tvDestination.setText(getArguments().getString("DESTINATION"));
         return view;
     }
 
