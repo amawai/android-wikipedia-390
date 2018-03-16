@@ -1,16 +1,16 @@
 package org.wikipedia.travel.landmarkpicker;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,10 @@ import org.wikipedia.util.log.L;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,12 +55,12 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
-
     private String destinationName;
-    private RecyclerView recyclerView;
+    private LandmarkAdapter adapter;
 
     private NearbyResult lastResult;
 
+    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
     @BindView(R.id.landmark_country_view_text) TextView destinationText;
 
     public static LandmarkFragment newInstance(String destinationName) {
@@ -77,54 +80,44 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
         unbinder = ButterKnife.bind(this, view);
         destinationName = getArguments().getString("DESTINATION");
-        Log.d("DestinationNAMe", "onCreateView:"+getArguments().getString("DESTINATION"));
+        destinationText.setText(destinationName);
 
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
+        //recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             linearLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(linearLayoutManager);
         }
-        destinationText.setText(destinationName);
-        retrieveArticles("Tokyo");
 
-        LandmarkAdapter adapter = new LandmarkAdapter(cardsList, getContext());
+        adapter = new LandmarkAdapter(cardsList, getContext());
 
         recyclerView.setAdapter(adapter);
+        retrieveArticles("Tokyo");
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        recyclerView.setAdapter(null);
+        unbinder.unbind();
+        unbinder = null;
+        super.onDestroyView();
     }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
 
-//    private void setDestination(String[] destinationString, View view) { //to be implemented with destination fragment
-//        //landmark_city_text textview editors are removed for landmark_city_text for now, since address includes it
-//        //TextView landmark_city_text = (TextView) view.findViewById(R.id.landmark_city_text);
-//        TextView landmark_country_view_text = (TextView) view.findViewById(R.id.landmark_country_view_text);
-//        //landmark_city_text.setText(destinationString[0]);
-//        landmark_country_view_text.setText(destinationString[1]);
-//    }
-
-    public List <String> listNearbyPlaces(){ //use geocoder to take address list and and return placecard list with titles
-        List<String> landmarksList = new ArrayList<String>();
-        landmarksList.add("one");
-
-        return landmarksList;
+    public void setLandmarkCards(List<LandmarkCard> landmarks) {
+        adapter.setLandmarkCardList(landmarks);
     }
 
-    private void fillList(List cardsList){//dummy list filler, make it into a function later
-        List<String> landMarkList = listNearbyPlaces();
-        landMarkList.add("one");//test if list has elements
-        for (int i=0; i<landMarkList.size(); i++){
-            LandmarkCard card = new LandmarkCard(
-                    landMarkList.get(i),
-                    "this is a great location for tourists..."
-            );
-        }
+    private void setDestination(String[] destinationString, View view) {
+        TextView landmark_country_view_text = (TextView) view.findViewById(R.id.landmark_country_view_text);
+        landmark_country_view_text.setText(destinationString[1]);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -139,22 +132,23 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    //TODO: Implement UI functionality of displaying articles
-    public void displayLandmarkArticles(NearbyResult nearbyArticles) {
-        cardsList.clear();
-        for (NearbyPage item : nearbyArticles.getList()) {
-            Log.d("Landmark", "Landmark: " + item.getTitle());
-
+    //Provide the adapter with new landmark data to display
+    private void fillList(Map<String, String> landMarkList){
+        for (String key : landMarkList.keySet()){
             LandmarkCard card = new LandmarkCard(
-                    item.getTitle(),
-                    "this is a great location for tourists..."
+                    key, "some description", landMarkList.get(key)
             );
             cardsList.add(card);
         }
-        //The following code snippet would load a page:
-        /*NearbyPage item = nearbyArticles.getList().get(0);
-        PageTitle title = new PageTitle(item.getTitle(), lastResult.getWiki(), item.getThumbUrl());
-        onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_LANDMARK, 1000));*/
+        adapter.setLandmarkCardList(cardsList);
+    }
+
+    private void extractLandmarkArticles(NearbyResult nearbyArticles) {
+        Map<String, String> landMarkList = new HashMap<String, String>();
+        for (NearbyPage item : nearbyArticles.getList()) {
+            landMarkList.put(item.getTitle(), item.getThumbUrl());
+        }
+        fillList(landMarkList);
     }
 
     //Location can be entered as followed: "City, State/Province/Country" or simply "City"
@@ -184,8 +178,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                             return;
                         }
                         lastResult = result;
-
-                        displayLandmarkArticles(result);
+                        //Send over the list of NearbyPages to the next function
+                        extractLandmarkArticles(result);
                     }
 
                     @Override public void failure(@NonNull Call<MwQueryResponse> call,
@@ -199,8 +193,95 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                 });
     }
 
+
+
     @Nullable
     private Callback getCallback() {
         return FragmentUtil.getCallback(this, Callback.class);
+    }
+
+    public class LandmarkAdapter extends RecyclerView.Adapter<LandmarkAdapter.ViewHolder> {
+
+        private List<LandmarkCard> landmarkCardList;
+        private Context context;
+
+        public LandmarkAdapter(List<LandmarkCard> landmarkCards, Context context) {
+            this.landmarkCardList = landmarkCards;
+            this.context = context;
+        }
+
+        @Override
+        public LandmarkAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_card_travel_landmark_picker_landmarks, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(LandmarkAdapter.ViewHolder holder, int position) {
+            LandmarkCard landmarkCard = landmarkCardList.get(position);
+            holder.bindItem(landmarkCard);
+        }
+
+        public void setLandmarkCardList(List<LandmarkCard> landmarkList) {
+            this.landmarkCardList = landmarkList;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemCount() {
+            return landmarkCardList.size();
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+
+        // Insert and remove for implementation of view closing feature
+        public void insert(int position, LandmarkCard landmarkCard) {
+            landmarkCardList.add(position, landmarkCard);
+            notifyItemInserted(position);
+        }
+
+        public void remove(LandmarkCard landmarkCard) {
+            int position = landmarkCardList.indexOf(landmarkCard);
+            landmarkCardList.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            private CardView cv;
+            private TextView textViewTitle;
+            private TextView textViewDesc;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+
+                cv = (CardView) itemView.findViewById(R.id.view_card);
+                textViewTitle = (TextView) itemView.findViewById(R.id.landmark_title_text_view);
+                textViewDesc = (TextView) itemView.findViewById(R.id.landmark_desc_text_view);
+
+                cv.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                int position = getAdapterPosition();
+                LandmarkCard card = cardsList.get(position);
+                PageTitle title = new PageTitle(card.getTitle(), lastResult.getWiki(), card.getThumbUrl());
+                if (position >= 0) {
+                    //Load the page when clicking on the article
+                    getCallback().onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_LANDMARK));
+                }
+            }
+
+            public void bindItem(LandmarkCard landmarkCard) {
+                textViewTitle.setText(landmarkCard.getTitle());
+                textViewDesc.setText(landmarkCard.getDesc());
+            }
+
+        }
     }
 }

@@ -26,6 +26,7 @@ import org.wikipedia.page.PageTitle;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.datepicker.DateFragment;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
+import org.wikipedia.travel.landmarkpicker.LandmarkCard;
 import org.wikipedia.travel.landmarkpicker.LandmarkFragment;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.travel.trip.TripFragment;
@@ -46,6 +47,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback{
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
+        void setLandmarkSearch();
     }
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
@@ -60,7 +62,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     public static MainPlannerFragment newInstance() {
 
         Bundle args = new Bundle();
-        
+
         MainPlannerFragment fragment = new MainPlannerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -154,6 +156,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip.setTripDepartureDate(year, month, day);
     }
 
+    
     /*
             BackPressedListener
          */

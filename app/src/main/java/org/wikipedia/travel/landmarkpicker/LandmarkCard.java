@@ -7,12 +7,14 @@ package org.wikipedia.travel.landmarkpicker;
 //class for location cards shown on recycler viewa, description is optional
 public class LandmarkCard {
 
-    public String title;
-    public String desc;
+    private String title;
+    private String desc;
+    private String thumbUrl;
 
-    public LandmarkCard(String title, String desc) {
+    public LandmarkCard(String title, String desc, String thumbUrl) {
         this.title = title;
         this.desc = desc;
+        this.thumbUrl = thumbUrl;
     }
 
     public String getTitle() {
@@ -27,4 +29,7 @@ public class LandmarkCard {
         this.title = title;
     }
 
+    public String getThumbUrl() {
+        return thumbUrl;
+    }
 }
