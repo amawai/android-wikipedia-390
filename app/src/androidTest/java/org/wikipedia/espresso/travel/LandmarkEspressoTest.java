@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.wikipedia.R;
-import org.wikipedia.travel.destinationpicker.DestinationActivity;
+import org.wikipedia.travel.TravelPlannerActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -31,32 +31,35 @@ public class LandmarkEspressoTest {
     private UiDevice mDevice;
 
     @Rule
-    public ActivityTestRule<DestinationActivity> dActivityTestRule = new ActivityTestRule<>(DestinationActivity.class);
+    public ActivityTestRule<TravelPlannerActivity> dActivityTestRule = new ActivityTestRule<>(TravelPlannerActivity.class);
 
     @Before
-    public void setUp() {
+    public void setUp() throws UiObjectNotFoundException{
         //Allows testing of components outside of testing context, in this case: destination
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+        ViewInteraction planNewTripButton = onView(
+                allOf(withId(R.id.trip_button_new)));
+        planNewTripButton.perform(click());
+
+        selectDestination();
+        //Navigate to the LandmarkFragment
+        UiObject nextButton = mDevice.findObject(new UiSelector()
+                .text("NEXT"));
+        try {
+            nextButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            nextButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void ensureThatCorrectDestinationIsDisplayed() throws UiObjectNotFoundException{
-        ViewInteraction nextDateButton = onView(
-                allOf(withId(R.id.destination_button_next)));
-
-        //Select Montreal, QC, Canada as the destination
-        selectDestination();
-
-        //Go to the Datepicker fragment
-        nextDateButton.perform(click());
-
-        ViewInteraction nextButton = onView(
-                allOf(withId(R.id.date_button_next)));
-        nextButton.check(matches(isDisplayed()));
-
-        //Go to the Landmark fragment
-        nextButton.perform(click());
-
         //Check that the correct destination is displayed
         ViewInteraction destinationDisplay = onView(
                 allOf(withId(R.id.landmark_country_view_text)));

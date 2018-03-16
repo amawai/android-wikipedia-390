@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.wikipedia.R;
-import org.wikipedia.travel.datepicker.DateActivity;
+import org.wikipedia.travel.TravelPlannerActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,7 +42,7 @@ public class DatePickerEspressoTest {
     private String today;
 
     @Rule
-    public ActivityTestRule<DateActivity> dActivityTestRule = new ActivityTestRule<>(DateActivity.class);
+    public ActivityTestRule<TravelPlannerActivity> dActivityTestRule = new ActivityTestRule<>(TravelPlannerActivity.class);
 
     @Before
     public void setUp() {
@@ -53,14 +53,33 @@ public class DatePickerEspressoTest {
         //Formatting the default date as it is displayed in the datepicker fragment
         SimpleDateFormat theDate = new SimpleDateFormat("LLLL dd, yyyy", Locale.getDefault());
         today = theDate.format(c.getTime());
+
+        ViewInteraction planNewTripButton = onView(
+                allOf(withId(R.id.trip_button_new)));
+        planNewTripButton.perform(click());
+
+        //Navigate to the DatePickerFragment
+        UiObject nextButton = mDevice.findObject(new UiSelector()
+                .text("NEXT"));
+        try {
+            //Cancel the datepicker without changing the date
+            nextButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test
     public void allUiComponentsShouldExist() {
+        ViewInteraction nextButton = onView(
+                allOf(withId(R.id.planner_next)));
+        nextButton.check(matches(isDisplayed()));
+
         ViewInteraction datePickerTitle = onView(
-                allOf(withId(R.id.select_departure_date_view_text),
+                allOf(withId(R.id.planner_title),
                         isDisplayed()));
-        datePickerTitle.check(matches(withText(R.string.date_departure)));
+        datePickerTitle.check(matches(withText("Departure Date")));
 
         ViewInteraction dateDisplay = onView(
                 allOf(withId(R.id.selected_date_view_text),
@@ -72,9 +91,6 @@ public class DatePickerEspressoTest {
                         isDisplayed()));
         selectDateButton.check(matches(isDisplayed()));
 
-        ViewInteraction nextButton = onView(
-                allOf(withId(R.id.date_button_next)));
-        nextButton.check(matches(isDisplayed()));
     }
 
     @Test

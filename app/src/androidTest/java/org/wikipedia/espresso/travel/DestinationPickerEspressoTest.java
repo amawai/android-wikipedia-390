@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.wikipedia.R;
-import org.wikipedia.travel.destinationpicker.DestinationActivity;
+import org.wikipedia.travel.TravelPlannerActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -33,23 +33,28 @@ public class DestinationPickerEspressoTest {
     private UiDevice mDevice;
 
     @Rule
-    public ActivityTestRule<DestinationActivity> dActivityTestRule = new ActivityTestRule<>(DestinationActivity.class);
+    public ActivityTestRule<TravelPlannerActivity> dActivityTestRule = new ActivityTestRule<>(TravelPlannerActivity.class);
 
     @Before
     public void setUp() {
         //Allows testing of components outside of testing context, in this case: Google Android Places Autocomplete
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+        //Navigate to the Destinations fragment
+        ViewInteraction planNewTripButton = onView(
+                allOf(withId(R.id.trip_button_new)));
+        planNewTripButton.perform(click());
     }
 
     @Test
     public void allUiComponentsShouldExist() {
         //Ensures that all relevant components are rendered
         ViewInteraction destination = onView(
-                allOf(withId(R.id.destinations_view_text)));
+                allOf(withId(R.id.planner_title)));
         destination.check(matches(withText(R.string.fragment_travel_destination_title)));
 
         ViewInteraction nextButton = onView(
-                allOf(withId(R.id.destination_button_next)));
+                allOf(withId(R.id.planner_next)));
         nextButton.check(matches(isDisplayed()));
 
         ViewInteraction searchInput = onView(
