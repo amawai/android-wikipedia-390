@@ -24,6 +24,7 @@ import org.wikipedia.nearby.NearbyClient;
 import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
@@ -46,19 +47,31 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
+    private String destinationName;
 
-    @BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
-//    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
-    private RecyclerView recyclerView;
+    //@BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
+    //@BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
+    @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
+    @BindView(R.id.landmark_country_view_text) TextView destinationText;
+
+    public static LandmarkFragment newInstance(String destinationName) {
+
+        Bundle args = new Bundle();
+        args.putString("DESTINATION", destinationName);
+
+        LandmarkFragment fragment = new LandmarkFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
-
-        //sets destination string in xml
-        setDestination(DestinationFragment.getDestinationString(), view);
+        unbinder = ButterKnife.bind(this, view);
+        destinationName = getArguments().getString("DESTINATION");
+        destinationText.setText(destinationName);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
 
@@ -67,16 +80,11 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
             linearLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(linearLayoutManager);
         }
-
         fillList(cardsList);
 
         LandmarkAdapter adapter = new LandmarkAdapter(cardsList, getContext());
 
-        unbinder = ButterKnife.bind(this, view);
         recyclerView.setAdapter(adapter);
-        nextButton.setOnClickListener((View.OnClickListener) this);
-
-        getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
         return view;
     }
@@ -95,6 +103,11 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
     public List <String> listNearbyPlaces(){ //use geocoder to take address list and and return placecard list with titles
         List<String> landmarksList = new ArrayList<String>();
+    /*
+    //Currently has an exception error that make it hard to consistently make a list from
+    public List<LandmarkCard> listNearbylandmarks(String location) { //use geocoder to take address list and and return landmarkcard list with titles
+        List<LandmarkCard> landmarksList = new ArrayList<LandmarkCard>();
+        List<Address> addresses;
         Geocoder gc = new Geocoder(getContext());
         NearbyClient client = new NearbyClient();
         double mapRadius=4153.95;
@@ -140,7 +153,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                 });
 
 
-
+*/
         return landmarksList;
     }
 
@@ -160,5 +173,4 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         String message = "Your trip has been saved.";
         FeedbackUtil.showMessage(getActivity(), message);
     }
-
 }
