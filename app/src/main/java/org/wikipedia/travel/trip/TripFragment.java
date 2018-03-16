@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -164,7 +163,6 @@ public class TripFragment extends Fragment{
         }
 
         public void setUserTrips(List<Trip> trips) {
-            Log.d("SetUserTrips", trips.size() + "");
             this.userTripsList = trips;
             notifyDataSetChanged();
         }

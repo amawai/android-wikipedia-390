@@ -20,11 +20,7 @@ public class DeprecatedDateAdapterTest {
     //Getter/setter tests required, because the getters and setters have been overriden
     @Test
     public void testDataFields() {
-        int month = 12;
         int year = 1993;
-
-        dateAdapter.setMonth(month);
-        assertEquals(dateAdapter.getMonth(), month);
         dateAdapter.setYear(year);
         assertEquals(dateAdapter.getYear(), year);
     }
