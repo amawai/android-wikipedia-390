@@ -35,19 +35,12 @@
                 android:visibility="invisible"
                 android:text="SAVE"/>
         </RelativeLayout>
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/fragment_travel_planner_coordinator"
+
+
+        <org.wikipedia.readinglist.NoSwipeViewPager
+            android:id="@+id/fragment_travel_planner_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-
-            <org.wikipedia.readinglist.NoSwipeViewPager
-                android:id="@+id/fragment_travel_planner_view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="507dp"
-                tools:layout_editor_absoluteY="4dp" />
-
-        </android.support.design.widget.CoordinatorLayout>
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="4dp" />
     </LinearLayout>
 </FrameLayout>
