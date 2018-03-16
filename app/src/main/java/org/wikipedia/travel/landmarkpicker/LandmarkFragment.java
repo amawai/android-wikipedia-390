@@ -5,7 +5,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+
 import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.dataclient.WikiSite;
@@ -23,8 +24,6 @@ import org.wikipedia.dataclient.mwapi.MwQueryResponse;
 import org.wikipedia.nearby.NearbyClient;
 import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
-import org.wikipedia.travel.destinationpicker.DestinationFragment;
-import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
@@ -48,6 +47,9 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
     private String destinationName;
+
+
+    private NearbyResult lastResult;
 
     //@BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
     //@BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
@@ -85,7 +87,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         LandmarkAdapter adapter = new LandmarkAdapter(cardsList, getContext());
 
         recyclerView.setAdapter(adapter);
-
         return view;
     }
 
@@ -172,5 +173,54 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         String message = "Your trip has been saved.";
         FeedbackUtil.showMessage(getActivity(), message);
+    }
+
+    //TODO: Implement functionality of displaying articles
+    public void displayLandmarkArticles(NearbyResult nearbyArticles) {
+        for (NearbyPage item : nearbyArticles.getList()) {
+            Log.d("NEARBY_TITLE", "mM: " + item.getTitle());
+        }
+    }
+
+    //Location can be entered as followed: "City, State/Province/Country" or simply "City"
+    private void retrieveArticles(String location) {
+        double lat = 0;
+        double longi = 0;
+        Geocoder gc = new Geocoder(getContext());
+        try {
+            List<Address> addresses= gc.getFromLocationName(location, 5);
+            List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
+            for(Address a : addresses){
+                if(a.hasLatitude() && a.hasLongitude()){
+                    lat = a.getLatitude();
+                    longi = a.getLongitude();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NearbyClient client = new NearbyClient();
+        WikiSite wiki = WikipediaApp.getInstance().getWikiSite();
+        client.request(wiki, lat,longi, 5000,
+                new NearbyClient.Callback() {
+                    @Override public void success(@NonNull Call<MwQueryResponse> call,
+                                                  @NonNull NearbyResult result) {
+                        if (!isResumed()) {
+                            return;
+                        }
+                        lastResult = result;
+
+                        displayLandmarkArticles(result);
+                    }
+
+                    @Override public void failure(@NonNull Call<MwQueryResponse> call,
+                                                  @NonNull Throwable caught) {
+                        if (!isResumed()) {
+                            return;
+                        }
+                        ThrowableUtil.AppError error = ThrowableUtil.getAppError(getActivity(), caught);
+                        L.e(caught);
+                    }
+                });
     }
 }
