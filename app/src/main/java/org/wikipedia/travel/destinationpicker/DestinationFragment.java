@@ -130,6 +130,10 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         itemTouchHelper.attachToRecyclerView(destinationList); //set swipe to destinationList
     }
 
+    protected void goToDateActivity(View v) {
+        onClick(v);
+    }
+
     public void onClick(View v) {
         Intent i = new Intent(getActivity(), DateActivity.class);
         startActivity(i);
@@ -215,11 +219,13 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         public TextView destinationName;
         public TextView tripDate;
         private int index;
+        private String savedDestination;
 
         public TripItemHolder(View tripView) {
             super(tripView);
             tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
             destinationName = (TextView) tripView.findViewById(R.id.trip_name_view_text);
+            tripDate = (TextView) tripView.findViewById(R.id.trip_date_view_text);
             tripLayout.setOnClickListener(this);
         }
 
@@ -227,12 +233,15 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position >= 0) {
-                Toast.makeText(getContext(), "You selected the trip " + userDestinationList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                savedDestination = userDestinationList.get(position).getDestination().getDestinationName();
+                setDestinationArray(savedDestination, savedDestination);
+                goToDateActivity(v);
             }
         }
 
         public void bindItem(Trip trip) {
             destinationName.setText(trip.getDestination().getDestinationName());
+            tripDate.setText(trip.getTripDepartureDate().toString());
         }
     }
 
