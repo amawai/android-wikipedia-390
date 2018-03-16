@@ -73,7 +73,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         adapter.setTripListFragment(TripFragment.newInstance());
         setupButtonListeners();
         updateUserTripList();
-        setPageTitle(viewPager.getCurrentItem());
 
         return view;
     }
@@ -130,6 +129,21 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     @Override
     public void onRequestTripListUpdate() {
         updateUserTripList();
+    }
+
+    @Override
+    public void onDeleteTrip(long id) {
+        CallbackTask.execute(() -> TripDbHelper.instance().deleteList(getTrip(id)), new CallbackTask.DefaultCallback<Object>() {
+            @Override
+            public void success(Object result) {
+                updateUserTripList();
+            }
+
+            @Override
+            public void failure(Throwable caught) {
+                Toast.makeText(getActivity(), "Failed to delete the trip", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -193,7 +207,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
 
     public void openTrip(long id) {
-        Toast.makeText(getActivity(), "Opening trip: " + id, Toast.LENGTH_SHORT).show();
         openTrip = getTrip(id);
         adapter.setupTripPages(openTrip);
         nextPage();
@@ -219,7 +232,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private void goToPage(int page) {
         viewPager.setCurrentItem(page);
         int newPage = viewPager.getCurrentItem();
-        setPageTitle(newPage);
         setButtonVisibility(page);
         if(page == 0) {
             updateUserTripList();
@@ -241,27 +253,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private void prevPage() {
         goToPage(getCurrentPage()-1);
     }
-
-    /*
-        Navigation
-     */
-    private void setPageTitle(int page) {
-        switch(page) {
-            case 0:
-                tvTitle.setText("Trips");
-                break;
-            case 1:
-                tvTitle.setText("Destination");
-                break;
-            case 2:
-                tvTitle.setText("Departure Date");
-                break;
-            default:
-                tvTitle.setText("Landmarks");
-        }
-    }
-
-
 
     private void setButtonVisibility(int page) {
         if(page == 0) {

@@ -64,6 +64,7 @@ public class TripFragment extends Fragment{
         void onNewTrip();
         void onOpenTrip(long id);
         void onRequestTripListUpdate();
+        void onDeleteTrip(long id);
     }
 
     public Callback getCallback() {
@@ -96,7 +97,7 @@ public class TripFragment extends Fragment{
         super.onResume();
         updateUserTripList();
     }
-    
+
     @Override
     public void onDestroyView() {
         tripList.setAdapter(null);
@@ -196,13 +197,18 @@ public class TripFragment extends Fragment{
             if (position >= 0) {
                 switch (v.getId()){
                     case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
-                        getCallback().onOpenTrip(id);
                         Toast.makeText(getContext(), "You selected the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.trip_item_edit:
+                        if (getCallback() != null) {
+                            getCallback().onOpenTrip(id);
+                        }
                         Toast.makeText(getContext(), "Edit the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.trip_item_delete:
+                        if(getCallback()!=null) {
+                            getCallback().onDeleteTrip(id);
+                        }
                         Toast.makeText(getContext(), "Delete the trip " + userTripsList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
