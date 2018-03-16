@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 //As with the database table, use the ReadingListDbHelper as a basis in constructing this class
-public class TripDbHelper {
+public class TripDbHelper implements ITripDbHelper{
 
     private static TripDbHelper INSTANCE;
 

@@ -108,6 +108,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
 
     }
 
+    // Method is called to handle when a user swipes saved destination to the Left
     private void onSwipeLeft() {
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -125,7 +126,6 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
                     tripHelper.deleteList(userDestinationList.get(position));
                     Toast.makeText(getContext(), userDestinationList.get(position).getDestination().getDestinationName() + " has been removed", Toast.LENGTH_SHORT).show();
                     updateUserDestinationList();
-                    destinationAdapter.notifyDataSetChanged();
                 }
             }
         };
@@ -133,10 +133,12 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         itemTouchHelper.attachToRecyclerView(destinationList); //set swipe to destinationList
     }
 
+    // Handles event when user taps a saved destination city
     protected void goToDateActivity(View v) {
         onClick(v);
     }
 
+    // Goes to next activity which is Date Picker
     public void onClick(View v) {
         Intent i = new Intent(getActivity(), DateActivity.class);
         startActivity(i);
@@ -159,6 +161,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         return destinationString;
     }
 
+    // Updates the destination arrayList
     private void updateUserDestinationList() {
         CallbackTask.execute(() -> TripDbHelper.instance().getDestinationList(),  new CallbackTask.DefaultCallback<List<Trip>>(){
             @Override
@@ -232,6 +235,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
             tripLayout.setOnClickListener(this);
         }
 
+        // Handles event when user taps saved destination city
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
@@ -242,6 +246,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
             }
         }
 
+        // Adds the text to the destination layout
         public void bindItem(Trip trip) {
             destinationName.setText(trip.getDestination().getDestinationName());
             tripDate.setText(trip.getTripDepartureDate().toString());
