@@ -75,7 +75,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         adapter.setTripListFragment(TripFragment.newInstance());
         setupButtonListeners();
         updateUserTripList();
-
+        setPageTitle(viewPager.getCurrentItem());
         return view;
     }
 
@@ -249,6 +249,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private void goToPage(int page) {
         viewPager.setCurrentItem(page);
         int newPage = viewPager.getCurrentItem();
+        setPageTitle(newPage);
         setButtonVisibility(page);
         if(page == 0) {
             updateUserTripList();
@@ -271,6 +272,22 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         goToPage(getCurrentPage()-1);
     }
 
+    private void setPageTitle(int page) {
+        switch(page) {
+            case 0:
+                tvTitle.setText("Trips");
+                break;
+            case 1:
+                tvTitle.setText("Destination");
+                break;
+            case 2:
+                tvTitle.setText("Departure Date");
+                break;
+            default:
+                tvTitle.setText("Landmarks");
+        }
+    }
+    
     private void setButtonVisibility(int page) {
         if(page == 0) {
             // Hide all buttons on the first page
