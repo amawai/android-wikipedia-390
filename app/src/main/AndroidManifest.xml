@@ -239,15 +239,6 @@
         <activity android:name=".travel.TravelPlannerActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
-        <activity android:name=".travel.datepicker.DateActivity"
-            android:theme="@style/AppTheme.ActionBar" />
-
-        <activity android:name=".travel.landmarkpicker.LandmarkActivity"
-            android:theme="@style/AppTheme.ActionBar" />
-
-        <activity android:name=".travel.destinationpicker.DestinationActivity"
-            android:theme="@style/AppTheme.ActionBar" />
-
         <activity android:name=".feed.onthisday.OnThisDayActivity" />
 
         <activity android:name=".feed.configure.ConfigureActivity"

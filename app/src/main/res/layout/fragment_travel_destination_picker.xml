@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/destination_button_next"
         android:layout_width="wrap_content"
@@ -37,9 +36,9 @@
 
     <fragment
         android:id="@+id/fragment_place_autocomplete"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
         android:layout_width="360dp"
-        android:layout_height="42dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="420dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -62,6 +61,5 @@
         app:layout_constraintHorizontal_bias="0.376"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </android.support.constraint.ConstraintLayout>
