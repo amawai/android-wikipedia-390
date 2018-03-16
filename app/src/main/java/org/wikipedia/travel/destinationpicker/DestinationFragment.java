@@ -121,7 +121,10 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
 
                 // Removes destination from list when user swipes left
                 if (direction == ItemTouchHelper.LEFT) {
-                    userDestinationList.remove(position);
+                    TripDbHelper tripHelper = TripDbHelper.instance();
+                    tripHelper.deleteList(userDestinationList.get(position));
+                    Toast.makeText(getContext(), userDestinationList.get(position).getDestination().getDestinationName() + " has been removed", Toast.LENGTH_SHORT).show();
+                    updateUserDestinationList();
                     destinationAdapter.notifyDataSetChanged();
                 }
             }

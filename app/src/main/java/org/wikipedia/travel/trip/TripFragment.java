@@ -66,7 +66,7 @@ public class TripFragment extends Fragment implements View.OnClickListener {
         //TODO: Implement functionality of trip creation
         //For now, this creates a random trip and updates the list accordingly
         TripDbHelper tripHelper = TripDbHelper.instance();
-        tripHelper.createList(getRandomTripName(), new Trip.Destination("Osaka"), new Date());
+        tripHelper.createList(getRandomTripName(), new Trip.Destination("TestDestination"), new Date());
         updateUserTripList();
         getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
     }
