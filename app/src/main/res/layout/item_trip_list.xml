@@ -19,7 +19,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-
         <TextView
             android:id="@+id/trip_name_view_text"
             android:layout_width="match_parent"
@@ -62,6 +61,18 @@
             android:layout_centerVertical="false"
             android:clickable="true"
             app:srcCompat="@drawable/ic_cancel_black_24dp" />
+
+        <ImageView
+            android:id="@+id/plan_a_trip_share_trip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/trip_date_view_text"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/share_via"
+            android:tint="?attr/secondary_text_color"
+            app:srcCompat="@drawable/ic_share_black_24dp" />
 
     </RelativeLayout>
 
