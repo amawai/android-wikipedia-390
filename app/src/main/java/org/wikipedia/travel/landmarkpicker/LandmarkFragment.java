@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.wikipedia.R;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.FeedbackUtil;
 
 import java.util.ArrayList;
@@ -33,48 +34,46 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
+    private String destinationName;
 
-    @BindView(R.id.landmark_button_next) FloatingActionButton nextButton;
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
+    @BindView(R.id.landmark_country_view_text) TextView destinationText;
+
+    public static LandmarkFragment newInstance(String destinationName) {
+
+        Bundle args = new Bundle();
+        args.putString("DESTINATION", destinationName);
+
+        LandmarkFragment fragment = new LandmarkFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
-
-        //sets destination string in xml
-        setDestination(DestinationFragment.getDestinationString(), view);
+        unbinder = ButterKnife.bind(this, view);
+        destinationName = getArguments().getString("DESTINATION");
+        destinationText.setText(destinationName);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             linearLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(linearLayoutManager);
         }
-
         fillList(cardsList);
 
         LandmarkAdapter adapter = new LandmarkAdapter(cardsList, getContext());
 
-        unbinder = ButterKnife.bind(this, view);
         recyclerView.setAdapter(adapter);
-        nextButton.setOnClickListener((View.OnClickListener) this);
-
-        getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
         return view;
     }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
-    }
-
-    private void setDestination(String[] destinationString, View view) { //to be implemented with destination fragment
-        //landmark_city_text textview editors are removed for landmark_city_text for now, since address includes it
-        //TextView landmark_city_text = (TextView) view.findViewById(R.id.landmark_city_text);
-        TextView landmark_country_view_text = (TextView) view.findViewById(R.id.landmark_country_view_text);
-        //landmark_city_text.setText(destinationString[0]);
-        landmark_country_view_text.setText(destinationString[1]);
     }
 
     /*
@@ -115,5 +114,4 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         String message = "Your trip has been saved.";
         FeedbackUtil.showMessage(getActivity(), message);
     }
-
 }
