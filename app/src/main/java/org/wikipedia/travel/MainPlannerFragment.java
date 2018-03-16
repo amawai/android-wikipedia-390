@@ -18,6 +18,7 @@ import com.google.android.gms.location.places.Place;
 
 import org.wikipedia.BackPressedHandler;
 import org.wikipedia.R;
+import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.page.PageActivity;
@@ -44,6 +45,9 @@ import butterknife.Unbinder;
 
 public class MainPlannerFragment extends Fragment implements BackPressedHandler, TripFragment.Callback,
         DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback{
+    public interface Callback {
+        void onLoadPage(PageTitle title, HistoryEntry entry);
+    }
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
     @BindView(R.id.planner_save) Button bSave;
@@ -308,5 +312,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             openTrip.getDestination().setDestinationName(destinationName);
         }
     }
-
+    @Nullable
+    private Callback getCallback() {
+        return FragmentUtil.getCallback(this, Callback.class);
+    }
 }
