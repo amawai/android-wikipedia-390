@@ -1,8 +1,11 @@
 package org.wikipedia.travel.trip;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,6 +67,7 @@ public class TripFragment extends Fragment{
         void onOpenTrip(long id);
         void onRequestTripListUpdate();
         void onDeleteTrip(long id);
+        void onShareTrip(int index);
         Trip onGetTrip(long id);
     }
 
@@ -179,6 +183,7 @@ public class TripFragment extends Fragment{
         @BindView(R.id.trip_date_view_text) TextView tripDate;
         @BindView(R.id.trip_item_edit) ImageView tripEdit;
         @BindView(R.id.trip_item_delete) ImageView tripDelete;
+        @BindView(R.id.plan_a_trip_share_trip_button) ImageView tripShare;
 
         public TripItemHolder(View tripView) {
             super(tripView);
@@ -188,30 +193,39 @@ public class TripFragment extends Fragment{
             tripDate.setOnClickListener(this);
             tripEdit.setOnClickListener(this);
             tripDelete.setOnClickListener(this);
+            tripShare.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+            index = position;
             if (position >= 0) {
-                switch (v.getId()){
-//                    case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
-//                        break;
+                switch (v.getId()) {
+                    //case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
+                    //break;
                     case R.id.trip_item_edit:
                         if (getCallback() != null) {
                             getCallback().onOpenTrip(id);
                         }
                         break;
                     case R.id.trip_item_delete:
-                        if(getCallback()!=null) {
-//                            tripAdapter.remove(getCallback().onGetTrip(id));
+                        if (getCallback() != null) {
+                            //tripAdapter.remove(getCallback().onGetTrip(id));
                             getCallback().onDeleteTrip(id);
                         }
                         break;
+                    case R.id.plan_a_trip_share_trip_button:
+                        if (getCallback() != null) {
+                            //tripAdapter.remove(getCallback().onGetTrip(id));
+                            getCallback().onShareTrip(index);
+                        }
+                        break;
+                    /* no longer need this default as edit and delete buttons have been integrated into trip item views
                     default:
                         FeedbackUtil.showMessage(getActivity(), "Error");
+                     */
                 }
-
             }
         }
 
