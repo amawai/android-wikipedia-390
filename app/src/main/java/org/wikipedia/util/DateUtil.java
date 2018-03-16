@@ -68,6 +68,10 @@ public final class DateUtil {
         return dateFormat.format(date);
     }
 
+    public static String getDateWithWeekday(@NonNull Date date) {
+        return new SimpleDateFormat("EEE, d MMM yyyy").format(date);
+    }
+
     public static UtcDate getUtcRequestDateFor(int age) {
         return new UtcDate(age);
     }
@@ -88,6 +92,7 @@ public final class DateUtil {
         Calendar cal = new GregorianCalendar(year, 1, 1);
         return new SimpleDateFormat(year < 0 ? "y GG" : "y", Locale.getDefault()).format(cal.getTime());
     }
+
 
     @NonNull public static String getYearDifferenceString(int year) {
         Context context = WikipediaApp.getInstance().getApplicationContext();

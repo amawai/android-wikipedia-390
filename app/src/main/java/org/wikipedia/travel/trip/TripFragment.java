@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import org.wikipedia.R;
 import org.wikipedia.activity.FragmentUtil;
+import org.wikipedia.util.DateUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -180,11 +182,11 @@ public class TripFragment extends Fragment{
         }
 
         public void bindItem(Trip trip) {
+            Date departureDate = trip.getTripDepartureDate();
+            String departureText = DateUtil.getDateWithWeekday(departureDate);
             tripName.setText(trip.getTitle());
-            tripDate.setText(trip.getTripDepartureDate().toString());
+            tripDate.setText(departureText);
             id = trip.getId();
         }
-
     }
-
 }
