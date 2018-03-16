@@ -85,8 +85,8 @@ public class TripFragment extends Fragment{
         updateUserTripList();
         tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
-        tripList.setLayoutManager(new LinearLayoutManager(getContext(), VERTICAL, false));
 
+        tripList.setLayoutManager(new LinearLayoutManager(getContext()));
         getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
         return view;
     }
@@ -96,8 +96,7 @@ public class TripFragment extends Fragment{
         super.onResume();
         updateUserTripList();
     }
-
-
+    
     @Override
     public void onDestroyView() {
         tripList.setAdapter(null);
@@ -117,7 +116,9 @@ public class TripFragment extends Fragment{
     }
 
     public void setUserTripList(List<Trip> trips) {
-        tripAdapter.setUserTrips(trips);
+        if(tripAdapter != null) {
+            tripAdapter.setUserTrips(trips);
+        }
     }
 
 
@@ -214,7 +215,7 @@ public class TripFragment extends Fragment{
         public void bindItem(Trip trip) {
             Date departureDate = trip.getTripDepartureDate();
             String departureText = DateUtil.getDateWithWeekday(departureDate);
-            tripName.setText(trip.getTitle());
+            tripName.setText(trip.getDestination().getDestinationName());
             tripDate.setText(departureText);
             id = trip.getId();
         }

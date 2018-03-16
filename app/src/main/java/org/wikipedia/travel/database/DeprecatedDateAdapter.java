@@ -1,5 +1,7 @@
 package org.wikipedia.travel.database;
 
+import org.wikipedia.util.DateUtil;
+
 import java.util.Date;
 
 /**
@@ -16,6 +18,10 @@ public class DeprecatedDateAdapter extends Date {
 
     public DeprecatedDateAdapter(long longDate) {
         super(longDate);
+    }
+
+    public DeprecatedDateAdapter() {
+        super();
     }
 
     @Override
