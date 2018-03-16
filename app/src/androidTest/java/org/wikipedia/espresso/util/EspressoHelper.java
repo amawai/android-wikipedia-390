@@ -17,6 +17,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  * Credit to original Wikipedia Android App
  */
 
+//This class allows for tests to be run on the wikipedia feed (the main page), where cards are dynamically generated
+//The functions are geared towards waiting for views to load
 public class EspressoHelper {
 
     public interface WhileCondition {
