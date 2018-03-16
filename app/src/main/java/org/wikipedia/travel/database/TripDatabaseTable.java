@@ -48,7 +48,7 @@ public class TripDatabaseTable extends DatabaseTable<Trip> {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TripContract.Col.TITLE.getName(), row.getTitle());
         contentValues.put(TripContract.Col.DESTINATION.getName(), row.getDestination().getDestinationName());
-        contentValues.put(TripContract.Col.DATE.getName(), String.valueOf(row.getTripDepartureDate()));
+        contentValues.put(TripContract.Col.DATE.getName(), row.getTripDepartureDate().getTime());
         return contentValues;
     }
 

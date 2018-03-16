@@ -91,9 +91,13 @@ public class Trip {
     }
 
     //Setter method for the trip's departure date
-    public void setTripDepartureDate(Date desiredTripDepartureDate) {
+    public void setTripDepartureDate(int year, int month, int date) {
         if (departureDate != null)
-            this.departureDate = desiredTripDepartureDate;
+        {
+            this.departureDate.setYear(year);
+            this.departureDate.setMonth(month);
+            this.departureDate.setDate(date);
+        }
         else
             System.out.println("A valid depature date has not been passed.");
     }
