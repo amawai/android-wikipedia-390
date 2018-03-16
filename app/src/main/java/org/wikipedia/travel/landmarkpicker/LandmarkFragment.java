@@ -55,6 +55,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
         String getLmDestinationName();
+        void onSave(List<LandmarkCard> saveList);
     }
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
@@ -123,7 +124,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         adapter.setLandmarkCardList(landmarks);
     }
 
-    private void setDestination(String[] destinationString, View view) {
+    private void setDestination(String[] destinationString, View view) {//removed deprecated function
         TextView landmark_country_view_text = (TextView) view.findViewById(R.id.landmark_country_view_text);
         landmark_country_view_text.setText(destinationString[1]);
     }
@@ -133,6 +134,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         String message = "Your trip has been saved.";
         FeedbackUtil.showMessage(getActivity(), message);
+        getCallback().onSave(selectedLandmarks);
     }
 
     private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
@@ -149,13 +151,20 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
             return "";
     }
+    private void onSave(List<LandmarkCard> saveList){
+        Callback callback = getCallback();
+        if (callback != null) {
+            callback.onSave(saveList);
+        }
+    }
 
     //Provide the adapter with new landmark data to display
     private void fillList(Map<String, String> landMarkList){
+
         cardsList.clear();
-        for (String key : landMarkList.keySet()){
+        for (String key : landMarkList.keySet()) {
             LandmarkCard card = new LandmarkCard(
-                    key, "some description", landMarkList.get(key)
+                key, "some description", landMarkList.get(key)
             );
             cardsList.add(card);
         }

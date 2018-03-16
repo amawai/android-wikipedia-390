@@ -48,6 +48,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
         String getLmDestinationName();
+        void onSave(List<LandmarkCard> saveList);
     }
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
@@ -159,6 +160,13 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
     public String getLmDestinationName(){
         return openTrip.getDestination().getDestinationName();
+    }
+
+    //saves landmarks into trips, called in onclick
+    public void onSave(List<LandmarkCard> saveList){
+        for (LandmarkCard card: saveList) {
+            openTrip.getDestination().getDestinationPlacesToVisit().add(card);
+        }
     }
 
     /*
