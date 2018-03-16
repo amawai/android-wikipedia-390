@@ -1,9 +1,13 @@
 package org.wikipedia.travel;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -151,6 +155,16 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     @Override
+    public void onShareTrip(int index) {
+        Context shareTripContext = getContext();
+        Intent intent = ShareCompat.IntentBuilder.from((Activity) shareTripContext)
+                .setType("text/plain")
+                .setText("I will be travelling to " + userTripsList.get(index).getDestination().getDestinationName() + " on " + userTripsList.get(index).getTripDepartureDate().toString())
+                .getIntent();
+        startActivity(intent, null);
+    }
+
+    @Override
     public void onPlaceSelected(Place destination) {
         openTrip.setDestinationName((String) destination.getName());
     }
@@ -161,8 +175,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     /*
-            BackPressedListener
-         */
+        BackPressedListener
+    */
     @Override
     public boolean onBackPressed() {
         if(viewPager.getCurrentItem() > 0) {
@@ -175,7 +189,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     /*
         Data persistence
      */
-
     private void saveTrip(Trip trip) {
         bSave.setActivated(false);
         //Do some stuff to save trip info
@@ -208,7 +221,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             }
         });
     }
-
 
     public void openTrip(long id) {
         openTrip = getTrip(id);
