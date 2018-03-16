@@ -33,14 +33,4 @@ public class DeprecatedDateAdapter extends Date {
     public void setYear(int year) {
         super.setYear(year-1900);
     }
-
-    @Override
-    public int getMonth() {
-        return super.getMonth()+1;
-    }
-
-    @Override
-    public void setMonth(int month) {
-        super.setMonth(month-1);
-    }
 }

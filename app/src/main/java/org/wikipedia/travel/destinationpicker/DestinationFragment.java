@@ -36,10 +36,10 @@ public class DestinationFragment extends Fragment {
 
     public interface Callback{
         void onPlaceSelected(Place place);
+        String onRequestOpenDestinationName();
     }
 
     public static DestinationFragment newInstance(String destination) {
-
         Bundle args = new Bundle();
         args.putString("DESTINATION", destination);
 
@@ -61,7 +61,7 @@ public class DestinationFragment extends Fragment {
             @Override
             public void onPlaceSelected(Place place) {
                 destination = place;
-                updateDestinationText(place);
+                updateDestinationText((String)place.getName());
                 if(getCallback() != null) {
                     getCallback().onPlaceSelected(place);
                 }
@@ -72,13 +72,13 @@ public class DestinationFragment extends Fragment {
                 Log.i("Autocomplete Failed", status.getStatusMessage());
             }
         });
-
-        tvDestination.setText(getArguments().getString("DESTINATION"));
+        //There is no need to always display the search bar result everytime the view is created
+        //tvDestination.setText(getArguments().getString("DESTINATION"));
         return view;
     }
 
-    private void updateDestinationText(Place destination) {
-        tvDestination.setText(destination.getName());
+    private void updateDestinationText(String destination) {
+        tvDestination.setText(destination);
     }
 
     private AppCompatActivity getAppCompatActivity() {

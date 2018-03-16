@@ -22,6 +22,7 @@ import org.wikipedia.R;
 import org.wikipedia.activity.FragmentUtil;
 
 import java.text.DateFormatSymbols;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,7 @@ public class DateFragment extends Fragment{
 
     public interface Callback {
         public void onDateChanged(int year, int month, int day);
+        public Date onRequestOpenDate();
     }
 
     public static DateFragment newInstance(int year, int month, int day) {
@@ -65,7 +67,6 @@ public class DateFragment extends Fragment{
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                month = month + 1;
                 String date = getMonth(month) + " " + day + ", " + year;
                 mDisplayDate.setText(date);
                 if(getCallback() != null) {
@@ -88,15 +89,29 @@ public class DateFragment extends Fragment{
             }
         });
 
-        //setting the current date as the departure date
-        String date = getMonth(month) + " " + day + ", " + year;
-        mDisplayDate.setText(date);
+
 
         return view;
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        if(getCallback() != null) {
+            Date date = getCallback().onRequestOpenDate();
+            setFragmentDate(date.getYear(), date.getMonth(), date.getDate());
+        }
+    }
+
+    public void setFragmentDate(int year, int month, int day) {
+        mDatePicker.updateDate(year, month, day);
+        //setting the current date as the departure date
+        String date = getMonth(month) + " " + day + ", " + year;
+        mDisplayDate.setText(date);
+    }
+
     public String getMonth(int month) {
-        return new DateFormatSymbols().getMonths()[month - 1];
+        return new DateFormatSymbols().getMonths()[month];
     }
 
     public Callback getCallback() { return FragmentUtil.getCallback(this, Callback.class); }
