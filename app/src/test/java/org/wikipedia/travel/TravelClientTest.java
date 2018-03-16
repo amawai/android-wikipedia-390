@@ -28,6 +28,7 @@ public class TravelClientTest {
          wiki = mock(WikiSite.class);
          client = new TravelClient();
     }
+
     @Test
     public void testClientMakesCards() {
         Card card = client.getNewCard(wiki);

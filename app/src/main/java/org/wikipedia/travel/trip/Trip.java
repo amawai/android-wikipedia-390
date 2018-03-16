@@ -4,8 +4,10 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
+import org.wikipedia.travel.database.DeprecatedDateAdapter;
 import org.wikipedia.travel.database.TripDatabaseTable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,10 @@ public class Trip {
         this.title = title;
         this.singleDestination = singleDestination;
         this.departureDate = departureDate;
+    }
+
+    public Trip() {
+        this("", new Destination(""), new DeprecatedDateAdapter());
     }
 
     //Setters and getters for the trip's id
@@ -91,9 +97,13 @@ public class Trip {
     }
 
     //Setter method for the trip's departure date
-    public void setTripDepartureDate(Date desiredTripDepartureDate) {
+    public void setTripDepartureDate(int year, int month, int date) {
         if (departureDate != null)
-            this.departureDate = desiredTripDepartureDate;
+        {
+            this.departureDate.setYear(year);
+            this.departureDate.setMonth(month);
+            this.departureDate.setDate(date);
+        }
         else
             System.out.println("A valid depature date has not been passed.");
     }
@@ -103,10 +113,21 @@ public class Trip {
         return (!(this.destinations.isEmpty()) && this.destinations != null);
     }
 
+    public void setDestinationName(String destinationName) {
+        if(this.destinations == null) {
+            this.singleDestination = new Destination();
+        }
+        this.getDestination().setDestinationName(destinationName);
+    }
+
     //Inner Destination Class
     public static class Destination {
         @SuppressWarnings("unused,NullableProblems") @Required @Nullable private List<Location> landmarks;
         @SuppressWarnings("unused,NullableProblems") @Required @NonNull private String destinationName;
+
+        public Destination() {
+            this(new ArrayList<>(), "");
+        }
 
         //Parametrized constructor for a destination
         public Destination(List<Location> placesToVisit, String destinationName) {
