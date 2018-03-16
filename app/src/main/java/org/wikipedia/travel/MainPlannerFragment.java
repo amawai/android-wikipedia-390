@@ -149,7 +149,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
     @Override
     public void onPlaceSelected(Place destination) {
-        openTrip.setDestinationName((String) destination.getName());
+        openTrip.setDestinationName((String) destination.getAddress());
     }
 
     @Override

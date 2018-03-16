@@ -87,7 +87,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         //destinationName = getArguments().getString("DESTINATION");
 
         //set, display and get results using desName
-        //destinationName = DestinationFragment.destination.getName().toString();
+        //destinationName = DestinationFragment.destination.getAddress().toString();
         destinationName = getCallback().getLmDestinationName();
         destinationText.setText(destinationName);
 
