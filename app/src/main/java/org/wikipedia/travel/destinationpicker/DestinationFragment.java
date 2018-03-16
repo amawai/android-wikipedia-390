@@ -32,7 +32,10 @@ import org.wikipedia.travel.trip.Trip;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +81,10 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
             @Override
             public void onPlaceSelected(Place place) {
                 setDestinationArray((String) place.getName(), (String) place.getAddress());
+                Date currentTime = Calendar.getInstance().getTime();
+                TripDbHelper tripHelper = TripDbHelper.instance();
+                tripHelper.createList(getRandomTripName(), new Trip.Destination((String) place.getName()), currentTime);
+                updateUserDestinationList();
             }
 
             @Override
@@ -86,6 +93,19 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
             }
         });
         return view;
+    }
+
+    //Temporary measure to add mock trips, to be deleted once full functionality is complete
+    protected String getRandomTripName() {
+        String validCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder tripName = new StringBuilder();
+        Random rnd = new Random();
+        while (tripName.length() < 12) {
+            int index = (int) (rnd.nextFloat() * validCharacters.length());
+            tripName.append(validCharacters.charAt(index));
+        }
+        return tripName.toString();
+
     }
 
     private void onSwipeLeft() {
@@ -133,7 +153,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateUserDestinationList() {
-        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(),  new CallbackTask.DefaultCallback<List<Trip>>(){
+        CallbackTask.execute(() -> TripDbHelper.instance().getDestinationList(),  new CallbackTask.DefaultCallback<List<Trip>>(){
             @Override
             public void success(List<Trip> list) {
                 if (getActivity() == null) {
@@ -192,15 +212,14 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
     //Individual rows that hold information about a trip
     public final class TripItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public RelativeLayout tripLayout;
-        public TextView tripName;
+        public TextView destinationName;
         public TextView tripDate;
         private int index;
 
         public TripItemHolder(View tripView) {
             super(tripView);
             tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
-            tripName = (TextView) tripView.findViewById(R.id.trip_name_view_text);
-            tripDate = (TextView) tripView.findViewById(R.id.trip_date_view_text);
+            destinationName = (TextView) tripView.findViewById(R.id.trip_name_view_text);
             tripLayout.setOnClickListener(this);
         }
 
@@ -213,8 +232,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         }
 
         public void bindItem(Trip trip) {
-            tripName.setText(trip.getTitle());
-            tripDate.setText(trip.getTripDepartureDate().toString());
+            destinationName.setText(trip.getDestination().getDestinationName());
         }
     }
 

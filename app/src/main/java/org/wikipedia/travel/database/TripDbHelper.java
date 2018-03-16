@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.database.contract.TripContract;
@@ -37,6 +38,20 @@ public class TripDbHelper {
         }
         return lists;
     }
+
+    public List<Trip> getDestinationList() {
+        List<Trip> lists = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        try (Cursor cursor = db.query(true, TripContract.TABLE, new String[] {TripContract.Col.ID.getName(),TripContract.Col.DESTINATION.getName(), TripContract.Col.DATE.getName()}, null, null, TripContract.Col.DESTINATION.getName(), null, null, null)) {
+            while (cursor.moveToNext()) {
+                Trip list = Trip.DATABASE_TABLE.fromDestinationCursor(cursor);
+                lists.add(list);
+            }
+        }
+        return lists;
+    }
+
 
     @NonNull
     public Trip createList(@NonNull String title, @NonNull Trip.Destination destination, @NonNull Date date) {

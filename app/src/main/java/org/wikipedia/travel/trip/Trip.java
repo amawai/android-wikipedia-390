@@ -39,6 +39,12 @@ public class Trip {
         this.departureDate = departureDate;
     }
 
+    //Parametrized constructor for a trip, only used for storing destination history
+    public Trip(Destination singleDestination, Date destinationAddedDate) {
+        this.singleDestination = singleDestination;
+        this.departureDate = destinationAddedDate;
+    }
+
     //Setters and getters for the trip's id
     public long getId() {
         return id;
