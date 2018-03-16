@@ -74,19 +74,11 @@ public class TripFragment extends Fragment{
 
         tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
-        updateUserTripList();
-
         tripList.setLayoutManager(new LinearLayoutManager(getContext()));
         getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
         return view;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUserTripList();
-    }
 
 
     @Override
@@ -108,7 +100,9 @@ public class TripFragment extends Fragment{
     }
 
     public void setUserTripList(List<Trip> trips) {
-        tripAdapter.setUserTrips(trips);
+        if(tripAdapter != null) {
+            tripAdapter.setUserTrips(trips);
+        }
     }
 
 
@@ -184,7 +178,7 @@ public class TripFragment extends Fragment{
         public void bindItem(Trip trip) {
             Date departureDate = trip.getTripDepartureDate();
             String departureText = DateUtil.getDateWithWeekday(departureDate);
-            tripName.setText(trip.getTitle());
+            tripName.setText(trip.getDestination().getDestinationName());
             tripDate.setText(departureText);
             id = trip.getId();
         }

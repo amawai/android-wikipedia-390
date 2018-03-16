@@ -26,7 +26,6 @@ import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.travel.trip.TripFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,9 +69,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
         adapter = new PlannerFragmentPagerAdapter(getChildFragmentManager());
-        adapter.setTripListFragment(TripFragment.newInstance());
-        updateUserTripList();
         viewPager.setAdapter((PagerAdapter) adapter);
+        adapter.setTripListFragment(TripFragment.newInstance());
         setupButtonListeners();
         updateUserTripList();
         setPageTitle(viewPager.getCurrentItem());
@@ -97,13 +95,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     @Override
-
-    public void onResume() {
-        super.onResume();
-        updateUserTripList();
-    }
-
-    @Override
     public void onDestroyView() {
         unbinder.unbind();
         super.onDestroyView();
@@ -119,10 +110,19 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
     @Override
     public void onNewTrip() {
-        newTrip();
-    }
+        CallbackTask.execute(() -> TripDbHelper.instance().createList(), new CallbackTask.DefaultCallback<Trip>(){
+            @Override
+            public void success(Trip trip) {
+                userTripsList.add(trip);
+                openTrip(trip.getId());
+            }
 
-    @Override
+            @Override
+            public void failure(Throwable caught) {
+                Toast.makeText(getActivity(), "Failed to create a new trip", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public void onOpenTrip(long id) {
         openTrip(id);
     }
@@ -157,14 +157,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     /*
         Data persistence
      */
-    private void fetchUserTrips() {
-        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>(){
-            @Override
-            public void success(List<Trip> result) {
-                super.success(result);
-            }
-        });
-    }
 
     private void saveTrip(Trip trip) {
         bSave.setActivated(false);
@@ -173,6 +165,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         CallbackTask.execute(() -> TripDbHelper.instance().updateList(trip),  new CallbackTask.DefaultCallback<Object>(){
             @Override
             public void success(Object o) {
+                super.success(o);
                 Toast.makeText(getActivity(),"Trip saved", Toast.LENGTH_SHORT).show();
                 goToHomePage();
             }
@@ -198,16 +191,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         });
     }
 
-    /*
-        Trip creation and management
-     */
-    public void newTrip() {
-        Trip trip = new Trip("Dream trip", new Trip.Destination(""), new Date(2018, 03, 06));
-        //TODO: Improve this for release 2
-        trip.getDestination().setDestinationName("");
-        userTripsList.add(trip);
-        openTrip(trip.getId());
-    }
 
     public void openTrip(long id) {
         Toast.makeText(getActivity(), "Opening trip: " + id, Toast.LENGTH_SHORT).show();
