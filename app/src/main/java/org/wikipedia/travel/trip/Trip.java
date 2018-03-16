@@ -4,6 +4,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
+import org.wikipedia.travel.database.DeprecatedDateAdapter;
 import org.wikipedia.travel.database.TripDatabaseTable;
 
 import java.util.ArrayList;
@@ -38,6 +39,10 @@ public class Trip {
         this.title = title;
         this.singleDestination = singleDestination;
         this.departureDate = departureDate;
+    }
+
+    public Trip() {
+        this("", new Destination(""), new DeprecatedDateAdapter());
     }
 
     //Setters and getters for the trip's id

@@ -45,6 +45,12 @@ public class TripDbHelper {
     }
 
     @NonNull
+    public Trip createList() {
+        Trip trip = new Trip();
+        return this.createList(trip.getTitle(), trip.getDestination(), trip.getTripDepartureDate());
+    }
+
+    @NonNull
     public Trip createList(@NonNull SQLiteDatabase db, @NonNull String title, @NonNull Trip.Destination destination, @NonNull Date date) {
         db.beginTransaction();
         try {
