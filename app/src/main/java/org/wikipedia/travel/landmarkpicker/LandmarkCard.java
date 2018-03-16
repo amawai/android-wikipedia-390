@@ -10,11 +10,13 @@ public class LandmarkCard {
     private String title;
     private String desc;
     private String thumbUrl;
+    private boolean isChecked;
 
     public LandmarkCard(String title, String desc, String thumbUrl) {
         this.title = title;
         this.desc = desc;
         this.thumbUrl = thumbUrl;
+        isChecked = false;
     }
 
     public String getTitle() {
@@ -31,5 +33,13 @@ public class LandmarkCard {
 
     public String getThumbUrl() {
         return thumbUrl;
+    }
+
+    public boolean getChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

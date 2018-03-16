@@ -47,7 +47,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback{
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
-        void setLandmarkSearch();
+        void setLmDestinationName(String location);
     }
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
@@ -156,7 +156,11 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip.setTripDepartureDate(year, month, day);
     }
 
-    
+    public void setLmDestinationName(String location){
+        getDestinationTrip();
+        location = openTrip.getDestination().getDestinationName();
+    }
+
     /*
             BackPressedListener
          */
@@ -205,7 +209,9 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             }
         });
     }
-
+    public String getDestinationTrip(){
+        return openTrip.getDestination().getDestinationName();
+    }
 
     public void openTrip(long id) {
         Toast.makeText(getActivity(), "Opening trip: " + id, Toast.LENGTH_SHORT).show();

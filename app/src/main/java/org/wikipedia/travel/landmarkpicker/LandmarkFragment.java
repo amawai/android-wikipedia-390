@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -57,8 +58,9 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private List<LandmarkCard> cardsList = new ArrayList<>();
     private String destinationName;
     private LandmarkAdapter adapter;
-
     private NearbyResult lastResult;
+
+    private List<LandmarkCard> selectedLandmarks;
 
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
     @BindView(R.id.landmark_country_view_text) TextView destinationText;
@@ -94,6 +96,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
         recyclerView.setAdapter(adapter);
         retrieveArticles("Tokyo");
+        selectedLandmarks = new ArrayList<LandmarkCard>();
         return view;
     }
 
@@ -255,6 +258,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
             private CardView cv;
             private TextView textViewTitle;
             private TextView textViewDesc;
+            private CheckBox checkBox;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -262,8 +266,10 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                 cv = (CardView) itemView.findViewById(R.id.view_card);
                 textViewTitle = (TextView) itemView.findViewById(R.id.landmark_title_text_view);
                 textViewDesc = (TextView) itemView.findViewById(R.id.landmark_desc_text_view);
+                checkBox = (CheckBox) itemView.findViewById(R.id.landmark_check_box);
 
                 cv.setOnClickListener(this);
+                checkBox.setOnClickListener(this);
             }
 
             @Override
@@ -271,9 +277,24 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                 int position = getAdapterPosition();
                 LandmarkCard card = cardsList.get(position);
                 PageTitle title = new PageTitle(card.getTitle(), lastResult.getWiki(), card.getThumbUrl());
-                if (position >= 0) {
-                    //Load the page when clicking on the article
-                    getCallback().onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_LANDMARK));
+                switch (v.getId()){
+                    case R.id.view_card:
+                        if (position >= 0) {
+                            //Load the page when clicking on the article
+                            getCallback().onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_LANDMARK));
+                        }
+                        break;
+                    case R.id.landmark_check_box:
+                        //Adds the LandmarkCard object, comprised of card title and thumbUrl into list
+                        if (card.getChecked()) {
+                            card.setChecked(false);
+                            selectedLandmarks.remove(card);
+                        }
+                        else  {
+                            card.setChecked(true);
+                            selectedLandmarks.add(card);
+                        }
+                        break;
                 }
             }
 
