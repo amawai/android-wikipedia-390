@@ -47,8 +47,9 @@ public class TripDbHelperTest implements ITripDbHelper {
     @Test
     public void mockTestDeleteLists() {
         Trip mockTrip = mock(Trip.class);
-        deleteList(mockTrip);
         when(mockTrip.getId()).thenReturn((long)1);
+
+        assertNull(deleteList(mockTrip));
         verify(mockTrip).getId();
     }
 
@@ -63,10 +64,11 @@ public class TripDbHelperTest implements ITripDbHelper {
     }
 
     @Override
-    public void deleteList(@NonNull Trip list) {
+    public Object deleteList(@NonNull Trip list) {
         List<Trip> arrList = new ArrayList<>();
         arrList.add(list);
 
         arrList.remove(list.getId());
+        return null;
     }
 }

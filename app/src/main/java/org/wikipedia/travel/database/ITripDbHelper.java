@@ -13,5 +13,5 @@ import java.util.List;
  */
 
 public interface ITripDbHelper {
-    public void deleteList(@NonNull Trip list);
+    public Object deleteList(@NonNull Trip list);
 }
