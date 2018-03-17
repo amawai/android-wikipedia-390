@@ -84,14 +84,10 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_landmark_picker, container, false);//change xml to fragment
         unbinder = ButterKnife.bind(this, view);
-        //destinationName = getArguments().getString("DESTINATION");
 
         //set, display and get results using desName
-        //destinationName = DestinationFragment.destination.getAddress().toString();
         destinationName = getCallback().getLmDestinationName();
         destinationText.setText(destinationName);
-
-        //recyclerView = (RecyclerView) view.findViewById(R.id.landmark_view_recycler);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
@@ -121,11 +117,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
     public void setLandmarkCards(List<LandmarkCard> landmarks) {
         adapter.setLandmarkCardList(landmarks);
-    }
-
-    private void setDestination(String[] destinationString, View view) {//removed deprecated function
-        TextView landmark_country_view_text = (TextView) view.findViewById(R.id.landmark_country_view_text);
-        landmark_country_view_text.setText(destinationString[1]);
     }
 
 
@@ -163,7 +154,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         cardsList.clear();
         for (String key : landMarkList.keySet()) {
             LandmarkCard card = new LandmarkCard(
-                key, "some description", landMarkList.get(key)
+                key, "", landMarkList.get(key)
             );
             cardsList.add(card);
         }

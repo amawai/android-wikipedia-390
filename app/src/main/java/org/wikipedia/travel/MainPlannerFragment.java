@@ -59,7 +59,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     @BindView(R.id.planner_save) Button bSave;
     @BindView(R.id.planner_title) TextView tvTitle;
 
-    public String lmDestination;
     private PlannerFragmentPagerAdapter adapter;
     private Trip openTrip;
     private Unbinder unbinder;
