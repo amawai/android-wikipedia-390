@@ -6,7 +6,7 @@ import org.wikipedia.dataclient.WikiSite;
 
 import java.util.List;
 
-class NearbyResult {
+public class NearbyResult {
     @NonNull private final WikiSite wiki;
     @NonNull private final List<NearbyPage> list;
 

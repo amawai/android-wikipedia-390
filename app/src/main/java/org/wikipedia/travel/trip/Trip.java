@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
 import org.wikipedia.travel.database.DeprecatedDateAdapter;
 import org.wikipedia.travel.database.TripDatabaseTable;
+import org.wikipedia.travel.landmarkpicker.LandmarkCard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -122,7 +123,7 @@ public class Trip {
 
     //Inner Destination Class
     public static class Destination {
-        @SuppressWarnings("unused,NullableProblems") @Required @Nullable private List<Location> landmarks;
+        @SuppressWarnings("unused,NullableProblems") @Required @Nullable private List<LandmarkCard> landmarks;
         @SuppressWarnings("unused,NullableProblems") @Required @NonNull private String destinationName;
 
         public Destination() {
@@ -130,7 +131,7 @@ public class Trip {
         }
 
         //Parametrized constructor for a destination
-        public Destination(List<Location> placesToVisit, String destinationName) {
+        public Destination(List<LandmarkCard> placesToVisit, String destinationName) {
             this.landmarks = placesToVisit;
             this.destinationName = destinationName;
         }
@@ -142,12 +143,12 @@ public class Trip {
 
         //Getter method for the list of landmarks that a destination has
         @NonNull
-        public List<Location> getDestinationPlacesToVisit() {
+        public List<LandmarkCard> getDestinationPlacesToVisit() {
             return (this.landmarks != null) ? this.landmarks : Collections.emptyList();
         }
 
         //Method to add a landmark to the list of landmarks that a destination has
-        public void addLandmark(Location location) {
+        public void addLandmark(LandmarkCard location) {
             if (location != null) {
                 landmarks.add(location);
             }
