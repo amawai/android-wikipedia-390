@@ -21,6 +21,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 
 /**
@@ -65,6 +66,22 @@ public class LandmarkEspressoTest {
                 allOf(withId(R.id.landmark_country_view_text)));
         destinationDisplay.check(matches(withText("Montreal, QC, Canada")));
 
+    }
+
+    @Test
+    public void ensureAssociatedArticleAppearsOnCardSelection() {
+        UiObject montrealArticleCard = mDevice.findObject(new UiSelector()
+                .text("Montreal Central Station"));
+        try {
+            montrealArticleCard.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //Checks that the article with the following description opens up and exists
+        UiObject montrealArticle = mDevice.findObject(new UiSelector()
+                .text("Railway station in Montreal, Quebec, Canada"));
+        assertTrue(montrealArticle.exists());
     }
 
     private void selectDestination() throws UiObjectNotFoundException{
