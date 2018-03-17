@@ -285,6 +285,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
                 cv.setOnClickListener(this);
                 checkBox.setOnClickListener(this);
+                this.setIsRecyclable(false);
             }
 
             @Override
