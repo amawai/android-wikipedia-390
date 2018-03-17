@@ -191,10 +191,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip.setTripDepartureDate(year, month, day);
     }
 
-    public String getLmDestinationName(){
-        return openTrip.getDestination().getDestinationName();
-    }
-
     //saves landmarks into trips, called in onclick
     public void onSave(List<LandmarkCard> saveList) {
         for (LandmarkCard card : saveList) {
@@ -257,11 +253,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
                 adapter.getTripListFragment().setUserTripList(list);
             }
         });
-    }
-
-
-    public String getDestinationTrip(){
-        return openTrip.getDestination().getDestinationName();
     }
 
     public void openTrip(long id) {

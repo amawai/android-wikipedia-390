@@ -53,7 +53,7 @@ import retrofit2.Call;
 public class LandmarkFragment extends Fragment implements View.OnClickListener {
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
-        String getLmDestinationName();
+        String onRequestOpenDestinationName();
         void onSave(List<LandmarkCard> saveList);
     }
     private Unbinder unbinder;
@@ -86,7 +86,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         unbinder = ButterKnife.bind(this, view);
 
         //set, display and get results using desName
-        destinationName = getCallback().getLmDestinationName();
+        destinationName = getCallback().onRequestOpenDestinationName();
         destinationText.setText(destinationName);
 
         if (recyclerView != null) {
@@ -136,10 +136,10 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String getLmDestinationName(){
+    private String onRequestOpenDestinationName(){
         Callback callback = getCallback();
         if (callback != null) {
-            callback.getLmDestinationName();
+            callback.onRequestOpenDestinationName();
         }
             return "";
     }
