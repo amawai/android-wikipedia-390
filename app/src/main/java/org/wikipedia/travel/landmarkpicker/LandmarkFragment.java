@@ -63,13 +63,13 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     private LandmarkAdapter adapter;
     private NearbyResult lastResult;
 
+    //Landmarks selected (checked) by the user
     private List<LandmarkCard> selectedLandmarks;
 
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
     @BindView(R.id.landmark_country_view_text) TextView destinationText;
 
     public static LandmarkFragment newInstance(String destinationName) {
-
         Bundle args = new Bundle();
         args.putString("DESTINATION", destinationName);
 
@@ -127,6 +127,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         getCallback().onSave(selectedLandmarks);
     }
 
+
+    //This function uses a callback to load the article corresponding to the title
     private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
         Callback callback = getCallback();
         if (callback != null) {
@@ -141,6 +143,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
             return "";
     }
+
+    //Saves list of selectedLandmarks
     private void onSave(List<LandmarkCard> saveList){
         Callback callback = getCallback();
         if (callback != null) {
@@ -150,7 +154,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
     //Provide the adapter with new landmark data to display
     private void fillList(Map<String, String> landMarkList){
-
+        //clear the list to prevent duplicates
         cardsList.clear();
         for (String key : landMarkList.keySet()) {
             LandmarkCard card = new LandmarkCard(
@@ -161,6 +165,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         adapter.setLandmarkCardList(cardsList);
     }
 
+    //Receives NearbyResult, and parses it to create a hashmap comprised of an article and thumburl
     private void extractLandmarkArticles(NearbyResult nearbyArticles) {
         Map<String, String> landMarkList = new HashMap<String, String>();
         for (NearbyPage item : nearbyArticles.getList()) {
@@ -174,6 +179,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         double lat = 0;
         double longi = 0;
         Geocoder gc = new Geocoder(getContext());
+        //Based on location, geocoder gets corresponding lattitude and longitude
         try {
             List<Address> addresses= gc.getFromLocationName(location, 5);
             List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
@@ -188,6 +194,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
         NearbyClient client = new NearbyClient();
         WikiSite wiki = WikipediaApp.getInstance().getWikiSite();
+        //Passing in longitude and lattiude, retrieve relevan articles nearby
         client.request(wiki, lat,longi, 5000,
                 new NearbyClient.Callback() {
                     @Override public void success(@NonNull Call<MwQueryResponse> call,
