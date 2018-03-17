@@ -30,7 +30,6 @@ import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.travel.MainPlannerFragment;
-import org.wikipedia.travel.destinationpicker.DestinationFragment;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;

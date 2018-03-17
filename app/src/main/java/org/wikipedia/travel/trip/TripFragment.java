@@ -1,22 +1,32 @@
 package org.wikipedia.travel.trip;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.wikipedia.R;
+
+import org.wikipedia.concurrency.CallbackTask;
+import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.util.FeedbackUtil;
+
 import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.util.DateUtil;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +35,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
+import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 
 /**
  * Created by amawai on 28/02/18.
@@ -53,6 +66,9 @@ public class TripFragment extends Fragment{
         void onNewTrip();
         void onOpenTrip(long id);
         void onRequestTripListUpdate();
+        void onDeleteTrip(long id);
+        void onShareTrip(int index);
+        Trip onGetTrip(long id);
     }
 
     public Callback getCallback() {
@@ -71,15 +87,20 @@ public class TripFragment extends Fragment{
                 getCallback().onNewTrip();
             }
         });
-
+        updateUserTripList();
         tripAdapter = new TripAdapter(getContext());
         tripList.setAdapter(tripAdapter);
+
         tripList.setLayoutManager(new LinearLayoutManager(getContext()));
         getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
         return view;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserTripList();
+    }
 
     @Override
     public void onDestroyView() {
@@ -146,7 +167,6 @@ public class TripFragment extends Fragment{
         }
 
         public void setUserTrips(List<Trip> trips) {
-            Log.d("SetUserTrips", trips.size() + "");
             this.userTripsList = trips;
             notifyDataSetChanged();
         }
@@ -154,24 +174,58 @@ public class TripFragment extends Fragment{
 
     //Individual rows that hold information about a trip
     public final class TripItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public RelativeLayout tripLayout;
-        public TextView tripName;
-        public TextView tripDate;
+
+        private int index;
         private long id;
+
+        @BindView(R.id.trip_info) RelativeLayout tripLayout;
+        @BindView(R.id.trip_name_view_text) TextView tripName;
+        @BindView(R.id.trip_date_view_text) TextView tripDate;
+        @BindView(R.id.trip_item_edit) ImageView tripEdit;
+        @BindView(R.id.trip_item_delete) ImageView tripDelete;
+        @BindView(R.id.plan_a_trip_share_trip_button) ImageView tripShare;
 
         public TripItemHolder(View tripView) {
             super(tripView);
-            tripLayout = (RelativeLayout) tripView.findViewById(R.id.trip_info);
-            tripName = (TextView) tripView.findViewById(R.id.trip_name_view_text);
-            tripDate = (TextView) tripView.findViewById(R.id.trip_date_view_text);
-            tripLayout.setOnClickListener(this);
+
+            unbinder = ButterKnife.bind(this, tripView);
+            tripName.setOnClickListener(this);
+            tripDate.setOnClickListener(this);
+            tripEdit.setOnClickListener(this);
+            tripDelete.setOnClickListener(this);
+            tripShare.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+            index = position;
             if (position >= 0) {
-                getCallback().onOpenTrip(id);
+                switch (v.getId()) {
+                    //case (R.id.trip_name_view_text): case (R.id.trip_date_view_text):
+                    //break;
+                    case R.id.trip_item_edit:
+                        if (getCallback() != null) {
+                            getCallback().onOpenTrip(id);
+                        }
+                        break;
+                    case R.id.trip_item_delete:
+                        if (getCallback() != null) {
+                            //tripAdapter.remove(getCallback().onGetTrip(id));
+                            getCallback().onDeleteTrip(id);
+                        }
+                        break;
+                    case R.id.plan_a_trip_share_trip_button:
+                        if (getCallback() != null) {
+                            //tripAdapter.remove(getCallback().onGetTrip(id));
+                            getCallback().onShareTrip(index);
+                        }
+                        break;
+                    /* no longer need this default as edit and delete buttons have been integrated into trip item views
+                    default:
+                        FeedbackUtil.showMessage(getActivity(), "Error");
+                     */
+                }
             }
         }
 
