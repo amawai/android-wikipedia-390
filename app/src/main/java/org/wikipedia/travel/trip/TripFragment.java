@@ -31,6 +31,7 @@ import org.wikipedia.util.DateUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,6 +95,29 @@ public class TripFragment extends Fragment{
         tripList.setLayoutManager(new LinearLayoutManager(getContext()));
         getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
         return view;
+    }
+
+//    @Override
+//    public void onClick(View v) {
+//        //TODO: Implement functionality of trip creation
+//        //For now, this creates a random trip and updates the list accordingly
+//        TripDbHelper tripHelper = TripDbHelper.instance();
+//        tripHelper.createList(getRandomTripName(), new Trip.Destination("TestDestination"), new Date());
+//        updateUserTripList();
+//        getContext().startActivity(new Intent(DestinationActivity.newIntent(getContext())));
+//    }
+
+    //Temporary measure to add mock trips, to be deleted once full functionality is complete
+    protected String getRandomTripName() {
+        String validCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder tripName = new StringBuilder();
+        Random rnd = new Random();
+        while (tripName.length() < 12) {
+            int index = (int) (rnd.nextFloat() * validCharacters.length());
+            tripName.append(validCharacters.charAt(index));
+        }
+        return tripName.toString();
+
     }
 
     @Override

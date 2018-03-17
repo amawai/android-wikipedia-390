@@ -30,6 +30,12 @@ public class TripDatabaseTable extends DatabaseTable<Trip> {
         return trip;
     }
 
+    public Trip fromDestinationCursor(@NonNull Cursor cursor) {
+        Trip trip = new Trip(TripContract.Col.DESTINATION.val(cursor), TripContract.Col.DATE.val(cursor));
+        trip.setId(TripContract.Col.ID.val(cursor));
+        return trip;
+    }
+
     @NonNull @Override public Column<?>[] getColumnsAdded(int version) {
         switch (version) {
             case DB_VER_INTRODUCED:
