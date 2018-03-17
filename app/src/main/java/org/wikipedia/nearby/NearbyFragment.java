@@ -397,28 +397,9 @@ public class NearbyFragment extends Fragment {
 
             onLoading();
 
-            String location = "Tokyo";
-            double lat = 0;
-            double longi = 0;
-            Geocoder gc = new Geocoder(getContext());
-            try {
-                List<Address> addresses= gc.getFromLocationName(location, 5);
-                Log.d("NEARBYTHING", "no error wow");
-                List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
-                for(Address a : addresses){
-                    if(a.hasLatitude() && a.hasLongitude()){
-                        Log.d("LATSLONGS", "Lat: " + a.getLatitude() + ", Long: " + a.getLongitude());
-                        lat = a.getLatitude();
-                        longi = a.getLongitude();
-                    }
-                }
-            } catch (IOException e) {
-                Log.d("NEARBY_ERROR", "something bad happened");
-                e.printStackTrace();
-            }
-
             WikiSite wiki = WikipediaApp.getInstance().getWikiSite();
-            client.request(wiki, lat,longi, getMapRadius(),
+            client.request(wiki, mapboxMap.getCameraPosition().target.getLatitude(),
+                    mapboxMap.getCameraPosition().target.getLongitude(), getMapRadius(),
                     new NearbyClient.Callback() {
                         @Override public void success(@NonNull Call<MwQueryResponse> call,
                                                       @NonNull NearbyResult result) {
@@ -426,10 +407,6 @@ public class NearbyFragment extends Fragment {
                                 return;
                             }
                             lastResult = result;
-                            for (NearbyPage item : result.getList()) {
-                                Log.d("NEARBY_TITLE", "mM: " + item.getTitle());
-
-                            }
                             showNearbyPages(result);
                             onLoaded();
                         }

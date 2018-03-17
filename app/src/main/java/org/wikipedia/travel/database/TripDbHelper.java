@@ -45,6 +45,12 @@ public class TripDbHelper {
     }
 
     @NonNull
+    public Trip createList() {
+        Trip trip = new Trip();
+        return this.createList(trip.getTitle(), trip.getDestination(), trip.getTripDepartureDate());
+    }
+
+    @NonNull
     public Trip createList(@NonNull SQLiteDatabase db, @NonNull String title, @NonNull Trip.Destination destination, @NonNull Date date) {
         db.beginTransaction();
         try {
@@ -75,7 +81,7 @@ public class TripDbHelper {
         return null;
     }
 
-    public void deleteList(@NonNull Trip list) {
+    public Object deleteList(@NonNull Trip list) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -88,6 +94,7 @@ public class TripDbHelper {
         } finally {
             db.endTransaction();
         }
+        return null;
     }
 
     @Nullable
