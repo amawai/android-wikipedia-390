@@ -1,4 +1,4 @@
-package org.wikipedia.travel;
+package org.wikipedia.travel.trip;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -10,7 +10,8 @@ import static org.mockito.Mockito.*;
 
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.wikipedia.test.TestRunner;
-import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.database.DeprecatedDateAdapter;
+import org.wikipedia.travel.trip.Trip;
 import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -72,32 +73,6 @@ public class TripTest {
         assertEquals("Trip of a Lifetime", mockTrip.getTitle());
     }
 
-    @Test
-    public void testMockSetAndGetTripDepartureDate() {
-        Trip mockTrip = mock(Trip.class);
-        final Date[] tripDepartureDate = new Date[1];
-        final Date testDate = new Date();
-
-        //Mocking the setter and getter
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                tripDepartureDate[0] = (Date) invocation.getArguments()[0];
-                return null;
-            }
-        }).when(mockTrip).setTripDepartureDate(anyObject());
-
-        when(mockTrip.getTripDepartureDate()).thenAnswer(new Answer<Object>() {
-            @Override
-            public Date answer(InvocationOnMock invocation) throws Throwable {
-                return tripDepartureDate[0];
-            }
-        });
-
-        mockTrip.setTripDepartureDate(testDate);
-        assertTrue(mockTrip.getTripDepartureDate().toString().equals(testDate.toString()));
-    }
-
     //Similar test can be conducted for the addDestination and getDestinations method in the Trip class
     @Test
     public void testMockSetAndGetDestination() {
@@ -124,4 +99,5 @@ public class TripTest {
         mockTrip.setDestination(testDestination);
         assertTrue(mockTrip.getDestination().getDestinationName().equals(testDestination.getDestinationName()));
     }
+
 }

@@ -16,8 +16,10 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by Artem on 2018-02-27.
  */
+
 @RunWith(TestRunner.class)
 public class TravelClientTest {
+
     private WikiSite wiki;
     private TravelClient client;
 
@@ -26,13 +28,15 @@ public class TravelClientTest {
          wiki = mock(WikiSite.class);
          client = new TravelClient();
     }
+
     @Test
     public void testClientMakesCards() {
         Card card = client.getNewCard(wiki);
 
-        // Client should make TravelCard objects
+        //Client should make TravelCard objects
         assertNotNull(card);
         assertEquals(card.getClass(), TravelCard.class);
         assertEquals(card.type(), CardType.TRAVEL);
     }
+
 }

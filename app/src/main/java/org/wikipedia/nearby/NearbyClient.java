@@ -18,7 +18,7 @@ import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-class NearbyClient {
+public class NearbyClient {
     public interface Callback {
         void success(@NonNull Call<MwQueryResponse> call, @NonNull NearbyResult result);
         void failure(@NonNull Call<MwQueryResponse> call, @NonNull Throwable caught);

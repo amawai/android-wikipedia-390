@@ -3,7 +3,7 @@ package org.wikipedia.database.column;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.wikipedia.travel.database.Trip;
+import org.wikipedia.travel.trip.Trip;
 
 //Set up a new column for destinations for storage in the TripDatabase Table
 public class DestinationColumn extends Column<Trip.Destination> {

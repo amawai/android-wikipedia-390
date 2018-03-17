@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.database.contract.TripContract;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.log.L;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 
 //As with the database table, use the ReadingListDbHelper as a basis in constructing this class
 public class TripDbHelper {
+
     private static TripDbHelper INSTANCE;
 
     public static TripDbHelper instance() {
@@ -43,6 +45,12 @@ public class TripDbHelper {
     }
 
     @NonNull
+    public Trip createList() {
+        Trip trip = new Trip();
+        return this.createList(trip.getTitle(), trip.getDestination(), trip.getTripDepartureDate());
+    }
+
+    @NonNull
     public Trip createList(@NonNull SQLiteDatabase db, @NonNull String title, @NonNull Trip.Destination destination, @NonNull Date date) {
         db.beginTransaction();
         try {
@@ -57,7 +65,7 @@ public class TripDbHelper {
         }
     }
 
-    public void updateList(@NonNull Trip list) {
+    public Object updateList(@NonNull Trip list) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -70,9 +78,10 @@ public class TripDbHelper {
         } finally {
             db.endTransaction();
         }
+        return null;
     }
 
-    public void deleteList(@NonNull Trip list) {
+    public Object deleteList(@NonNull Trip list) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -85,6 +94,7 @@ public class TripDbHelper {
         } finally {
             db.endTransaction();
         }
+        return null;
     }
 
     @Nullable
@@ -111,4 +121,5 @@ public class TripDbHelper {
     private SQLiteDatabase getWritableDatabase() {
         return WikipediaApp.getInstance().getDatabase().getWritableDatabase();
     }
+
 }

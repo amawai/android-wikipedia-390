@@ -1,56 +1,70 @@
 package org.wikipedia.travel.destinationpicker;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import org.wikipedia.R;
-import org.wikipedia.travel.PlacesToVisitActivity;
-import org.wikipedia.travel.TravelDatePickerActivity;
+import org.wikipedia.activity.FragmentUtil;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by aman_ on 3/3/2018.
+ * Created by abhandal on 3/3/2018.
  */
 
-public class DestinationFragment extends Fragment implements View.OnClickListener {
-    private Unbinder unbinder;
-    private FloatingActionButton nextButton;
-    private static String[] destinationString;
+public class DestinationFragment extends Fragment {
 
-    // The method will assemble the destinationFragment and invoke the Google Place Autocomplete widget
+    private Unbinder unbinder;
+    private SupportPlaceAutocompleteFragment autocompleteFragment;
+    @BindView(R.id.destination_text_view) TextView tvDestination;
+    Place destination;
+
+    public interface Callback{
+        void onPlaceSelected(Place place);
+        String onRequestOpenDestinationName();
+    }
+
+    public static DestinationFragment newInstance(String destination) {
+        Bundle args = new Bundle();
+        args.putString("DESTINATION", destination);
+
+        DestinationFragment fragment = new DestinationFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    //The method will assemble the destinationFragment and invoke the Google Place Autocomplete widget
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.travel_destination_picker_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_travel_destination_picker, container, false);
         unbinder = ButterKnife.bind(this, view);
-        getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
 
-        nextButton = (FloatingActionButton) view.findViewById(R.id.travel_next_button);
-        nextButton.setOnClickListener(this);
-
-        PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (SupportPlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.fragment_place_autocomplete);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                setDestinationArray((String)place.getName(), (String)place.getAddress());
+                destination = place;
+                updateDestinationText((String)place.getName());
+                if(getCallback() != null) {
+                    getCallback().onPlaceSelected(place);
+                }
             }
 
             @Override
@@ -58,29 +72,20 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
                 Log.i("Autocomplete Failed", status.getStatusMessage());
             }
         });
+        //There is no need to always display the search bar result everytime the view is created
+        //tvDestination.setText(getArguments().getString("DESTINATION"));
         return view;
     }
 
-    public void onClick(View v) {
-        Intent i = new Intent(getActivity(), TravelDatePickerActivity.class);
-        startActivity(i);
+    private void updateDestinationText(String destination) {
+        tvDestination.setText(destination);
     }
 
     private AppCompatActivity getAppCompatActivity() {
         return (AppCompatActivity) getActivity();
     }
 
-    // Grabs the user selected city and stores it in a 2 element array.
-    // The destinationName is the name of city, destinationAddress includes the city, state, and country
-    private void setDestinationArray(String destinationName, String destinationAddress) {
-        this.destinationString = new String[2];
-        this.destinationString[0] = destinationName;
-        this.destinationString[1] = destinationAddress;
+    public Callback getCallback() {
+        return FragmentUtil.getCallback(this, Callback.class);
     }
-
-    // Returns the destinationArray, to be used for getting wikipedia articles for city surrounding
-    public static String[] getDestinationString() {
-        return destinationString;
-    }
-
 }

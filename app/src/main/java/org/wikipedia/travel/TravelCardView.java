@@ -14,6 +14,7 @@ import org.wikipedia.feed.view.StaticCardView;
  */
 
 public class TravelCardView extends StaticCardView<TravelCard> {
+
     public TravelCardView(Context context) {
         super(context);
     }
@@ -35,4 +36,5 @@ public class TravelCardView extends StaticCardView<TravelCard> {
     private void openTravelPlanner() {
         getContext().startActivity(new Intent(TravelPlannerActivity.newIntent(getContext())));
     }
+
 }
