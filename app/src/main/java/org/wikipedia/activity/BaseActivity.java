@@ -13,8 +13,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.Preference;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.DraweeTransition;
@@ -33,6 +35,8 @@ import org.wikipedia.offline.OfflineManager;
 import org.wikipedia.recurring.RecurringTasksExecutor;
 import org.wikipedia.savedpages.SavedPageSyncService;
 import org.wikipedia.settings.Prefs;
+import org.wikipedia.theme.Theme;
+import org.wikipedia.theme.ThemeFittingRoomActivity;
 import org.wikipedia.util.DeviceUtil;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.PermissionUtil;
@@ -239,6 +243,21 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Subscribe public void on(ThemeChangeEvent event) {
             recreate();
+        }
+    }
+
+    //Changing the color theme when private browsing is activated
+    //Will add on for actual functionality of private browsing
+    public void privateBrowsingTransition() {
+        if (Prefs.isPrivateBrowsingEnabled() == true) {
+            //changes to dark theme on when toggled on and user can no longer change color theme
+            WikipediaApp.getInstance().setCurrentTheme(Theme.DARK);
+            Toast.makeText(getApplication(),"Private browsing enabled", Toast.LENGTH_SHORT).show();
+        }
+        else if (Prefs.isPrivateBrowsingEnabled() == false) {
+            //dark theme remains but user can now change app color theme
+            WikipediaApp.getInstance().setCurrentTheme(WikipediaApp.getInstance().getCurrentTheme());
+            Toast.makeText(getApplicationContext(),"Private browsing disabled, app theme can be altered", Toast.LENGTH_SHORT).show();
         }
     }
 

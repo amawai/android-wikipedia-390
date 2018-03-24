@@ -13,6 +13,7 @@ import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.activity.BaseActivity;
 import org.wikipedia.feed.onthisday.OnThisDayAlarmService;
+import org.wikipedia.theme.Theme;
 import org.wikipedia.theme.ThemeFittingRoomActivity;
 import org.wikipedia.util.ReleaseUtil;
 import org.wikipedia.util.StringUtil;
@@ -46,9 +47,13 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
         findPreference(R.string.preference_key_sync_reading_lists)
                 .setOnPreferenceChangeListener(new SyncReadingListsListener());
 
-        //Mimicking Workflow of "syncReadingLists" (see OnThisDayNotificaitonsListener class implementation below)
+        //Mimicking Workflow of "syncReadingLists" (see OnThisDayNotificationsListener class implementation below)
         findPreference(R.string.preference_key_on_this_day_notifications)
                 .setOnPreferenceChangeListener(new OnThisDayNotificationsListener());
+
+        //Mimicking Workflow of OnThisDayNotifications Listener
+        findPreference(R.string.preference_key_private_browsing)
+                .setOnPreferenceChangeListener(new PrivateBrowsingListener());
 
         Preference eventLoggingOptInPref = findPreference(R.string.preference_key_eventlogging_opt_in);
         eventLoggingOptInPref.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -165,6 +170,22 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
                 ((SwitchPreferenceCompat) preference).setChecked(false);
                 Prefs.setOnThisDayNotificationEnabled(false);
                 ((BaseActivity) getActivity()).onThisDayNotificationTransition();
+            }
+            return true;
+        }
+    }
+
+    private final class PrivateBrowsingListener implements Preference.OnPreferenceChangeListener {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if (newValue == Boolean.TRUE) {
+                ((SwitchPreferenceCompat) preference).setChecked(true);
+                Prefs.setPrivateBrowsingEnabled(true);
+                ((BaseActivity) getActivity()).privateBrowsingTransition();
+            }
+            else {
+                ((SwitchPreferenceCompat) preference).setChecked(false);
+                Prefs.setPrivateBrowsingEnabled(false);
+                ((BaseActivity) getActivity()).privateBrowsingTransition();
             }
             return true;
         }
