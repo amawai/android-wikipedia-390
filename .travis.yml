@@ -11,7 +11,7 @@ android:
     - 'android-sdk-license-.+'
 
 notifications:
-    # travis update notifications for email on sucesss and on failure
+    # travis update notifications for email on success and on failure
     email:
       recipients:
         - sophiaquach16@gmail.com
@@ -48,12 +48,14 @@ jobs:
     - stage: Release 2 Tests
       language: android
       script: ./gradlew -p app/src/test/java/org/wikipedia/travel
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/travel
     # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
       deploy:
         provider: releases
-        api_key: $GITHUB_OAUTH_TOKEN
+        api_key: "e8c08bbdb7fef2959553f8eb8c2f376135b9ab33"
         skip_cleanup: true
         on:
           tags: true
