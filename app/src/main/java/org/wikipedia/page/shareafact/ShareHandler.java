@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -164,11 +165,23 @@ public class ShareHandler {
         handleSelection(menu, shareItem);
     }
 
+    // Adds functionality when translate button is pressed
+    private void showTranslateResult() {
+        FeedbackUtil.showMessage(fragment.getActivity(), "Text has been translated");
+    }
+
     private void handleSelection(Menu menu, MenuItem shareItem) {
         if (PrefsOnboardingStateMachine.getInstance().isShareTutorialEnabled()) {
             postShowShareToolTip(shareItem);
             PrefsOnboardingStateMachine.getInstance().setShareTutorial();
         }
+
+        // Listener for translate button
+        MenuItem translateItem = menu.findItem(R.id.menu_text_select_translate);
+        translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
+            showTranslateResult();
+            return true;
+        });
 
         // Provide our own listeners for the copy, define, and share buttons.
         shareItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_SHARE));
