@@ -180,6 +180,7 @@ public class ShareHandler {
         MenuItem translateItem = menu.findItem(R.id.menu_text_select_translate);
         translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
             showTranslateResult();
+            leaveActionMode();
             return true;
         });
 
