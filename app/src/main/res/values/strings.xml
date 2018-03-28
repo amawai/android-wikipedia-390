@@ -47,6 +47,7 @@
     <string name="menu_text_select_define">Define</string>
     <string name="menu_text_select_share">Share</string>
     <string name="menu_text_select_edit_here">Edit here</string>
+    <string name="menu_text_select_translate">Translate</string>
 
     <!-- Nearby -->
     <string name="nav_item_nearby">Nearby</string>

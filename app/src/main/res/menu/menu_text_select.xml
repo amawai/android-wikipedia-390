@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/menu_text_select_translate"
+        android:icon="@drawable/ic_mode_edit_themed_24dp"
+        android:title="@string/menu_text_select_translate"
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/menu_text_select_copy"
           android:title="@string/menu_text_select_copy"
           android:icon="@drawable/ic_content_copy_themed_24dp"
