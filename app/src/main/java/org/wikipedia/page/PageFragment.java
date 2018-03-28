@@ -2,6 +2,7 @@ package org.wikipedia.page;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -26,8 +27,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -90,6 +93,7 @@ import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 import static org.wikipedia.page.PageActivity.ACTION_RESUME_READING;
 import static org.wikipedia.page.PageActivity.ACTION_SHOW_TAB_LIST;
 import static org.wikipedia.page.PageCacher.loadIntoCache;
@@ -168,6 +172,8 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     private TabsProvider tabsProvider;
     private ActiveTimer activeTimer = new ActiveTimer();
 
+    private String titleStr= "";
+
     private WikipediaApp app;
 
     @NonNull
@@ -230,6 +236,11 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         public void onFindInPageTabSelected() {
             showFindInPage();
         }
+
+//        @Override
+//        public void onAddNoteTabSelected() {//callback function for bottom action bar
+//            showAddNoteDialog();
+//        }
 
         @Override
         public void onViewToCTabSelected() {
@@ -811,6 +822,9 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             case R.id.menu_page_find_in_page:
                 showFindInPage();
                 return true;
+            case R.id.menu_add_note:
+                showAddNoteDialog();
+                return true;
             case R.id.menu_page_content_issues:
                 showContentIssues();
                 return true;
@@ -857,6 +871,32 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
     public int getTabCount() {
         return tabList.size();
+    }
+
+    private void showAddNoteDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
+        final EditText txtInput = new EditText(getActivity());
+
+        dialogBuilder.setTitle("title");
+        dialogBuilder.setMessage("msg");
+        dialogBuilder.setView(txtInput);
+        dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                titleStr += txtInput.getText().toString();
+                Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "note cancelled", Toast.LENGTH_SHORT).show();
+                //dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialogAddNote = dialogBuilder.create();
+        dialogAddNote.show();
     }
 
     public void showFindInPage() {
