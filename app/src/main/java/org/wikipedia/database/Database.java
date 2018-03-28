@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.edit.summaries.EditSummary;
 import org.wikipedia.history.HistoryEntry;
+import org.wikipedia.page.notes.Article;
+import org.wikipedia.page.notes.Note;
 import org.wikipedia.pageimages.PageImage;
 import org.wikipedia.readinglist.database.ReadingList;
 import org.wikipedia.readinglist.database.ReadingListPage;
@@ -27,7 +29,10 @@ public class Database extends SQLiteOpenHelper {
             ReadingList.DATABASE_TABLE,
             ReadingListPage.DATABASE_TABLE,
             //Addition of trip databae table to the rest of database tables in app
-            Trip.DATABASE_TABLE
+            Trip.DATABASE_TABLE,
+            //Addition of article + note tracking database table
+            Article.DATABASE_TABLE,
+            Note.DATABASE_TABLE
     };
 
     public Database(Context context) {
