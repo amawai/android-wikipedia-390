@@ -246,8 +246,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    //Changing the color theme when private browsing is activated
-    //Will add on for actual functionality of private browsing
+    //This transition changes the color theme when private browsing is activated
+    //The prevention of saving articles to both the recent search table and and history tables are implemented
+    //within the classes dealing with the addition of the respective entries into the db (the SearchFragment.java and UpdateHistoryTask.java
+    //classes)
     public void privateBrowsingTransition() {
         //when the toggle is on, the theme gets switched to the already present dark theme
         //the user can no longer change the app theme until after they switch the toggle off and disable private browsing
@@ -256,10 +258,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             WikipediaApp.getInstance().setCurrentTheme(Theme.DARK);
             Toast.makeText(getApplication(),"Private browsing enabled", Toast.LENGTH_SHORT).show();
         }
-        //this additional else/if condition is necessary as the toggle can be switched on/off during and prior
-        //launch of application. Thus, this is to ensure that behavior is as expected when the toggle is in either
-        //state
-        else if (Prefs.isPrivateBrowsingEnabled() == false) {
+        //in the false case, articles become saved to recent searches and history of articles viewed
+        else {
             //dark theme remains but user can now change app color theme
             WikipediaApp.getInstance().setCurrentTheme(WikipediaApp.getInstance().getCurrentTheme());
             Toast.makeText(getApplicationContext(),"Private browsing disabled, app theme can be altered", Toast.LENGTH_SHORT).show();

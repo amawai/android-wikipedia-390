@@ -34,12 +34,36 @@ public class PrefsTest {
         assertEquals(mockPref.isOnThisDayNotificationEnabled(), false);
     }
 
-
     @Test
     public void testMockSetOnThisDayNotificationEnabled() {
         PowerMockito.mockStatic(Prefs.class);
         Prefs mockPref = mock(Prefs.class);
         verify(mockPref).setOnThisDayNotificationEnabled(true);
+    }
+
+    //Testing Setters and Getters for Private Browsing Enabled preference variable
+    @Test
+    public void testMockPrivatBrowsingEnabledTrueCase() {
+        PowerMockito.mockStatic(Prefs.class);
+        Prefs mockPref = mock(Prefs.class);
+        PowerMockito.when(mockPref.isPrivateBrowsingEnabled()).thenReturn(true);
+        assertEquals(mockPref.isPrivateBrowsingEnabled(), true);
+    }
+
+    @Test
+    public void testMockPrivateBrowsingEnabledFalseCase() {
+        PowerMockito.mockStatic(Prefs.class);
+        Prefs mockPref = mock(Prefs.class);
+        PowerMockito.when(mockPref.isPrivateBrowsingEnabled()).thenReturn(false);
+        assertEquals(mockPref.isPrivateBrowsingEnabled(), false);
+    }
+
+
+    @Test
+    public void testMockSetPrivateBrowsingEnabled() {
+        PowerMockito.mockStatic(Prefs.class);
+        Prefs mockPref = mock(Prefs.class);
+        verify(mockPref).setPrivateBrowsingEnabled(true);
     }
 }
 
