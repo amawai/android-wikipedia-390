@@ -26,6 +26,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
     @Override
     public Note fromCursor(Cursor c) {
         Note note = new Note(
+                ArticleNoteContract.Col.ARTICLE_ID.val(c),
                 ArticleNoteContract.Col.NOTE_TITLE.val(c),
                 ArticleNoteContract.Col.NOTE_CONTENT.val(c),
                 ArticleNoteContract.Col.SCROLL_POSITION.val(c)
@@ -41,6 +42,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
             case DB_VER_INTRODUCED:
                 List<Column<?>> cols = new ArrayList<>();
                 cols.add(ArticleNoteContract.Col.NOTE_ID);
+                cols.add(ArticleNoteContract.Col.ARTICLE_ID);
                 cols.add(ArticleNoteContract.Col.NOTE_TITLE);
                 cols.add(ArticleNoteContract.Col.NOTE_CONTENT);
                 cols.add(ArticleNoteContract.Col.SCROLL_POSITION);
@@ -53,6 +55,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
     @Override
     protected ContentValues toContentValues(Note row) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(ArticleNoteContract.Col.ARTICLE_ID.getName(), row.getNoteTitle());
         contentValues.put(ArticleNoteContract.Col.NOTE_TITLE.getName(), row.getNoteTitle());
         contentValues.put(ArticleNoteContract.Col.NOTE_CONTENT.getName(), row.getNoteContent());
         contentValues.put(ArticleNoteContract.Col.SCROLL_POSITION.getName(), row.getScrollPosition());

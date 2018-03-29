@@ -93,7 +93,7 @@ public class ArticleNoteDbHelper {
     }
 
     private void insertPageInDb(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
-        //article.listId(list.id());
+        note.setArticleId(article.getId());
         long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
                 Note.DATABASE_TABLE.toContentValues(note));
         article.setId(id);
