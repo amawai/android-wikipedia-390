@@ -30,10 +30,10 @@ public enum PageActionTab implements EnumCode {
             cb.onFindInPageTabSelected();
         }
     },
-//    ADD_NOTE() {//button bottom action bar
-//        @Override
-//        public void select(@NonNull Callback cb) {cb.onAddNoteTabSelected(); }
-//    },
+    ADD_NOTE() {//button bottom action bar
+        @Override
+        public void select(@NonNull Callback cb) {cb.onAddNoteTabSelected(); }
+    },
     VIEW_TOC() {
         @Override
         public void select(@NonNull Callback cb) {
@@ -61,7 +61,7 @@ public enum PageActionTab implements EnumCode {
         void onSharePageTabSelected();
         void onChooseLangTabSelected();
         void onFindInPageTabSelected();
-        //void onAddNoteTabSelected();
+        void onAddNoteTabSelected();
         void onViewToCTabSelected();
         void updateBookmark(boolean pageSaved);
     }

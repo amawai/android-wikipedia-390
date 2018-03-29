@@ -239,10 +239,10 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             showFindInPage();
         }
 
-//        @Override
-//        public void onAddNoteTabSelected() {//callback function for bottom action bar
-//            showViewNoteDialog();
-//        }
+        @Override
+        public void onAddNoteTabSelected() {//callback function for bottom action bar
+            showViewNoteDialog(articleNote);
+        }
 
         @Override
         public void onViewToCTabSelected() {
@@ -876,19 +876,26 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     }
 
     private void showAddNoteDialog(){
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         final EditText titleInput = new EditText(getActivity());
         final EditText contentInput = new EditText(getActivity());
 
-        dialogBuilder.setTitle("Title:");
+        titleInput.setText("New Note");
+        titleInput.selectAll();
         dialogBuilder.setCustomTitle(titleInput);
-        //dialogBuilder.setMessage("Content:");
+        dialogBuilder.setMessage("");
         dialogBuilder.setView(contentInput);
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
                 articleNote.setNoteTitle(titleInput.getText().toString());
                 articleNote.setNoteContent(contentInput.getText().toString());
+                //inflate note button, at current location?
+
+//                LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
+//                        (Context.LAYOUT_INFLATER_SERVICE);
+//                View view = inflater.inflate(R.layout.fragment_note_btn,null);
+
                 Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
             }
         });
@@ -903,11 +910,11 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogAddNote.show();
     }
 
-    private void showViewNoteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
+    private void showViewNoteDialog(ArticleNote note) {//opens dialogue to view notes
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 
-        dialogBuilder.setTitle(articleNote.getNoteTitle());
-        dialogBuilder.setMessage(articleNote.getNoteContent());
+        dialogBuilder.setTitle(note.getNoteTitle());
+        dialogBuilder.setMessage(note.getNoteContent());
         dialogBuilder.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
@@ -917,15 +924,14 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogBuilder.setNeutralButton("Edit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                //function to edit note
-                showEditNoteDialog();
-                Toast.makeText(getActivity(), "note being edited", Toast.LENGTH_SHORT).show();
+                showEditNoteDialog(note);
+                Toast.makeText(getActivity(), "opening note editor", Toast.LENGTH_SHORT).show();
             }
         });
         dialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //function to delete the note
+                showDeleteNoteDialog(note);
                 Toast.makeText(getActivity(), "note deleted", Toast.LENGTH_SHORT).show();
             }
         });
@@ -934,21 +940,21 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogAddNote.show();
     }
 
-    private void showEditNoteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
+    private void showEditNoteDialog(ArticleNote note) {//opens dialog to edit note
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         final EditText titleInput = new EditText(getActivity());
         final EditText contentInput = new EditText(getActivity());
 
-        titleInput.setText(articleNote.getNoteTitle());
-        contentInput.setText(articleNote.getNoteContent());
+        titleInput.setText(note.getNoteTitle());
+        contentInput.setText(note.getNoteContent());
 
         dialogBuilder.setCustomTitle(titleInput);
         dialogBuilder.setView(contentInput);
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                articleNote.setNoteTitle(titleInput.getText().toString());
-                articleNote.setNoteContent(contentInput.getText().toString());
+                note.setNoteTitle(titleInput.getText().toString());
+                note.setNoteContent(contentInput.getText().toString());
                 Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
             }
         });
@@ -961,6 +967,25 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
         AlertDialog dialogAddNote = dialogBuilder.create();
         dialogAddNote.show();
+    }
+
+    private void showDeleteNoteDialog(ArticleNote note) {//dialog to confirm delete
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+
+        dialogBuilder.setTitle("Are you sure you want to permanently delete this note?");
+        dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                //delete note
+                Toast.makeText(getActivity(), "note has been deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "delete cancelled", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void showFindInPage() {
