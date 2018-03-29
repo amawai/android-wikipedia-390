@@ -2,6 +2,7 @@ package org.wikipedia.page.notes.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -70,12 +71,12 @@ public class ArticleNoteDbHelper {
             db.beginTransaction();
             try {
                 if (!articleExistsInDb(getReadableDatabase(), title)) {
-                    Article protoList = new Article(title, scroll);
+                    Article createdArticle = new Article(title, scroll);
                     long id = db.insertOrThrow(ArticleContract.TABLE, null,
-                            Article.DATABASE_TABLE.toContentValues(protoList));
+                            Article.DATABASE_TABLE.toContentValues(createdArticle));
                     db.setTransactionSuccessful();
-                    protoList.setId(id);
-                    return protoList;
+                    createdArticle.setId(id);
+                    return createdArticle;
                 }
             } finally {
                 db.endTransaction();
@@ -150,7 +151,7 @@ public class ArticleNoteDbHelper {
     private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article, int scroll) {
         article.setScroll(scroll);
         int result = db.update(ArticleContract.TABLE, article.DATABASE_TABLE.toContentValues(article),
-                ArticleContract.Col.SCROLL_POSITION.getName() + " = ?", new String[]{Long.toString(article.getId())});
+                ArticleContract.Col.ID.getName() + " = ?", new String[]{Long.toString(article.getId())});
         if (result != 1) {
             L.w("Failed to update scroll position for article " + article.getArticleTitle() + " at scroll " + scroll);
         }
