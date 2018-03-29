@@ -53,6 +53,7 @@ public class ShareHandler {
     private static final String PAYLOAD_PURPOSE_SHARE = "share";
     private static final String PAYLOAD_PURPOSE_DEFINE = "define";
     private static final String PAYLOAD_PURPOSE_EDIT_HERE = "edit_here";
+    private static final String PAYLOAD_PURPOSE_TRANSLATE = "translate";
     private static final String PAYLOAD_TEXT_KEY = "text";
 
     @NonNull private final PageFragment fragment;
@@ -85,10 +86,18 @@ public class ShareHandler {
                 case PAYLOAD_PURPOSE_EDIT_HERE:
                     onEditHerePayload(messagePayload.optInt("sectionID", 0), text);
                     break;
+                case PAYLOAD_PURPOSE_TRANSLATE:
+                    onTranslatePayload(text);
+                    break;
                 default:
                     L.d("Unknown purpose=" + purpose);
             }
         });
+    }
+
+    //create a new instance of the translation dialog
+    private void onTranslatePayload(String text) {
+        fragment.showBottomSheet(TranslationDialog.newInstance(text));
     }
 
     private void onHighlightText() {
@@ -166,9 +175,9 @@ public class ShareHandler {
     }
 
     // Adds functionality when translate button is pressed
-    private void showTranslateResult() {
-        FeedbackUtil.showMessage(fragment.getActivity(), "Text has been translated");
-    }
+//    private void showTranslateResult() {
+//        FeedbackUtil.showMessage(fragment.getActivity(), "Text has been translated");
+//    }
 
     private void handleSelection(Menu menu, MenuItem shareItem) {
         if (PrefsOnboardingStateMachine.getInstance().isShareTutorialEnabled()) {
