@@ -1,6 +1,7 @@
 package org.wikipedia.page;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -172,7 +174,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     private TabsProvider tabsProvider;
     private ActiveTimer activeTimer = new ActiveTimer();
 
-    private String titleStr= "";
+    private ArticleNote articleNote = new ArticleNote();
 
     private WikipediaApp app;
 
@@ -239,7 +241,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
 //        @Override
 //        public void onAddNoteTabSelected() {//callback function for bottom action bar
-//            showAddNoteDialog();
+//            showViewNoteDialog();
 //        }
 
         @Override
@@ -875,15 +877,18 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
     private void showAddNoteDialog(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
-        final EditText txtInput = new EditText(getActivity());
+        final EditText titleInput = new EditText(getActivity());
+        final EditText contentInput = new EditText(getActivity());
 
-        dialogBuilder.setTitle("title");
-        dialogBuilder.setMessage("msg");
-        dialogBuilder.setView(txtInput);
+        dialogBuilder.setTitle("Title:");
+        dialogBuilder.setCustomTitle(titleInput);
+        //dialogBuilder.setMessage("Content:");
+        dialogBuilder.setView(contentInput);
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                titleStr += txtInput.getText().toString();
+                articleNote.setNoteTitle(titleInput.getText().toString());
+                articleNote.setNoteContent(contentInput.getText().toString());
                 Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
             }
         });
@@ -891,7 +896,66 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getActivity(), "note cancelled", Toast.LENGTH_SHORT).show();
-                //dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialogAddNote = dialogBuilder.create();
+        dialogAddNote.show();
+    }
+
+    private void showViewNoteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
+
+        dialogBuilder.setTitle(articleNote.getNoteTitle());
+        dialogBuilder.setMessage(articleNote.getNoteContent());
+        dialogBuilder.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNeutralButton("Edit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                //function to edit note
+                showEditNoteDialog();
+                Toast.makeText(getActivity(), "note being edited", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //function to delete the note
+                Toast.makeText(getActivity(), "note deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog dialogAddNote = dialogBuilder.create();
+        dialogAddNote.show();
+    }
+
+    private void showEditNoteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());//might removed to avoid reset
+        final EditText titleInput = new EditText(getActivity());
+        final EditText contentInput = new EditText(getActivity());
+
+        titleInput.setText(articleNote.getNoteTitle());
+        contentInput.setText(articleNote.getNoteContent());
+
+        dialogBuilder.setCustomTitle(titleInput);
+        dialogBuilder.setView(contentInput);
+        dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                articleNote.setNoteTitle(titleInput.getText().toString());
+                articleNote.setNoteContent(contentInput.getText().toString());
+                Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "edits cancelled", Toast.LENGTH_SHORT).show();
             }
         });
 
