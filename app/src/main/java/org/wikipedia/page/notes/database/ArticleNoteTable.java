@@ -55,7 +55,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
     @Override
     protected ContentValues toContentValues(Note row) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ArticleNoteContract.Col.ARTICLE_ID.getName(), row.getNoteTitle());
+        contentValues.put(ArticleNoteContract.Col.ARTICLE_ID.getName(), row.getArticleId());
         contentValues.put(ArticleNoteContract.Col.NOTE_TITLE.getName(), row.getNoteTitle());
         contentValues.put(ArticleNoteContract.Col.NOTE_CONTENT.getName(), row.getNoteContent());
         contentValues.put(ArticleNoteContract.Col.SCROLL_POSITION.getName(), row.getScrollPosition());
