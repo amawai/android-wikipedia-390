@@ -45,6 +45,20 @@ public class ArticleNoteDbHelper {
         return articleList;
     }
 
+    public int getScrollOfArticle(Article article) {
+        SQLiteDatabase db = getReadableDatabase();
+        int scrollPosition = 0;
+        try (Cursor cursor = db.query(ArticleContract.TABLE, null, ArticleContract.Col.ARTICLE_TITLE.getName() + " = ?",
+                new String[]{article.getArticleTitle()},
+                null, null, null)) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToNext();
+                scrollPosition = Article.DATABASE_TABLE.fromCursor(cursor).getScrollPosition();
+            }
+        }
+        return scrollPosition;
+    }
+
     @NonNull
     public Article createArticle(@NonNull String title, @NonNull int scroll) {
         SQLiteDatabase db = getWritableDatabase();
