@@ -175,6 +175,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     private ActiveTimer activeTimer = new ActiveTimer();
 
     private ArticleNote articleNote = new ArticleNote();
+    LinearLayout linearLayoutForNotes;
 
     private WikipediaApp app;
 
@@ -310,6 +311,8 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
+
+        linearLayoutForNotes = (LinearLayout) rootView.findViewById(R.id.noteBtn);//change this?
 
         webView = rootView.findViewById(R.id.page_web_view);
         initWebViewListeners();
@@ -891,10 +894,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 articleNote.setNoteTitle(titleInput.getText().toString());
                 articleNote.setNoteContent(contentInput.getText().toString());
                 //inflate note button, at current location?
-
-//                LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
-//                        (Context.LAYOUT_INFLATER_SERVICE);
-//                View view = inflater.inflate(R.layout.fragment_note_btn,null);
 
                 Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
             }
