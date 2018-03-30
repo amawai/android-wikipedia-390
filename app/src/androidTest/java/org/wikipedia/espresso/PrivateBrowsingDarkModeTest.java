@@ -1,4 +1,4 @@
-package org.wikipedia.espresso;
+package org.wikipedia.espresso.privateBrowsing;
 
 
 import android.graphics.Color;
@@ -47,28 +47,11 @@ import static org.wikipedia.espresso.util.EspressoHelper.waitFor;
 @RunWith(AndroidJUnit4.class)
 public class PrivateBrowsingDarkModeTest {
 
-    private UiDevice mDevice;
-
-    public static Matcher<View> withTextColor(final int color) {
-        Checks.checkNotNull(color);
-        return new BoundedMatcher<View, TextView>(TextView.class) {
-            @Override
-            public boolean matchesSafely(TextView textView) {
-                return ContextCompat.getColor(getTargetContext(),color)==textView.getCurrentTextColor();
-            }
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with text color: ");
-            }
-        };
-    }
-
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void test1() {
+    public void PrivateBrowsingDarkModeTest() {
 
         try {
             Thread.sleep(2000);
