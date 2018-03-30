@@ -75,7 +75,7 @@
                 </android.support.design.widget.CoordinatorLayout>
 
                 <Button
-                    android:id="@+id/note_button"
+                    android:id="@+id/note_button0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/page_contents_container"
@@ -84,9 +84,8 @@
                     android:background="@android:color/transparent"
                     android:drawableTop="@drawable/button_note"
                     android:elevation="0dp"
-                    android:visibility="invisible"
-                    tools:layout_editor_absoluteX="265dp"
-                    tools:layout_editor_absoluteY="94dp" />
+                    android:visibility="invisible" />
+
             </RelativeLayout>
 
 
