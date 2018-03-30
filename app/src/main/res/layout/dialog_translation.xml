@@ -53,21 +53,21 @@
                 android:background="?attr/material_theme_border_color"/>
 
             <TextView
-                android:id="@+id/wiktionary_no_definitions_found"
+                android:id="@+id/translation_not_found"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                android:textColor="?attr/primary_text_color"
                 android:text="@string/wiktionary_no_definitions_found"
+                android:textColor="?attr/primary_text_color"
                 android:visibility="gone" />
 
             <LinearLayout
-                android:id="@+id/wiktionary_definitions_by_part_of_speech"
+                android:id="@+id/translation_selected_translated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp" />
 
         </LinearLayout>
 
