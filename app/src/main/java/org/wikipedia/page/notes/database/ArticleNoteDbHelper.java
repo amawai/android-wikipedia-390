@@ -2,6 +2,7 @@ package org.wikipedia.page.notes.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -70,12 +71,12 @@ public class ArticleNoteDbHelper {
             db.beginTransaction();
             try {
                 if (!articleExistsInDb(getReadableDatabase(), title)) {
-                    Article protoList = new Article(title, scroll);
+                    Article createdArticle = new Article(title, scroll);
                     long id = db.insertOrThrow(ArticleContract.TABLE, null,
-                            Article.DATABASE_TABLE.toContentValues(protoList));
+                            Article.DATABASE_TABLE.toContentValues(createdArticle));
                     db.setTransactionSuccessful();
-                    protoList.setId(id);
-                    return protoList;
+                    createdArticle.setId(id);
+                    return createdArticle;
                 }
             } finally {
                 db.endTransaction();
@@ -98,6 +99,11 @@ public class ArticleNoteDbHelper {
         }
     }
 
+    public void addNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
+        Note newNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
+        addNote(article, newNote);
+    }
+
     public void addNote(@NonNull Article article, @NonNull Note note) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -107,9 +113,7 @@ public class ArticleNoteDbHelper {
         } finally {
             db.endTransaction();
         }
-        //SavedPageSyncService.enqueue();
     }
-
 
     public void addNotes(@NonNull Article article, @NonNull List<Note> notes) {
         SQLiteDatabase db = getWritableDatabase();
@@ -120,16 +124,20 @@ public class ArticleNoteDbHelper {
         db.beginTransaction();
         try {
             for (Note note : notes) {
-                insertPageInDb(db, article, note);
+                insertNoteInDb(db, article, note);
             }
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
-        //SavedPageSyncService.enqueue();
     }
 
-    public void updatePage(@NonNull Note note) {
+    public void updateNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
+        Note updatedNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
+        updateNote(updatedNote);
+    }
+
+    public void updateNote(@NonNull Note note) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -140,17 +148,47 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    private void insertPageInDb(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
+    public void deleteNote(@NonNull Article article, String noteTitle, String noteDescription, int scroll) {
+        Note deleteNote = new Note(article.getId(), noteTitle, noteDescription, scroll);
+        deleteNoteFromDb(getReadableDatabase(), deleteNote);
+    }
+
+    public List<Note> getNotesFromArticle(@NonNull Article article) {
+        SQLiteDatabase db = getReadableDatabase();
+        return getNotesFromArticle(db, article);
+    }
+
+    public List<Note> getNotesFromArticle(@NonNull SQLiteDatabase db, @NonNull Article article) {
+        List<Note> noteList = new ArrayList<>();
+        try (Cursor cursor = db.query(ArticleNoteContract.TABLE, null,
+                ArticleNoteContract.Col.ARTICLE_ID.getName() + " = ?", new String[]{Long.toString(article.getId())},
+                null, null,null)) {
+            while (cursor.moveToNext()) {
+                Note note = Note.DATABASE_TABLE.fromCursor(cursor);
+                noteList.add(note);
+            }
+        }
+        for (Note list : noteList) {
+            Log.d("ARTICLE_HELPER", "title: " + list.getNoteTitle() + " scroll : " + list.getScrollPosition());
+        }
+        Log.d("ARTICLE_HELPER", "size is " + noteList.size());
+        return noteList;
+    }
+
+    private void addNote(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
+        insertNoteInDb(db, article, note);
+    }
+
+    private void insertNoteInDb(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
         note.setArticleId(article.getId());
         long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
                 Note.DATABASE_TABLE.toContentValues(note));
-        article.setId(id);
     }
 
     private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article, int scroll) {
         article.setScroll(scroll);
         int result = db.update(ArticleContract.TABLE, article.DATABASE_TABLE.toContentValues(article),
-                ArticleContract.Col.SCROLL_POSITION.getName() + " = ?", new String[]{Long.toString(article.getId())});
+                ArticleContract.Col.ID.getName() + " = ?", new String[]{Long.toString(article.getId())});
         if (result != 1) {
             L.w("Failed to update scroll position for article " + article.getArticleTitle() + " at scroll " + scroll);
         }
@@ -183,10 +221,6 @@ public class ArticleNoteDbHelper {
             }
         }
         return false;
-    }
-
-    private void addNote(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
-        insertPageInDb(db, article, note);
     }
 
     private SQLiteDatabase getReadableDatabase() {
