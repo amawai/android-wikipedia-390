@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -99,10 +98,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 import static org.wikipedia.page.PageActivity.ACTION_RESUME_READING;
 import static org.wikipedia.page.PageActivity.ACTION_SHOW_TAB_LIST;
 import static org.wikipedia.page.PageCacher.loadIntoCache;
@@ -346,7 +343,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v){onViewNoteTabSelected(button);}
+            public void onClick(View v){onViewNoteTabSelected();}
         });
 
         return rootView;
@@ -900,39 +897,24 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     }
 
     //@OnClick(R.id.page_toolbar_button_show_tabs)
-    public void onViewNoteTabSelected(Button btn) {
-        fetchArticleState();
+    public void onViewNoteTabSelected() {
         int index =-1 ;
         if (articleState.getNotes().isEmpty()){
             showAddNoteDialog();
         }
         else{
             for (Note note : articleState.getNotes()){
-                if (articleState.getScrollPosition() - note.getScrollPosition()<500){
+                if (articleState.getScrollPosition() - note.getScrollPosition()<200){
                     index = articleState.getNotes().indexOf(note);
                 }
             }
             if (index>=0){
                 showViewNoteDialog(articleState.getNotes().get(index));
             }
-//            else{
-//                showAddNoteDialog();
-//            }
+            else{
+                showAddNoteDialog();
+            }
         }
-
-
-//        int index=0;
-//        if (!articleState.getNotes().isEmpty()){
-//            for (Note note : articleState.getNotes()){
-//                if (articleState.getScrollPosition() - note.getScrollPosition()<200){
-//                    index = articleState.getNotes().indexOf(note);
-//                }
-//            }
-//            showViewNoteDialog(articleState.getNotes().get(index));
-//        }
-//        else{
-//            showAddNoteDialog();
-//        }
     }
     private void showAddNoteDialog(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
@@ -941,7 +923,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
 
         Button invisibleBtn0 = (Button)getView().findViewById(R.id.note_button0);
-        //Button invisibleBtn1 = (Button)getView().findViewById(R.id.note_button1);
 
         titleInput.setText("New Note");
         titleInput.selectAll();
@@ -951,7 +932,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                fetchAndUpdatePageState();
+                //fetchAndUpdatePageState();
                 Note note = new Note(articleState.getId(), titleInput.getText().toString(),
                         contentInput.getText().toString(),articleState.getScrollPosition());
                 //save locally then on db?
@@ -1003,12 +984,11 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showDeleteNoteDialog(note);
-                Toast.makeText(getActivity(), "note deleted", Toast.LENGTH_SHORT).show();
             }
         });
 
-        AlertDialog dialogAddNote = dialogBuilder.create();
-        dialogAddNote.show();
+        AlertDialog dialogViewNote = dialogBuilder.create();
+        dialogViewNote.show();
     }
 
     private void showEditNoteDialog(Note note) {//opens dialog to edit note
@@ -1020,6 +1000,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         contentInput.setText(note.getNoteContent());
 
         dialogBuilder.setCustomTitle(titleInput);
+        dialogBuilder.setMessage("");
         dialogBuilder.setView(contentInput);
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
@@ -1037,8 +1018,8 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             }
         });
 
-        AlertDialog dialogAddNote = dialogBuilder.create();
-        dialogAddNote.show();
+        AlertDialog dialogEditNote = dialogBuilder.create();
+        dialogEditNote.show();
     }
 
     private void showDeleteNoteDialog(Note note) {//dialog to confirm delete
@@ -1049,6 +1030,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             @Override
             public void onClick(DialogInterface dialog, int which){
                 //delete note and remove button?
+                articleState.getNotes().remove(note);
                 articleNoteDbHelper.instance().deleteNote(note);
                 Toast.makeText(getActivity(), "note has been deleted", Toast.LENGTH_SHORT).show();
             }
@@ -1059,6 +1041,8 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 Toast.makeText(getActivity(), "delete cancelled", Toast.LENGTH_SHORT).show();
             }
         });
+        AlertDialog dialogDeleteNote = dialogBuilder.create();
+        dialogDeleteNote.show();
     }
 
     public void showFindInPage() {
