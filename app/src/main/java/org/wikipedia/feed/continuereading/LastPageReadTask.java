@@ -21,7 +21,7 @@ public class LastPageReadTask extends SaneAsyncTask<HistoryEntry> {
         List<Tab> tabList = Prefs.getTabs();
         // Make sure that the private browsing button isn't enabled for the article to be shown in
         // the continue reading card
-        if (age < tabList.size() && Prefs.isPrivateBrowsingEnabled() == false) {
+        if (age < tabList.size() && !Prefs.isPrivateBrowsingEnabled()) {
             List<PageBackStackItem> items = tabList.get(tabList.size() - age - 1).getBackStack();
             if (!items.isEmpty()) {
                 return items.get(items.size() - 1).getHistoryEntry();

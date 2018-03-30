@@ -434,7 +434,7 @@ public class SearchFragment extends Fragment implements BackPressedHandler,
         //Checks the Prefs setting of private browsing. If the private browsing is activated,
         //articles that the user searches for will not be logged and ultimately saved to the RecentSearchDatabaseTable
         //Otherwise, it functions as expected
-        if (isValidQuery(title) && Prefs.isPrivateBrowsingEnabled() == false) {
+        if (isValidQuery(title) && !Prefs.isPrivateBrowsingEnabled()) {
             new SaveRecentSearchTask(new RecentSearch(title)).execute();
         }
     }

@@ -26,7 +26,7 @@ public class UpdateHistoryTask extends SaneAsyncTask<Void> {
     public Void performTask() throws Throwable {
         //As with the recent search history implementation, viewed articles are only saved to history
         //when private browsing is disabled.
-        if (Prefs.isPrivateBrowsingEnabled() == false) {
+        if (!Prefs.isPrivateBrowsingEnabled()) {
             DatabaseClient<HistoryEntry> client = app.getDatabaseClient(HistoryEntry.class);
             client.upsert(new HistoryEntry(entry.getTitle(),
                             entry.getTimestamp(),

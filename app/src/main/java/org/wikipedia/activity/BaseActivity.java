@@ -253,7 +253,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void privateBrowsingTransition() {
         //when the toggle is on, the theme gets switched to the already present dark theme
         //the user can no longer change the app theme until after they switch the toggle off and disable private browsing
-        if (Prefs.isPrivateBrowsingEnabled() == true) {
+        if (Prefs.isPrivateBrowsingEnabled()) {
             //changes to dark theme on when toggled on and user can no longer change color theme
             WikipediaApp.getInstance().setCurrentTheme(Theme.DARK);
             Toast.makeText(getApplication(),"Private browsing enabled", Toast.LENGTH_SHORT).show();
