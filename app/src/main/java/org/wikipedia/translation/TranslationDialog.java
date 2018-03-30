@@ -9,8 +9,10 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.wikipedia.R;
@@ -30,6 +32,9 @@ import org.wikipedia.page.PageTitle;
 import org.wikipedia.util.StringUtil;
 import org.wikipedia.util.log.L;
 import org.wikipedia.views.AppTextView;
+
+import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -104,9 +109,20 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
 
         View translation = inflater.inflate(R.layout.item_translation, (ViewGroup) rootView, false);
         progressbar.setVisibility(View.GONE);
+        loadLanguageOptions(translation);
         loadSelectedText(translation);
         translationText.addView(translation);
 
+    }
+
+    private void loadLanguageOptions(View translation) {
+
+        //PLACEHOLDER FOR CHOOSING LANGUAGE OPTIONS
+        Spinner languageOptions = translation.findViewById(R.id.translation_lang_options);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.language_options,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageOptions.setAdapter(adapter);
     }
 
     private void loadSelectedText(View translation) {

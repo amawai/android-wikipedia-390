@@ -6,12 +6,17 @@
     android:orientation="vertical"
     android:paddingBottom="8dp">
 
+    <Spinner
+        android:id="@+id/translation_lang_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/translation_selected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="21dp" />
 
     <TextView
         android:id="@+id/translation_translated"
