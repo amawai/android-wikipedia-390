@@ -31,6 +31,18 @@ public class Note {
         this.articleId = id;
     }
 
+    public void setNoteTitle(String title) {
+        this.noteTitle = title;
+    }
+
+    public void setNoteContent(String content) {
+        this.noteContent = content;
+    }
+
+    public void setScrollPosition(int scroll) {
+        this.scrollPosition = scroll;
+    }
+
     public String getNoteTitle() {
         return this.noteTitle;
     }

@@ -31,7 +31,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
                 ArticleNoteContract.Col.NOTE_CONTENT.val(c),
                 ArticleNoteContract.Col.SCROLL_POSITION.val(c)
         );
-        note.setId(ArticleNoteContract.Col.NOTE_ID.val(c));
+        note.setId(ArticleNoteContract.Col.ID.val(c));
         return note;
     }
 
@@ -41,7 +41,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
         switch (version) {
             case DB_VER_INTRODUCED:
                 List<Column<?>> cols = new ArrayList<>();
-                cols.add(ArticleNoteContract.Col.NOTE_ID);
+                cols.add(ArticleNoteContract.Col.ID);
                 cols.add(ArticleNoteContract.Col.ARTICLE_ID);
                 cols.add(ArticleNoteContract.Col.NOTE_TITLE);
                 cols.add(ArticleNoteContract.Col.NOTE_CONTENT);
@@ -59,7 +59,6 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
         contentValues.put(ArticleNoteContract.Col.NOTE_TITLE.getName(), row.getNoteTitle());
         contentValues.put(ArticleNoteContract.Col.NOTE_CONTENT.getName(), row.getNoteContent());
         contentValues.put(ArticleNoteContract.Col.SCROLL_POSITION.getName(), row.getScrollPosition());
-        contentValues.put(ArticleNoteContract.Col.NOTE_ID.getName(), row.getNoteId());
         return contentValues;
     }
 

@@ -21,7 +21,6 @@ import java.util.List;
  */
 
 public class ArticleNoteDbHelper {
-    //TODO: test out everything here + make sure everything gets added correctly...
     private static ArticleNoteDbHelper INSTANCE;
 
     public static ArticleNoteDbHelper instance() {
@@ -112,17 +111,22 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    public void addNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
+    public Note addNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
         Note newNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
-        addNote(article, newNote);
+        return addNote(article, newNote);
     }
 
-    public void addNote(@NonNull Article article, @NonNull Note note) {
+    public Note addNote(@NonNull Article article, @NonNull Note note) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            addNote(db, article, note);
+            //addNote(db, article, note);
+            //db.setTransactionSuccessful();
+            long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
+                    Note.DATABASE_TABLE.toContentValues(note));
             db.setTransactionSuccessful();
+            note.setId(id);
+            return note;
         } finally {
             db.endTransaction();
         }
@@ -145,6 +149,7 @@ public class ArticleNoteDbHelper {
         }
     }
 
+
     public void updateNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
         Note updatedNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
         updateNote(updatedNote);
@@ -161,9 +166,9 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    public void deleteNote(@NonNull Article article, String noteTitle, String noteDescription, int scroll) {
-        Note deleteNote = new Note(article.getId(), noteTitle, noteDescription, scroll);
-        deleteNoteFromDb(getReadableDatabase(), deleteNote);
+
+    public void deleteNote(@NonNull Note note) {
+        deleteNoteFromDb(getReadableDatabase(), note);
     }
 
     public List<Note> getNotesFromArticle(@NonNull Article article) {
@@ -189,6 +194,13 @@ public class ArticleNoteDbHelper {
         return noteList;
     }
 
+    public void deleteAllNotesFromArticle(@NonNull Article article) {
+        List<Note> notesToDelete = getNotesFromArticle(article);
+        for (Note note : notesToDelete) {
+            deleteNote(note);
+        }
+    }
+
     private void addNote(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
         insertNoteInDb(db, article, note);
     }
@@ -197,6 +209,7 @@ public class ArticleNoteDbHelper {
         note.setArticleId(article.getId());
         long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
                 Note.DATABASE_TABLE.toContentValues(note));
+        note.setId(id);
     }
 
     private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article) {
@@ -209,7 +222,7 @@ public class ArticleNoteDbHelper {
 
     private void updateNoteInDb(SQLiteDatabase db, @NonNull Note note) {
         int result = db.update(ArticleNoteContract.TABLE, Note.DATABASE_TABLE.toContentValues(note),
-                ArticleNoteContract.Col.NOTE_ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
+                ArticleNoteContract.Col.ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
         if (result != 1) {
             L.w("Failed to update db entry for page " + note.getNoteTitle());
         }
@@ -217,7 +230,8 @@ public class ArticleNoteDbHelper {
 
     private void deleteNoteFromDb(SQLiteDatabase db, @NonNull Note note) {
         int result = db.delete(ArticleNoteContract.TABLE,
-                ArticleNoteContract.Col.NOTE_ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
+                ArticleNoteContract.Col.ID.getName() + " = ?",
+                new String[]{Long.toString(note.getNoteId())});
         if (result != 1) {
             L.w("Failed to delete db entry for page " + note.getNoteTitle());
         }
