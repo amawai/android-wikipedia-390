@@ -43,10 +43,10 @@ public class PrivateBrowsingSearchUpdateHistoryTaskTest {
     @Test
     public void testPerformTask() {
         try {
+            mUpdateHistoryTask.performTask();
             //if private browsing is disabled, an UpdateHistoryTask object should be able to invoke the performTask operation
             //and commence adding a history entry into the db
             if (Prefs.isPrivateBrowsingEnabled() == false) {
-                verify(mUpdateHistoryTask).performTask();
                 //confirmation that operation has been executed
                 assertNull(mUpdateHistoryTask.performTask());
             }
@@ -54,6 +54,7 @@ public class PrivateBrowsingSearchUpdateHistoryTaskTest {
                 //if private browsing has been enabled, the application should not be able to make the call to retrieve a db client
                 //this is the first line within the performTask() operation and indicates that no db access is taking place
                 Mockito.verify(mAppInstance, never()).getDatabaseClient(HistoryEntry.class);
+                assertNull(mUpdateHistoryTask.performTask());
             }
         }
         catch(Throwable e) {
