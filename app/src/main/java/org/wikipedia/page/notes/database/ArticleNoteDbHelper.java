@@ -21,7 +21,6 @@ import java.util.List;
  */
 
 public class ArticleNoteDbHelper {
-    //TODO: test out everything here + make sure everything gets added correctly...
     private static ArticleNoteDbHelper INSTANCE;
 
     public static ArticleNoteDbHelper instance() {
@@ -104,12 +103,17 @@ public class ArticleNoteDbHelper {
         addNote(article, newNote);
     }
 
-    public void addNote(@NonNull Article article, @NonNull Note note) {
+    public Note addNote(@NonNull Article article, @NonNull Note note) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            addNote(db, article, note);
+            //addNote(db, article, note);
+            //db.setTransactionSuccessful();
+            long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
+                    Note.DATABASE_TABLE.toContentValues(note));
             db.setTransactionSuccessful();
+            note.setId(id);
+            return note;
         } finally {
             db.endTransaction();
         }
@@ -131,6 +135,7 @@ public class ArticleNoteDbHelper {
             db.endTransaction();
         }
     }
+
 
     public void updateNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
         Note updatedNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
@@ -183,6 +188,7 @@ public class ArticleNoteDbHelper {
         note.setArticleId(article.getId());
         long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
                 Note.DATABASE_TABLE.toContentValues(note));
+        note.setId(id);
     }
 
     private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article, int scroll) {
@@ -196,7 +202,7 @@ public class ArticleNoteDbHelper {
 
     private void updateNoteInDb(SQLiteDatabase db, @NonNull Note note) {
         int result = db.update(ArticleNoteContract.TABLE, Note.DATABASE_TABLE.toContentValues(note),
-                ArticleNoteContract.Col.NOTE_ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
+                ArticleNoteContract.Col.ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
         if (result != 1) {
             L.w("Failed to update db entry for page " + note.getNoteTitle());
         }
@@ -204,7 +210,10 @@ public class ArticleNoteDbHelper {
 
     private void deleteNoteFromDb(SQLiteDatabase db, @NonNull Note note) {
         int result = db.delete(ArticleNoteContract.TABLE,
-                ArticleNoteContract.Col.NOTE_ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
+                ArticleNoteContract.Col.NOTE_TITLE.getName() + " = ? AND "
+                + ArticleNoteContract.Col.NOTE_CONTENT.getName() + " = ? AND "
+                + ArticleNoteContract.Col.SCROLL_POSITION.getName() + " = ?", new String[]{note.getNoteTitle(),
+                        note.getNoteContent(), Integer.toString(note.getScrollPosition())});
         if (result != 1) {
             L.w("Failed to delete db entry for page " + note.getNoteTitle());
         }
