@@ -60,7 +60,7 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
             "en" // English
     };
 
-
+    private String textTranslated;
     private ProgressBar progressbar;
     private String textToTranslate;
     private View rootView;
@@ -92,7 +92,11 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         progressbar = rootView.findViewById(R.id.translation_progress_bar);
         unbinder = ButterKnife.bind(this, rootView);
         TRANSLATION.setText("Translation");
-        loadTranslation();
+        try{
+            loadTranslation();
+        }catch(Exception e) {
+
+        }
 
 
         //noTranslationFound();
@@ -103,7 +107,7 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         return rootView;
     }
 
-    private void loadTranslation() {
+    private void loadTranslation() throws Exception{
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout translationText = rootView.findViewById(R.id.translation_selected_translated);
 
@@ -111,8 +115,8 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         progressbar.setVisibility(View.GONE);
         loadLanguageOptions(translation);
         loadSelectedText(translation);
+        loadTranslatedText(translation);
         translationText.addView(translation);
-
     }
 
     private void loadLanguageOptions(View translation) {
@@ -130,10 +134,17 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         selectedText.setText("To translate: \n" + textToTranslate);
     }
 
-    private void loadTranslatedText(View translation) {
+    private void loadTranslatedText(View translation) throws Exception{
         TextView translatedText = translation.findViewById(R.id.translation_translated);
         //CALL GOOGLE API
-        translatedText.setText("Translated: \n");
+        Translator translator = new Translator();
+        textTranslated = translator.execute(textToTranslate,"en","fr").get();
+
+        if(textTranslated.equals("-1")) {
+            noTranslationFound();
+        }else {
+            translatedText.setText("Translated: \n" + textTranslated);
+        }
     }
 
     private void noTranslationFound() {

@@ -18,22 +18,14 @@ import java.nio.charset.StandardCharsets;
 
 public class Translator extends AsyncTask <String, Void, String> {
 
-    private static Translator translator = null;
     private final String KEY;
     private final String PATH;
     private final String CHARSET;
 
-    private Translator() {
+    public Translator() {
         KEY = "trnsl.1.1.20180329T182936Z.7a2ea55bab627000.b0c9cc1bb2ba24da663ab45d7311ac374dfa3a41";
         PATH = "https://translate.yandex.net/api/v1.5/tr.json/translate";
         CHARSET = StandardCharsets.UTF_8.name();
-    }
-
-    public static Translator getInstance() {
-        if(translator == null) {
-            translator = new Translator();
-        }
-        return translator;
     }
 
     @Override
@@ -81,7 +73,7 @@ public class Translator extends AsyncTask <String, Void, String> {
             }
 
         } catch (Exception e) {
-            Log.d("Translation Error", "Error in Translator class");
+            return "-1";
         }
 
         return result;
