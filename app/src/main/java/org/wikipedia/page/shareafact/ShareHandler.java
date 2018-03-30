@@ -31,6 +31,7 @@ import org.wikipedia.page.PageFragment;
 import org.wikipedia.page.PageProperties;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.settings.Prefs;
+import org.wikipedia.translation.TranslationDialog;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ShareUtil;
 import org.wikipedia.util.StringUtil;
@@ -187,11 +188,13 @@ public class ShareHandler {
 
         // Listener for translate button
         MenuItem translateItem = menu.findItem(R.id.menu_text_select_translate);
-        translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
-            showTranslateResult();
-            leaveActionMode();
-            return true;
-        });
+        translateItem.setVisible(true);
+        translateItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_TRANSLATE));
+//        translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
+//            onTranslatePayload();
+//            leaveActionMode();
+//            return true;
+//        });
 
         // Provide our own listeners for the copy, define, and share buttons.
         shareItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_SHARE));
