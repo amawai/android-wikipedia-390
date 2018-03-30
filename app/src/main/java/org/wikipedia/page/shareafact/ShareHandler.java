@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wikipedia.R;
@@ -32,7 +31,7 @@ import org.wikipedia.page.PageFragment;
 import org.wikipedia.page.PageProperties;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.settings.Prefs;
-import org.wikipedia.translation.Translator;
+import org.wikipedia.translation.TranslationDialog;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ShareUtil;
 import org.wikipedia.util.StringUtil;
@@ -40,27 +39,9 @@ import org.wikipedia.util.UriUtil;
 import org.wikipedia.util.log.L;
 import org.wikipedia.wiktionary.WiktionaryDialog;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 
 import static org.wikipedia.analytics.ShareAFactFunnel.ShareMode;
@@ -73,6 +54,7 @@ public class ShareHandler {
     private static final String PAYLOAD_PURPOSE_SHARE = "share";
     private static final String PAYLOAD_PURPOSE_DEFINE = "define";
     private static final String PAYLOAD_PURPOSE_EDIT_HERE = "edit_here";
+    private static final String PAYLOAD_PURPOSE_TRANSLATE = "translate";
     private static final String PAYLOAD_TEXT_KEY = "text";
 
     @NonNull private final PageFragment fragment;
@@ -105,10 +87,18 @@ public class ShareHandler {
                 case PAYLOAD_PURPOSE_EDIT_HERE:
                     onEditHerePayload(messagePayload.optInt("sectionID", 0), text);
                     break;
+                case PAYLOAD_PURPOSE_TRANSLATE:
+                    onTranslatePayload(text);
+                    break;
                 default:
                     L.d("Unknown purpose=" + purpose);
             }
         });
+    }
+
+    //create a new instance of the translation dialog
+    private void onTranslatePayload(String text) {
+        fragment.showBottomSheet(TranslationDialog.newInstance(text));
     }
 
     private void onHighlightText() {
@@ -186,9 +176,9 @@ public class ShareHandler {
     }
 
     // Adds functionality when translate button is pressed
-    private void showTranslateResult() throws Throwable {
-      String result = Translator.getInstance().execute("hello world", "en", "fr").get();
-    }
+//    private void showTranslateResult() {
+//        FeedbackUtil.showMessage(fragment.getActivity(), "Text has been translated");
+//    }
 
     private void handleSelection(Menu menu, MenuItem shareItem) {
         if (PrefsOnboardingStateMachine.getInstance().isShareTutorialEnabled()) {
@@ -198,15 +188,13 @@ public class ShareHandler {
 
         // Listener for translate button
         MenuItem translateItem = menu.findItem(R.id.menu_text_select_translate);
-        translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
-            try {
-                showTranslateResult();
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-            leaveActionMode();
-            return true;
-        });
+        translateItem.setVisible(true);
+        translateItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_TRANSLATE));
+//        translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
+//            onTranslatePayload();
+//            leaveActionMode();
+//            return true;
+//        });
 
         // Provide our own listeners for the copy, define, and share buttons.
         shareItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_SHARE));

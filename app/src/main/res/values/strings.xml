@@ -641,5 +641,14 @@
         <item quantity="other">%d years ago</item>
     </plurals>
 
+    <!-- Translation -->
+    <string-array name="language_options">
+        <item>Select language</item>
+        <item>French</item>
+        <item>Spanish</item>
+        <item>Mandarin</item>
+        <item>Cantonese</item>
+        <item>Japanese</item>
+    </string-array>
 
 </resources>
