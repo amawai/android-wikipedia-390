@@ -38,6 +38,10 @@ public class Article {
         return this.notes;
     }
 
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
     public long getId() {
         return this.id;
     }

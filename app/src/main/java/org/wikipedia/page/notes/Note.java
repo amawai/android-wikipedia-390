@@ -31,12 +31,17 @@ public class Note {
         this.articleId = id;
     }
 
-    public void setNoteTitle(String noteTitle) {
-        this.noteTitle = noteTitle;
+
+    public void setNoteTitle(String title) {
+        this.noteTitle = title;
     }
 
-    public void setNoteContent(String noteContent) {
-        this.noteContent = noteContent;
+    public void setNoteContent(String content) {
+        this.noteContent = content;
+    }
+
+    public void setScrollPosition(int scroll) {
+        this.scrollPosition = scroll;
     }
 
     public String getNoteTitle() {
