@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wikipedia.R;
@@ -31,6 +32,7 @@ import org.wikipedia.page.PageFragment;
 import org.wikipedia.page.PageProperties;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.settings.Prefs;
+import org.wikipedia.translation.Translator;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ShareUtil;
 import org.wikipedia.util.StringUtil;
@@ -38,9 +40,27 @@ import org.wikipedia.util.UriUtil;
 import org.wikipedia.util.log.L;
 import org.wikipedia.wiktionary.WiktionaryDialog;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 
 import static org.wikipedia.analytics.ShareAFactFunnel.ShareMode;
@@ -166,8 +186,8 @@ public class ShareHandler {
     }
 
     // Adds functionality when translate button is pressed
-    private void showTranslateResult() {
-        FeedbackUtil.showMessage(fragment.getActivity(), "Text has been translated");
+    private void showTranslateResult() throws Throwable {
+      String result = Translator.getInstance().execute("hello world", "en", "fr").get();
     }
 
     private void handleSelection(Menu menu, MenuItem shareItem) {
@@ -179,7 +199,11 @@ public class ShareHandler {
         // Listener for translate button
         MenuItem translateItem = menu.findItem(R.id.menu_text_select_translate);
         translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
-            showTranslateResult();
+            try {
+                showTranslateResult();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
             leaveActionMode();
             return true;
         });
