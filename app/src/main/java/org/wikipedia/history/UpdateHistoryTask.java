@@ -7,6 +7,7 @@ import org.wikipedia.WikipediaApp;
 import org.wikipedia.concurrency.SaneAsyncTask;
 import org.wikipedia.database.DatabaseClient;
 import org.wikipedia.database.contract.PageHistoryContract;
+import org.wikipedia.settings.Prefs;
 import org.wikipedia.util.log.L;
 
 /**
@@ -23,12 +24,16 @@ public class UpdateHistoryTask extends SaneAsyncTask<Void> {
 
     @Override
     public Void performTask() throws Throwable {
-        DatabaseClient<HistoryEntry> client = app.getDatabaseClient(HistoryEntry.class);
-        client.upsert(new HistoryEntry(entry.getTitle(),
-                entry.getTimestamp(),
-                entry.getSource(),
-                entry.getTimeSpentSec() + getPreviousTimeSpent(client)),
-                PageHistoryContract.Page.SELECTION);
+        //As with the recent search history implementation, viewed articles are only saved to history
+        //when private browsing is disabled.
+        if (!Prefs.isPrivateBrowsingEnabled()) {
+            DatabaseClient<HistoryEntry> client = app.getDatabaseClient(HistoryEntry.class);
+            client.upsert(new HistoryEntry(entry.getTitle(),
+                            entry.getTimestamp(),
+                            entry.getSource(),
+                            entry.getTimeSpentSec() + getPreviousTimeSpent(client)),
+                    PageHistoryContract.Page.SELECTION);
+        }
         return null;
     }
 

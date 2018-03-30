@@ -33,6 +33,7 @@ import org.wikipedia.offline.OfflineManager;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.readinglist.AddToReadingListDialog;
 import org.wikipedia.settings.LanguagePreferenceDialog;
+import org.wikipedia.settings.Prefs;
 import org.wikipedia.util.DeviceUtil;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.views.ViewUtil;
@@ -430,7 +431,10 @@ public class SearchFragment extends Fragment implements BackPressedHandler,
     }
 
     private void addRecentSearch(String title) {
-        if (isValidQuery(title)) {
+        //Checks the Prefs setting of private browsing. If the private browsing is activated,
+        //articles that the user searches for will not be logged and ultimately saved to the RecentSearchDatabaseTable
+        //Otherwise, it functions as expected
+        if (isValidQuery(title) && !Prefs.isPrivateBrowsingEnabled()) {
             new SaveRecentSearchTask(new RecentSearch(title)).execute();
         }
     }

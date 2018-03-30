@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(RobolectricTestRunner.class)
-public class ReadingListDbHelperTester {
+public class ReadingListDbHelperTest {
     SQLiteDatabase mockDb;
     ReadingList mockReadingList;
 
