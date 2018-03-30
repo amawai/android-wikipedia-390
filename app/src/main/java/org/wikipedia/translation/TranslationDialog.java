@@ -79,12 +79,12 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
 
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "WrongViewCast"})
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_translation, container);
-//        progressbar = rootView.findViewById(R.id.translation_dialog_progress);
+        progressbar = rootView.findViewById(R.id.translation_progress_bar);
         unbinder = ButterKnife.bind(this, rootView);
         TRANSLATION.setText("Translation");
         loadTranslation();
@@ -103,6 +103,7 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         LinearLayout translationText = rootView.findViewById(R.id.translation_selected_translated);
 
         View translation = inflater.inflate(R.layout.item_translation, (ViewGroup) rootView, false);
+        progressbar.setVisibility(View.GONE);
         loadSelectedText(translation);
         translationText.addView(translation);
 
@@ -110,11 +111,13 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
 
     private void loadSelectedText(View translation) {
         TextView selectedText = translation.findViewById(R.id.translation_selected);
-        selectedText.setText("To translate: " + textToTranslate);
+        selectedText.setText("To translate: \n" + textToTranslate);
     }
 
-    private void loadTranslatedText() {
-
+    private void loadTranslatedText(View translation) {
+        TextView translatedText = translation.findViewById(R.id.translation_translated);
+        //CALL GOOGLE API
+        translatedText.setText("Translated: \n");
     }
 
     private void noTranslationFound() {
