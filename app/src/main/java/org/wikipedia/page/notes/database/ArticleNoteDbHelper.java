@@ -98,9 +98,9 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    public void addNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
+    public Note addNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
         Note newNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
-        addNote(article, newNote);
+        return addNote(article, newNote);
     }
 
     public Note addNote(@NonNull Article article, @NonNull Note note) {
@@ -153,9 +153,9 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    public void deleteNote(@NonNull Article article, String noteTitle, String noteDescription, int scroll) {
-        Note deleteNote = new Note(article.getId(), noteTitle, noteDescription, scroll);
-        deleteNoteFromDb(getReadableDatabase(), deleteNote);
+
+    public void deleteNote(@NonNull Note note) {
+        deleteNoteFromDb(getReadableDatabase(), note);
     }
 
     public List<Note> getNotesFromArticle(@NonNull Article article) {
@@ -178,6 +178,13 @@ public class ArticleNoteDbHelper {
         }
         Log.d("ARTICLE_HELPER", "size is " + noteList.size());
         return noteList;
+    }
+
+    public void deleteAllNotesFromArticle(@NonNull Article article) {
+        List<Note> notesToDelete = getNotesFromArticle(article);
+        for (Note note : notesToDelete) {
+            deleteNote(note);
+        }
     }
 
     private void addNote(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
@@ -210,10 +217,8 @@ public class ArticleNoteDbHelper {
 
     private void deleteNoteFromDb(SQLiteDatabase db, @NonNull Note note) {
         int result = db.delete(ArticleNoteContract.TABLE,
-                ArticleNoteContract.Col.NOTE_TITLE.getName() + " = ? AND "
-                + ArticleNoteContract.Col.NOTE_CONTENT.getName() + " = ? AND "
-                + ArticleNoteContract.Col.SCROLL_POSITION.getName() + " = ?", new String[]{note.getNoteTitle(),
-                        note.getNoteContent(), Integer.toString(note.getScrollPosition())});
+                ArticleNoteContract.Col.ID.getName() + " = ?",
+                new String[]{Long.toString(note.getNoteId())});
         if (result != 1) {
             L.w("Failed to delete db entry for page " + note.getNoteTitle());
         }
