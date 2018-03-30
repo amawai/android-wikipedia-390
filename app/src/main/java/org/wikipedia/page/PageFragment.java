@@ -58,6 +58,9 @@ import org.wikipedia.page.action.PageActionTab;
 import org.wikipedia.page.action.PageActionToolbarHideHandler;
 import org.wikipedia.page.bottomcontent.BottomContentView;
 import org.wikipedia.page.leadimages.LeadImagesHandler;
+import org.wikipedia.page.notes.Article;
+import org.wikipedia.page.notes.Note;
+import org.wikipedia.page.notes.database.ArticleNoteDbHelper;
 import org.wikipedia.page.shareafact.ShareHandler;
 import org.wikipedia.page.tabs.Tab;
 import org.wikipedia.page.tabs.TabsProvider;
@@ -169,6 +172,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     private ActiveTimer activeTimer = new ActiveTimer();
 
     private WikipediaApp app;
+    private Article articleState;
 
     @NonNull
     private final SwipeRefreshLayout.OnRefreshListener pageRefreshListener = () -> refreshPage();
@@ -185,7 +189,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
         }
 
         @Override
@@ -287,7 +290,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         super.onCreate(savedInstanceState);
         app = (WikipediaApp) getActivity().getApplicationContext();
         model = new PageViewModel();
-
         pageFragmentLoadState = new PageFragmentLoadState();
 
         initTabs();
@@ -452,6 +454,14 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 pageScrollFunnel.onPageScrolled(oldScrollY, scrollY, isHumanScroll);
             }
         });
+        webView.addOnScrollChangeListener(new ObservableWebView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChanged(int oldScrollY, int scrollY, boolean isHumanScroll) {
+                if(articleState != null) {
+                    articleState.setScroll(scrollY);
+                }
+            }
+        });
         webView.setWebViewClient(new OkHttpWebViewClient() {
             @NonNull @Override public WikiSite getWikiSite() {
                 return model.getTitle().getWikiSite();
@@ -571,12 +581,17 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 ? System.currentTimeMillis()
                 : 0;
         Prefs.pageLastShown(time);
+
+        saveArticlePosition();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initPageScrollFunnel();
+        if(articleState != null && !pageFragmentLoadState.isLoading()) {
+            fetchAndUpdatePageState();
+        }
         activeTimer.resume();
     }
 
@@ -710,6 +725,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         model.setCurEntry(entry);
         model.setReadingListPage(null);
         model.setForceNetwork(isRefresh);
+        fetchArticleState();
 
         updateProgressBar(true, true, 0);
 
@@ -944,7 +960,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 }
             });
         }
-
+        fetchAndUpdatePageState();
         checkAndShowSelectTextOnboarding();
     }
 
@@ -1425,6 +1441,56 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             if (!(offline && PageActionTab.of(i).equals(PageActionTab.ADD_TO_READING_LIST))) {
                 tabLayout.disableTab(i);
             }
+        }
+    }
+
+    private void fetchArticleState() {
+        String title = getTitle().toString();
+        CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getArticleByTitle(title), new CallbackTask.DefaultCallback<Article>() {
+            @Override
+            public void success(Article existingArticle) {
+                if(existingArticle == null) {
+                    CallbackTask.execute(() -> ArticleNoteDbHelper.instance().createArticle(title, 0), new CallbackTask.DefaultCallback<Article>() {
+                        @Override
+                        public void success(Article newArticle) {
+                            articleState = newArticle;
+                        }
+                    });
+                } else {
+                    articleState = existingArticle;
+                }
+            }
+        });
+    }
+
+    private void fetchAndUpdatePageState() {
+        if(articleState != null) {
+            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getNotesFromArticle(articleState), new CallbackTask.DefaultCallback<List<Note>>(){
+                @Override
+                public void success(List<Note> notes) {
+                    articleState.setNotes(notes);
+                    // Bind to an adapter and notify updated data set i guess
+                }
+            });
+            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getScrollOfArticle(articleState), new CallbackTask.DefaultCallback<Integer>() {
+                public void success(Integer scrollY) {
+                    articleState.setScroll(scrollY);
+                    webView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.scrollTo(0, scrollY);
+                        }
+                    });
+                    Log.d("updatePageState", scrollY + "");
+                }
+            });
+        }
+    }
+
+    private void saveArticlePosition() {
+        if(articleState != null) {
+            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().updateScrollState(articleState));
+            Log.d("updatePageState", articleState.getScrollPosition() + "");
         }
     }
 

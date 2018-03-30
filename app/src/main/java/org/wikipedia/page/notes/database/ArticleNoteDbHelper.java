@@ -84,15 +84,28 @@ public class ArticleNoteDbHelper {
         return null;
     }
 
-    public void updateScrollState(@NonNull Article article, int scroll) {
-        SQLiteDatabase db = getWritableDatabase();
-        updateScrollState(db, article, scroll);
+    public Article getArticleByTitle(String title) {
+        Article article = null;
+        SQLiteDatabase db = getReadableDatabase();
+        try (Cursor cursor = db.query(ArticleContract.TABLE, null,
+                ArticleContract.Col.ARTICLE_TITLE.getName() + " = ?", new String[]{title},
+                null, null,null)) {
+            if (cursor.moveToFirst()) {
+                article = Article.DATABASE_TABLE.fromCursor(cursor);
+            }
+        }
+        return article;
     }
 
-    public void updateScrollState(@NonNull SQLiteDatabase db, @NonNull Article article, int scroll) {
+    public void updateScrollState(@NonNull Article article) {
+        SQLiteDatabase db = getWritableDatabase();
+        updateScrollState(db, article);
+    }
+
+    public void updateScrollState(@NonNull SQLiteDatabase db, @NonNull Article article) {
         db.beginTransaction();
         try {
-            updateScrollInDb(db, article, scroll);
+            updateScrollInDb(db, article);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -158,6 +171,7 @@ public class ArticleNoteDbHelper {
         return getNotesFromArticle(db, article);
     }
 
+
     public List<Note> getNotesFromArticle(@NonNull SQLiteDatabase db, @NonNull Article article) {
         List<Note> noteList = new ArrayList<>();
         try (Cursor cursor = db.query(ArticleNoteContract.TABLE, null,
@@ -185,12 +199,11 @@ public class ArticleNoteDbHelper {
                 Note.DATABASE_TABLE.toContentValues(note));
     }
 
-    private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article, int scroll) {
-        article.setScroll(scroll);
+    private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article) {
         int result = db.update(ArticleContract.TABLE, article.DATABASE_TABLE.toContentValues(article),
                 ArticleContract.Col.ID.getName() + " = ?", new String[]{Long.toString(article.getId())});
         if (result != 1) {
-            L.w("Failed to update scroll position for article " + article.getArticleTitle() + " at scroll " + scroll);
+            L.w("Failed to update scroll position for article " + article.getArticleTitle() + " at scroll " + article.getScrollPosition());
         }
     }
 
