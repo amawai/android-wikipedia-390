@@ -63,6 +63,9 @@ import org.wikipedia.page.action.PageActionTab;
 import org.wikipedia.page.action.PageActionToolbarHideHandler;
 import org.wikipedia.page.bottomcontent.BottomContentView;
 import org.wikipedia.page.leadimages.LeadImagesHandler;
+import org.wikipedia.page.notes.Article;
+import org.wikipedia.page.notes.Note;
+import org.wikipedia.page.notes.database.ArticleTable;
 import org.wikipedia.page.shareafact.ShareHandler;
 import org.wikipedia.page.tabs.Tab;
 import org.wikipedia.page.tabs.TabsProvider;
@@ -89,6 +92,7 @@ import org.wikipedia.views.ObservableWebView;
 import org.wikipedia.views.SwipeRefreshLayoutWithScroll;
 import org.wikipedia.views.WikiDrawerLayout;
 import org.wikipedia.views.WikiPageErrorView;
+import org.wikipedia.page.notes.database.ArticleNoteDbHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,6 +111,7 @@ import static org.wikipedia.util.ResourceUtil.getThemedColor;
 import static org.wikipedia.util.ThrowableUtil.isOffline;
 import static org.wikipedia.util.UriUtil.decodeURL;
 import static org.wikipedia.util.UriUtil.visitInExternalBrowser;
+
 
 public class PageFragment extends Fragment implements BackPressedHandler {
     public interface Callback {
@@ -174,8 +179,9 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     private TabsProvider tabsProvider;
     private ActiveTimer activeTimer = new ActiveTimer();
 
-    private ArticleNote articleNote = new ArticleNote();
-    LinearLayout linearLayoutForNotes;
+    private Article article;
+    private Note articleNote;
+    private ArticleNoteDbHelper articleNoteDbHelper;
 
     private WikipediaApp app;
 
@@ -241,8 +247,14 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         }
 
         @Override
-        public void onAddNoteTabSelected() {//callback function for bottom action bar
-            showViewNoteDialog(articleNote);
+        public void onViewNoteTabSelected() {//callback function for bottom action bar
+            if (article.getNotes().size()>0){
+                showViewNoteDialog(article.getNotes().get(0));
+            }
+            else{
+                showAddNoteDialog();
+            }
+
         }
 
         @Override
@@ -311,8 +323,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
-
-        linearLayoutForNotes = (LinearLayout) rootView.findViewById(R.id.noteBtn);//change this?
 
         webView = rootView.findViewById(R.id.page_web_view);
         initWebViewListeners();
@@ -828,6 +838,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 showFindInPage();
                 return true;
             case R.id.menu_add_note:
+                //Article article = new Article(pageInfo.getTitle().toString(), 0);//change position
                 showAddNoteDialog();
                 return true;
             case R.id.menu_page_content_issues:
@@ -883,6 +894,8 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         final EditText titleInput = new EditText(getActivity());
         final EditText contentInput = new EditText(getActivity());
 
+        article = new Article(pageInfo.getTitle().toString(), 0);//change position
+
         titleInput.setText("New Note");
         titleInput.selectAll();
         dialogBuilder.setCustomTitle(titleInput);
@@ -891,9 +904,14 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                articleNote.setNoteTitle(titleInput.getText().toString());
-                articleNote.setNoteContent(contentInput.getText().toString());
-                //inflate note button, at current location?
+                Note note = new Note(0,titleInput.getText().toString(), contentInput.getText().toString(),article.getScrollPosition());
+                //change id
+                articleNote = note;//remove later
+                //add note to article
+                article.getNotes().add(note);
+                //articleNoteDbHelper.addNote(article, note);
+                //add article to db
+                //inflate note button, at current location
 
                 Toast.makeText(getActivity(), "note has been saved", Toast.LENGTH_SHORT).show();
             }
@@ -909,7 +927,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogAddNote.show();
     }
 
-    private void showViewNoteDialog(ArticleNote note) {//opens dialogue to view notes
+    private void showViewNoteDialog(Note note) {//opens dialogue to view notes
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 
         dialogBuilder.setTitle(note.getNoteTitle());
@@ -939,7 +957,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogAddNote.show();
     }
 
-    private void showEditNoteDialog(ArticleNote note) {//opens dialog to edit note
+    private void showEditNoteDialog(Note note) {//opens dialog to edit note
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         final EditText titleInput = new EditText(getActivity());
         final EditText contentInput = new EditText(getActivity());
@@ -968,7 +986,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         dialogAddNote.show();
     }
 
-    private void showDeleteNoteDialog(ArticleNote note) {//dialog to confirm delete
+    private void showDeleteNoteDialog(Note note) {//dialog to confirm delete
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 
         dialogBuilder.setTitle("Are you sure you want to permanently delete this note?");

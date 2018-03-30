@@ -31,6 +31,14 @@ public class Note {
         this.articleId = id;
     }
 
+    public void setNoteTitle(String noteTitle) {
+        this.noteTitle = noteTitle;
+    }
+
+    public void setNoteContent(String noteContent) {
+        this.noteContent = noteContent;
+    }
+
     public String getNoteTitle() {
         return this.noteTitle;
     }
