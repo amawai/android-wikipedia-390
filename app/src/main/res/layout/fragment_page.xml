@@ -9,9 +9,9 @@
     tools:context=".main.MainActivity">
 
     <org.wikipedia.views.WikiDrawerLayout
-            android:id="@+id/page_toc_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:id="@+id/page_toc_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <org.wikipedia.views.SwipeRefreshLayoutWithScroll
             android:id="@+id/page_refresh_container"

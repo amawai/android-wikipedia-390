@@ -12,6 +12,11 @@
     <android.support.design.widget.TabItem
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:icon="@drawable/button_note"
+        android:contentDescription="@string/article_menu_bar_notes"/>
+    <android.support.design.widget.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:icon="@drawable/ic_translate_white_24dp"
         android:contentDescription="@string/menu_page_other_languages" />
     <android.support.design.widget.TabItem
