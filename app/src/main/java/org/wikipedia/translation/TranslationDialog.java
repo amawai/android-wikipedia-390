@@ -1,14 +1,12 @@
 package org.wikipedia.translation;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,25 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.wikipedia.R;
-import org.wikipedia.WikipediaApp;
-import org.wikipedia.activity.FragmentUtil;
-import org.wikipedia.analytics.WiktionaryDialogFunnel;
-import org.wikipedia.dataclient.WikiSite;
-import org.wikipedia.dataclient.page.PageClient;
-import org.wikipedia.dataclient.page.PageClientFactory;
-import org.wikipedia.dataclient.restbase.RbDefinition;
-import org.wikipedia.dataclient.restbase.page.RbPageClient;
-import org.wikipedia.dataclient.restbase.page.RbPageClient.DefinitionCallback;
 import org.wikipedia.page.ExtendedBottomSheetDialogFragment;
-import org.wikipedia.page.LinkMovementMethodExt;
-import org.wikipedia.page.Namespace;
-import org.wikipedia.page.PageTitle;
-import org.wikipedia.util.StringUtil;
-import org.wikipedia.util.log.L;
-import org.wikipedia.views.AppTextView;
-
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +24,9 @@ import butterknife.Unbinder;
  * Created by SunXP on 2018-03-29.
  */
 
-public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
+public class TranslationDialog extends ExtendedBottomSheetDialogFragment{
+
+
     public interface Callback {
         void translationShowDialog(@NonNull String text);
     }
@@ -60,7 +42,7 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
             "en" // English
     };
 
-
+    private String textTranslated;
     private ProgressBar progressbar;
     private String textToTranslate;
     private View rootView;
@@ -92,18 +74,17 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         progressbar = rootView.findViewById(R.id.translation_progress_bar);
         unbinder = ButterKnife.bind(this, rootView);
         TRANSLATION.setText("Translation");
-        loadTranslation();
+        try{
+            loadTranslation();
+        }catch(Exception e) {
 
-
-        //noTranslationFound();
-        //display the selected text
-        //call the translation api
-        //display the translated text
+        }
 
         return rootView;
     }
 
-    public void loadTranslation() {
+    private void loadTranslation() throws Exception{
+
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout translationText = rootView.findViewById(R.id.translation_selected_translated);
 
@@ -112,7 +93,6 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         loadLanguageOptions(translation);
         loadSelectedText(translation);
         translationText.addView(translation);
-
     }
 
     public void loadLanguageOptions(View translation) {
@@ -123,6 +103,54 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         languageOptions.setAdapter(adapter);
+
+        languageOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 1:
+                        try {
+                            loadTranslatedText(translation,"fr");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        try {
+                            loadTranslatedText(translation,"es");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 3:
+                        try {
+                            loadTranslatedText(translation,"ru");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 4:
+                        try {
+                            loadTranslatedText(translation,"hi");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 5:
+                        try {
+                            loadTranslatedText(translation,"ja");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void loadSelectedText(View translation) {
@@ -130,10 +158,33 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         selectedText.setText("To translate: \n" + textToTranslate);
     }
 
-    public void loadTranslatedText(View translation) {
+    public void loadTranslatedText(View translation) throws Exception{
+
         TextView translatedText = translation.findViewById(R.id.translation_translated);
+
         //CALL GOOGLE API
-        translatedText.setText("Translated: \n");
+        Translator translator = new Translator();
+        textTranslated = translator.execute(textToTranslate,"en","fr").get();
+
+        if(textTranslated.equals("-1")) {
+            noTranslationFound();
+        }else {
+            translatedText.setText("Translated: \n" + textTranslated);
+        }
+    }
+
+    public void loadTranslatedText(View translation, String newTargetLang) throws Exception{
+        TextView translatedText = translation.findViewById(R.id.translation_translated);
+
+        //CALL GOOGLE API
+        Translator translator = new Translator();
+        textTranslated = translator.execute(textToTranslate,"en",newTargetLang).get();
+
+        if(textTranslated.equals("-1")) {
+            noTranslationFound();
+        }else {
+            translatedText.setText("Translated: \n" + textTranslated);
+        }
     }
 
     public void noTranslationFound() {
