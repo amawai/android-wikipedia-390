@@ -1,7 +1,9 @@
 package org.wikipedia.page;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -11,11 +13,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.transition.Slide;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -26,8 +31,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -58,6 +67,9 @@ import org.wikipedia.page.action.PageActionTab;
 import org.wikipedia.page.action.PageActionToolbarHideHandler;
 import org.wikipedia.page.bottomcontent.BottomContentView;
 import org.wikipedia.page.leadimages.LeadImagesHandler;
+import org.wikipedia.page.notes.Article;
+import org.wikipedia.page.notes.Note;
+import org.wikipedia.page.notes.database.ArticleNoteDbHelper;
 import org.wikipedia.page.shareafact.ShareHandler;
 import org.wikipedia.page.tabs.Tab;
 import org.wikipedia.page.tabs.TabsProvider;
@@ -89,6 +101,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 import static android.app.Activity.RESULT_OK;
 import static org.wikipedia.page.PageActivity.ACTION_RESUME_READING;
 import static org.wikipedia.page.PageActivity.ACTION_SHOW_TAB_LIST;
@@ -101,6 +114,7 @@ import static org.wikipedia.util.ResourceUtil.getThemedColor;
 import static org.wikipedia.util.ThrowableUtil.isOffline;
 import static org.wikipedia.util.UriUtil.decodeURL;
 import static org.wikipedia.util.UriUtil.visitInExternalBrowser;
+
 
 public class PageFragment extends Fragment implements BackPressedHandler {
     public interface Callback {
@@ -168,7 +182,10 @@ public class PageFragment extends Fragment implements BackPressedHandler {
     private TabsProvider tabsProvider;
     private ActiveTimer activeTimer = new ActiveTimer();
 
+    private ArticleNoteDbHelper articleNoteDbHelper;
+
     private WikipediaApp app;
+    private Article articleState;
 
     @NonNull
     private final SwipeRefreshLayout.OnRefreshListener pageRefreshListener = () -> refreshPage();
@@ -185,7 +202,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
         }
 
         @Override
@@ -220,6 +236,9 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         public void onSharePageTabSelected() {
             sharePageLink();
         }
+
+        @Override
+        public void onManageNotesTabSelected() { openPageNotes(); }
 
         @Override
         public void onChooseLangTabSelected() {
@@ -287,7 +306,6 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         super.onCreate(savedInstanceState);
         app = (WikipediaApp) getActivity().getApplicationContext();
         model = new PageViewModel();
-
         pageFragmentLoadState = new PageFragmentLoadState();
 
         initTabs();
@@ -452,6 +470,14 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 pageScrollFunnel.onPageScrolled(oldScrollY, scrollY, isHumanScroll);
             }
         });
+        webView.addOnScrollChangeListener(new ObservableWebView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChanged(int oldScrollY, int scrollY, boolean isHumanScroll) {
+                if(articleState != null) {
+                    articleState.setScroll(scrollY);
+                }
+            }
+        });
         webView.setWebViewClient(new OkHttpWebViewClient() {
             @NonNull @Override public WikiSite getWikiSite() {
                 return model.getTitle().getWikiSite();
@@ -571,12 +597,17 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 ? System.currentTimeMillis()
                 : 0;
         Prefs.pageLastShown(time);
+
+        saveArticlePosition();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initPageScrollFunnel();
+        if(articleState != null && !pageFragmentLoadState.isLoading()) {
+            fetchAndUpdatePageState();
+        }
         activeTimer.resume();
     }
 
@@ -710,6 +741,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         model.setCurEntry(entry);
         model.setReadingListPage(null);
         model.setForceNetwork(isRefresh);
+        fetchArticleState();
 
         updateProgressBar(true, true, 0);
 
@@ -811,6 +843,9 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             case R.id.menu_page_find_in_page:
                 showFindInPage();
                 return true;
+            case R.id.menu_add_note:
+                showViewNoteDialog();
+                return true;
             case R.id.menu_page_content_issues:
                 showContentIssues();
                 return true;
@@ -851,12 +886,99 @@ public class PageFragment extends Fragment implements BackPressedHandler {
         }
     }
 
+    public void openPageNotes() {
+        showViewNoteDialog(articleState.getNote());
+    }
+
     @NonNull public TabLayout getTabLayout() {
         return tabLayout;
     }
 
     public int getTabCount() {
         return tabList.size();
+    }
+
+    private void showViewNoteDialog() {
+        showViewNoteDialog(articleState.getNote());
+    }
+
+    private void showViewNoteDialog(Note note) {//opens dialogue to view notes
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        dialogBuilder.setTitle("Notes for " + getTitle().getText());
+        dialogBuilder.setMessage(note.getNoteContent());
+        dialogBuilder.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+            }
+        });
+        dialogBuilder.setNeutralButton("Edit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                showEditNoteDialog(note);
+            }
+        });
+        dialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showDeleteNoteDialog(note);
+            }
+        });
+
+        AlertDialog dialogViewNote = dialogBuilder.create();
+        dialogViewNote.show();
+    }
+
+    private void showEditNoteDialog(Note note) {//opens dialog to edit note
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        final EditText contentInput = new EditText(getActivity());
+        contentInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        contentInput.setGravity(Gravity.TOP | Gravity.LEFT);
+        contentInput.setScroller(new Scroller(getContext()));
+        contentInput.setVerticalScrollBarEnabled(true);
+        contentInput.setMinLines(4);
+        contentInput.setMaxLines(4);
+
+        contentInput.setText(note.getNoteContent());
+
+        dialogBuilder.setView(contentInput);
+        dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                note.setNoteContent(contentInput.getText().toString());
+                articleNoteDbHelper.instance().updateArticleNote(articleState);
+                Toast.makeText(getActivity(), "Note saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialogEditNote = dialogBuilder.create();
+        dialogEditNote.show();
+    }
+
+    private void showDeleteNoteDialog(Note note) {//dialog to confirm delete
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+
+        dialogBuilder.setTitle("Are you sure you want to permanently erase this note?");
+        dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                //delete note and remove button?
+                articleState.getNote().setNoteContent("");
+                articleNoteDbHelper.instance().updateArticleNote(articleState);
+                Toast.makeText(getActivity(), "Note deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog dialogDeleteNote = dialogBuilder.create();
+        dialogDeleteNote.show();
     }
 
     public void showFindInPage() {
@@ -944,7 +1066,7 @@ public class PageFragment extends Fragment implements BackPressedHandler {
                 }
             });
         }
-
+        fetchAndUpdatePageState();
         checkAndShowSelectTextOnboarding();
     }
 
@@ -1425,6 +1547,65 @@ public class PageFragment extends Fragment implements BackPressedHandler {
             if (!(offline && PageActionTab.of(i).equals(PageActionTab.ADD_TO_READING_LIST))) {
                 tabLayout.disableTab(i);
             }
+        }
+    }
+
+    private void fetchArticleState() {
+        String title = getTitle().toString();
+        CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getArticleByTitle(title), new CallbackTask.DefaultCallback<Article>() {
+            @Override
+            public void success(Article existingArticle) {
+                if(existingArticle == null) {
+                    articleState = ArticleNoteDbHelper.instance().createArticle(title, 0);
+                } else {
+                    articleState = existingArticle;
+                }
+                CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getNotesFromArticle(articleState), new CallbackTask.DefaultCallback<Note>() {
+                    @Override
+                    public void success(Note result) {
+                        if(result != null) {
+                            articleState.setNote(result);
+                        } else {
+                            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().createNote(articleState, ""), new CallbackTask.DefaultCallback<Note>() {
+                                @Override
+                                public void success(Note result) {
+                                    articleState.setNote(result);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void fetchAndUpdatePageState() {
+        if(articleState != null) {
+            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getNotesFromArticle(articleState), new CallbackTask.DefaultCallback<Note>(){
+                @Override
+                public void success(Note note) {
+                    articleState.setNote(note);
+                    Log.d("Note loading", note.getNoteId() + " " + note.getNoteContent());
+                    // Bind to an adapter and notify updated data set i guess
+                }
+            });
+            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().getScrollOfArticle(articleState), new CallbackTask.DefaultCallback<Integer>() {
+                public void success(Integer scrollY) {
+                    articleState.setScroll(scrollY);
+                    webView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.scrollTo(0, scrollY);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void saveArticlePosition() {
+        if(articleState != null) {
+            CallbackTask.execute(() -> ArticleNoteDbHelper.instance().updateScrollState(articleState));
         }
     }
 

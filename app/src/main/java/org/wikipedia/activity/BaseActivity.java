@@ -13,8 +13,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.Preference;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.DraweeTransition;
@@ -33,6 +35,8 @@ import org.wikipedia.offline.OfflineManager;
 import org.wikipedia.recurring.RecurringTasksExecutor;
 import org.wikipedia.savedpages.SavedPageSyncService;
 import org.wikipedia.settings.Prefs;
+import org.wikipedia.theme.Theme;
+import org.wikipedia.theme.ThemeFittingRoomActivity;
 import org.wikipedia.util.DeviceUtil;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.PermissionUtil;
@@ -239,6 +243,26 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Subscribe public void on(ThemeChangeEvent event) {
             recreate();
+        }
+    }
+
+    //This transition changes the color theme when private browsing is activated
+    //The prevention of saving articles to both the recent search table and and history tables are implemented
+    //within the classes dealing with the addition of the respective entries into the db (the SearchFragment.java and UpdateHistoryTask.java
+    //classes)
+    public void privateBrowsingTransition() {
+        //when the toggle is on, the theme gets switched to the already present dark theme
+        //the user can no longer change the app theme until after they switch the toggle off and disable private browsing
+        if (Prefs.isPrivateBrowsingEnabled()) {
+            //changes to dark theme on when toggled on and user can no longer change color theme
+            WikipediaApp.getInstance().setCurrentTheme(Theme.DARK);
+            Toast.makeText(getApplication(),"Private browsing enabled", Toast.LENGTH_SHORT).show();
+        }
+        //in the false case, articles become saved to recent searches and history of articles viewed
+        else {
+            //dark theme remains but user can now change app color theme
+            WikipediaApp.getInstance().setCurrentTheme(WikipediaApp.getInstance().getCurrentTheme());
+            Toast.makeText(getApplicationContext(),"Private browsing disabled, app theme can be altered", Toast.LENGTH_SHORT).show();
         }
     }
 
