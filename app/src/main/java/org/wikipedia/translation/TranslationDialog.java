@@ -103,7 +103,7 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         return rootView;
     }
 
-    private void loadTranslation() {
+    public void loadTranslation() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout translationText = rootView.findViewById(R.id.translation_selected_translated);
 
@@ -115,7 +115,7 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
 
     }
 
-    private void loadLanguageOptions(View translation) {
+    public void loadLanguageOptions(View translation) {
 
         //PLACEHOLDER FOR CHOOSING LANGUAGE OPTIONS
         Spinner languageOptions = translation.findViewById(R.id.translation_lang_options);
@@ -125,18 +125,18 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment {
         languageOptions.setAdapter(adapter);
     }
 
-    private void loadSelectedText(View translation) {
+    public void loadSelectedText(View translation) {
         TextView selectedText = translation.findViewById(R.id.translation_selected);
         selectedText.setText("To translate: \n" + textToTranslate);
     }
 
-    private void loadTranslatedText(View translation) {
+    public void loadTranslatedText(View translation) {
         TextView translatedText = translation.findViewById(R.id.translation_translated);
         //CALL GOOGLE API
         translatedText.setText("Translated: \n");
     }
 
-    private void noTranslationFound() {
+    public void noTranslationFound() {
         noTranslationFound = rootView.findViewById(R.id.translation_not_found);
         noTranslationFound.setText("No translation was found.");
         noTranslationFound.setVisibility(View.VISIBLE);
