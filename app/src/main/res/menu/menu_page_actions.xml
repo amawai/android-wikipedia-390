@@ -11,7 +11,7 @@
           app:showAsAction="never"
           android:enabled="false" />
     <item android:id="@+id/menu_add_note"
-          android:title="Add Note"
+          android:title="@string/menu_page_article_notes"
           app:showAsAction="never"
           android:enabled="false" />
     <item android:id="@+id/menu_page_add_to_list"
