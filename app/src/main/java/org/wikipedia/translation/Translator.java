@@ -1,7 +1,6 @@
 package org.wikipedia.translation;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -14,8 +13,11 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Created by aman_ on 3/29/2018.
+ * Purpose: The class makes a call to the Yandex API to receieve translations for highlighted text within articles
+ *
  */
 
+// The class needs to extend Asynctask as it runs in a new thread
 public class Translator extends AsyncTask <String, Void, String> {
 
     private final String KEY;
@@ -28,6 +30,7 @@ public class Translator extends AsyncTask <String, Void, String> {
         CHARSET = StandardCharsets.UTF_8.name();
     }
 
+    // calls to the Yandex API are made within this method
     @Override
     protected String doInBackground(String... strings) {
         String lang = strings[1] +"-"+strings[2];
@@ -79,6 +82,7 @@ public class Translator extends AsyncTask <String, Void, String> {
         return result;
     }
 
+    // Grabs the result from doInBackground and returns it to the caller
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);

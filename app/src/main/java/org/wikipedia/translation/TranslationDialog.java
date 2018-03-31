@@ -1,12 +1,8 @@
 package org.wikipedia.translation;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,28 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.wikipedia.R;
-import org.wikipedia.WikipediaApp;
-import org.wikipedia.activity.FragmentUtil;
-import org.wikipedia.analytics.WiktionaryDialogFunnel;
-import org.wikipedia.dataclient.WikiSite;
-import org.wikipedia.dataclient.page.PageClient;
-import org.wikipedia.dataclient.page.PageClientFactory;
-import org.wikipedia.dataclient.restbase.RbDefinition;
-import org.wikipedia.dataclient.restbase.page.RbPageClient;
-import org.wikipedia.dataclient.restbase.page.RbPageClient.DefinitionCallback;
 import org.wikipedia.page.ExtendedBottomSheetDialogFragment;
-import org.wikipedia.page.LinkMovementMethodExt;
-import org.wikipedia.page.Namespace;
-import org.wikipedia.page.PageTitle;
-import org.wikipedia.util.StringUtil;
-import org.wikipedia.util.log.L;
-import org.wikipedia.views.AppTextView;
-
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,12 +79,6 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment{
         }catch(Exception e) {
 
         }
-
-
-        //noTranslationFound();
-        //display the selected text
-        //call the translation api
-        //display the translated text
 
         return rootView;
     }
@@ -177,7 +148,6 @@ public class TranslationDialog extends ExtendedBottomSheetDialogFragment{
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-                // sometimes you need nothing here
             }
         });
     }

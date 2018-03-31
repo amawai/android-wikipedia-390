@@ -27,11 +27,12 @@ public class TranslatorTest{
     @Test
     public void testExecute() {
         Translator mockTranslator = PowerMockito.mock(Translator.class);
+        Translator translator = new Translator();
         try{
-            when(mockTranslator.execute("hello","en","fr").get()).thenReturn("bonjour");
-            assertEquals("bonjour", mockTranslator.execute("hello","en","fr"));
+            when(mockTranslator.execute("hello","en","fr")).thenReturn(translator);
+            assertEquals(translator, mockTranslator.execute("hello","en","fr"));
         }catch(Exception e) {
-            System.out.print("Error" + e.getMessage());
+            e.getStackTrace();
         }
     }
 }
