@@ -635,6 +635,8 @@
     <string name="date_selected_date">Selected Date</string>
     <string name="date_departure">Select Departure Date</string>
     <string name="destination_picker">Destinations</string>
+    <string name="article_menu_bar_notes">Manage notes</string>
+    <string name="menu_page_article_notes">Article notes</string>
     <plurals name="diff_years">
         <item quantity="one">Last year</item>
         <item quantity="other">%d years ago</item>
