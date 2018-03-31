@@ -1,4 +1,4 @@
-package org.wikipedia.translation;
+package org.wikipedia.espresso.translation;
 
 
 import android.support.test.espresso.ViewInteraction;
@@ -23,6 +23,10 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
+
+/**
+ * Purpose: This tests the longClick functionality within an article for the Translate button
+ */
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
