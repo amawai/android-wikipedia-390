@@ -2,6 +2,7 @@ package org.wikipedia.espresso.translation;
 
 import android.graphics.Rect;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Root;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.uiautomator.UiDevice;
@@ -9,6 +10,7 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +22,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -81,13 +84,17 @@ public class TranslatorDialogEspressoTest {
         mDevice.swipe(coordinates.centerX(), coordinates.centerY(), coordinates.centerX(), coordinates.centerY(), 100);
 
 
-        ViewInteraction translateButton = onView(withText(R.id.menu_text_select_translate));
+        ViewInteraction translateButton = onView(withText("Translate")).inRoot(isPopupWindow());
+        translateButton.perform(click());
 
-//        translateButton.perform(click());
-//
-//        UiObject translationOverlay = mDevice.findObject(new UiSelector()
-//                .text("Translation"));
+        UiObject translationOverlay = mDevice.findObject(new UiSelector()
+                .text("Translation"));
 
+        assertTrue(translationOverlay.exists());
+    }
+
+    public static Matcher<Root> isPopupWindow() {
+        return isPlatformPopup();
     }
 
 
