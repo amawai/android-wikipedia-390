@@ -27,9 +27,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
     public Note fromCursor(Cursor c) {
         Note note = new Note(
                 ArticleNoteContract.Col.ARTICLE_ID.val(c),
-                ArticleNoteContract.Col.NOTE_TITLE.val(c),
-                ArticleNoteContract.Col.NOTE_CONTENT.val(c),
-                ArticleNoteContract.Col.SCROLL_POSITION.val(c)
+                ArticleNoteContract.Col.NOTE_CONTENT.val(c)
         );
         note.setId(ArticleNoteContract.Col.ID.val(c));
         return note;
@@ -43,9 +41,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
                 List<Column<?>> cols = new ArrayList<>();
                 cols.add(ArticleNoteContract.Col.ID);
                 cols.add(ArticleNoteContract.Col.ARTICLE_ID);
-                cols.add(ArticleNoteContract.Col.NOTE_TITLE);
                 cols.add(ArticleNoteContract.Col.NOTE_CONTENT);
-                cols.add(ArticleNoteContract.Col.SCROLL_POSITION);
                 return cols.toArray(new Column<?>[cols.size()]);
             default:
                 return super.getColumnsAdded(version);
@@ -56,9 +52,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
     protected ContentValues toContentValues(Note row) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ArticleNoteContract.Col.ARTICLE_ID.getName(), row.getArticleId());
-        contentValues.put(ArticleNoteContract.Col.NOTE_TITLE.getName(), row.getNoteTitle());
         contentValues.put(ArticleNoteContract.Col.NOTE_CONTENT.getName(), row.getNoteContent());
-        contentValues.put(ArticleNoteContract.Col.SCROLL_POSITION.getName(), row.getScrollPosition());
         return contentValues;
     }
 
@@ -71,7 +65,7 @@ public class ArticleNoteTable extends DatabaseTable<Note> {
 
     @Override
     protected String[] getUnfilteredPrimaryKeySelectionArgs(@NonNull Note row) {
-        return new String[] {row.getNoteTitle()};
+        return new String[] {String.valueOf(row.getNoteId())};
     }
 
     @Override

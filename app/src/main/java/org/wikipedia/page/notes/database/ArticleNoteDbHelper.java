@@ -111,17 +111,15 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    public Note addNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
-        Note newNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
-        return addNote(article, newNote);
+    public Note createNote(@NonNull Article article, String noteDescription) {
+        Note newNote = new Note(article.getId(), noteDescription);
+        return createNote(article, newNote);
     }
 
-    public Note addNote(@NonNull Article article, @NonNull Note note) {
+    public Note createNote(@NonNull Article article, @NonNull Note note) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            //addNote(db, article, note);
-            //db.setTransactionSuccessful();
             long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
                     Note.DATABASE_TABLE.toContentValues(note));
             db.setTransactionSuccessful();
@@ -132,17 +130,12 @@ public class ArticleNoteDbHelper {
         }
     }
 
-    public void addNotes(@NonNull Article article, @NonNull List<Note> notes) {
-        SQLiteDatabase db = getWritableDatabase();
-        addNotes(db, article, notes);
-    }
 
-    public void addNotes(@NonNull SQLiteDatabase db, @NonNull Article article, @NonNull List<Note> notes) {
+    public void updateArticleNote(@NonNull Article article) {
+        SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            for (Note note : notes) {
-                insertNoteInDb(db, article, note);
-            }
+            updateNoteInDb(db, article.getNote());
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -150,66 +143,26 @@ public class ArticleNoteDbHelper {
     }
 
 
-    public void updateNote(@NonNull Article article, String noteTitle, String noteDescription, int scrollPosition) {
-        Note updatedNote = new Note(article.getId(), noteTitle, noteDescription, scrollPosition);
-        updateNote(updatedNote);
+    public void deleteArticleNote(@NonNull Article article) {
+        deleteNoteFromDb(getReadableDatabase(), article.getNote());
     }
 
-    public void updateNote(@NonNull Note note) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            updateNoteInDb(db, note);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-    }
-
-
-    public void deleteNote(@NonNull Note note) {
-        deleteNoteFromDb(getReadableDatabase(), note);
-    }
-
-    public List<Note> getNotesFromArticle(@NonNull Article article) {
+    public Note getNotesFromArticle(@NonNull Article article) {
         SQLiteDatabase db = getReadableDatabase();
         return getNotesFromArticle(db, article);
     }
 
 
-    public List<Note> getNotesFromArticle(@NonNull SQLiteDatabase db, @NonNull Article article) {
-        List<Note> noteList = new ArrayList<>();
+    public Note getNotesFromArticle(@NonNull SQLiteDatabase db, @NonNull Article article) {
+        Note note = null;
         try (Cursor cursor = db.query(ArticleNoteContract.TABLE, null,
                 ArticleNoteContract.Col.ARTICLE_ID.getName() + " = ?", new String[]{Long.toString(article.getId())},
                 null, null,null)) {
-            while (cursor.moveToNext()) {
-                Note note = Note.DATABASE_TABLE.fromCursor(cursor);
-                noteList.add(note);
+            if (cursor.moveToFirst()) {
+                note = Note.DATABASE_TABLE.fromCursor(cursor);
             }
         }
-        for (Note list : noteList) {
-            Log.d("ARTICLE_HELPER", "title: " + list.getNoteTitle() + " scroll : " + list.getScrollPosition());
-        }
-        Log.d("ARTICLE_HELPER", "size is " + noteList.size());
-        return noteList;
-    }
-
-    public void deleteAllNotesFromArticle(@NonNull Article article) {
-        List<Note> notesToDelete = getNotesFromArticle(article);
-        for (Note note : notesToDelete) {
-            deleteNote(note);
-        }
-    }
-
-    private void addNote(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
-        insertNoteInDb(db, article, note);
-    }
-
-    private void insertNoteInDb(SQLiteDatabase db, @NonNull Article article, @NonNull Note note) {
-        note.setArticleId(article.getId());
-        long id = db.insertOrThrow(ArticleNoteContract.TABLE, null,
-                Note.DATABASE_TABLE.toContentValues(note));
-        note.setId(id);
+        return note;
     }
 
     private void updateScrollInDb(SQLiteDatabase db, @NonNull Article article) {
@@ -224,7 +177,7 @@ public class ArticleNoteDbHelper {
         int result = db.update(ArticleNoteContract.TABLE, Note.DATABASE_TABLE.toContentValues(note),
                 ArticleNoteContract.Col.ID.getName() + " = ?", new String[]{Long.toString(note.getNoteId())});
         if (result != 1) {
-            L.w("Failed to update db entry for page " + note.getNoteTitle());
+            L.w("Failed to update db entry for note" + note.getNoteId());
         }
     }
 
@@ -233,7 +186,7 @@ public class ArticleNoteDbHelper {
                 ArticleNoteContract.Col.ID.getName() + " = ?",
                 new String[]{Long.toString(note.getNoteId())});
         if (result != 1) {
-            L.w("Failed to delete db entry for page " + note.getNoteTitle());
+            L.w("Failed to update db entry for note" + note.getNoteId());
         }
     }
 

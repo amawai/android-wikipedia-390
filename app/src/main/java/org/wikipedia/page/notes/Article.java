@@ -15,8 +15,7 @@ public class Article {
     private long id;
     @NonNull private String title;
     private int scrollPosition;
-
-    private List<Note> notes = new ArrayList<>();
+    private Note note;
 
     public static final ArticleTable DATABASE_TABLE = new ArticleTable();
 
@@ -34,12 +33,12 @@ public class Article {
         return this.scrollPosition;
     }
 
-    public List<Note> getNotes() {
-        return this.notes;
+    public Note getNote() {
+        return this.note;
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    public void setNote(Note notes) {
+        this.note = notes;
     }
 
     public long getId() {

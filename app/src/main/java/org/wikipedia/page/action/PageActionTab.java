@@ -18,6 +18,10 @@ public enum PageActionTab implements EnumCode {
             cb.onSharePageTabSelected();
         }
     },
+    MANAGE_NOTES() {
+        @Override
+        public void select(@NonNull Callback cb) { cb.onManageNotesTabSelected(); }
+    },
     CHOOSE_LANGUAGE() {
         @Override
         public void select(@NonNull Callback cb) {
@@ -55,6 +59,7 @@ public enum PageActionTab implements EnumCode {
     public interface Callback {
         void onAddToReadingListTabSelected();
         void onSharePageTabSelected();
+        void onManageNotesTabSelected();
         void onChooseLangTabSelected();
         void onFindInPageTabSelected();
         void onViewToCTabSelected();

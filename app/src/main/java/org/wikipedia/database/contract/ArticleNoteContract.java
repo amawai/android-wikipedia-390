@@ -20,11 +20,9 @@ public interface ArticleNoteContract {
     interface Col {
         IdColumn ID = new IdColumn(TABLE);
         LongColumn ARTICLE_ID = new LongColumn(TABLE, "noteId", "integer");
-        StrColumn NOTE_TITLE = new StrColumn(TABLE, "title", "text not null");
-        StrColumn NOTE_CONTENT = new StrColumn(TABLE, "noteContent", "text not null");
-        IntColumn SCROLL_POSITION = new IntColumn(TABLE, "scrollPosition", "integer");
+        StrColumn NOTE_CONTENT = new StrColumn(TABLE, "noteContent", "text");
 
-        String[] SELECTION = DbUtil.qualifiedNames(NOTE_TITLE);
-        String[] ALL = DbUtil.qualifiedNames(ID, NOTE_TITLE, NOTE_CONTENT, ARTICLE_ID, SCROLL_POSITION);
+        String[] SELECTION = DbUtil.qualifiedNames(ARTICLE_ID);
+        String[] ALL = DbUtil.qualifiedNames(ID, NOTE_CONTENT, ARTICLE_ID);
     }
 }

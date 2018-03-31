@@ -10,17 +10,17 @@ public class Note {
     private long id;
 
     private long articleId;
-    private String noteTitle;
     private String noteContent;
-    private int scrollPosition;
 
     public static final ArticleNoteTable DATABASE_TABLE = new ArticleNoteTable();
 
-    public Note(long articleId, String noteTitle, String noteContent, int scrollPosition) {
+    public Note(long articleId) {
+        this(articleId,"");
+    }
+
+    public Note(long articleId, String noteContent) {
         this.articleId = articleId;
-        this.noteTitle = noteTitle;
         this.noteContent = noteContent;
-        this.scrollPosition = scrollPosition;
     }
 
     public void setId(long id) {
@@ -31,29 +31,12 @@ public class Note {
         this.articleId = id;
     }
 
-
-    public void setNoteTitle(String title) {
-        this.noteTitle = title;
-    }
-
     public void setNoteContent(String content) {
         this.noteContent = content;
     }
 
-    public void setScrollPosition(int scroll) {
-        this.scrollPosition = scroll;
-    }
-
-    public String getNoteTitle() {
-        return this.noteTitle;
-    }
-
     public String getNoteContent() {
         return this.noteContent;
-    }
-
-    public int getScrollPosition() {
-        return this.scrollPosition;
     }
 
     public long getArticleId() {
