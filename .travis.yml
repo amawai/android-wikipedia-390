@@ -48,8 +48,17 @@ jobs:
     - stage: Release 2 Tests
       language: android
       script: ./gradlew -p app/src/test/java/org/wikipedia/travel
-      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/travel
       script: ./gradlew -p app/src/androidTest/java/org/wikipedia/travel
+      # will build the release 3 tests added by our team
+    - stage: Release 3 Tests
+      language: android
+      script: ./gradlew -p app/src/test/java/org/wikipedia/translation
+      script: ./gradlew -p app/src/test/java/org/wikipedia/search
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/page
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/privateBrowsing
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/articleNote
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/translation
     # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
