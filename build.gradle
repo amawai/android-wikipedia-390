@@ -1,3 +1,5 @@
+//apply plugin: 'gnag'
+
 buildscript {
     repositories {
         jcenter()
@@ -7,7 +9,31 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.facebook.testing.screenshot:plugin:0.4.2'
         classpath 'com.google.android.gms:play-services-places:11.8.0'
+        //classpath 'com.btkelly:gnag:2.0.0'
     }
+}
+
+plugins {
+    id "se.bjurr.violations.violation-comments-to-github-gradle-plugin" version "1.40"
+}
+
+task violationCommentsToGitHub(type: se.bjurr.violations.comments.github.plugin.gradle.ViolationCommentsToGitHubTask) {
+    repositoryOwner = "tomasbjerre";
+    repositoryName = "violations-test"
+    pullRequestId = System.properties['GITHUB_PULLREQUESTID']
+    username = System.properties['GITHUB_USERNAME']
+    password = System.properties['GITHUB_PASSWORD']
+    oAuth2Token = System.properties['GITHUB_OAUTH2TOKEN']
+    gitHubUrl = "https://api.github.com/"
+    createCommentWithAllSingleFileComments = false
+    createSingleFileComments = true
+    violations = [
+            ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$"],
+            ["PMD",        ".", ".*/pmd/.*\\.xml\$"],
+            ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$"],
+            ["JSHINT",     ".", ".*/jshint/.*\\.xml\$"],
+            ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$"]
+    ]
 }
 
 allprojects {
@@ -16,3 +42,32 @@ allprojects {
         google()
     }
 }
+
+/*
+gnag {
+    github {
+        repoName 'amawai/android-wikipedia-390'
+    }
+    enabled true
+    failOnError true
+    checkstyle {
+        enabled true
+        reporterConfig project.file('config/checkstyle.xml')
+    }
+    pmd {
+        enabled true
+        reporterConfig project.file('config/pmd.xml')
+    }
+    findbugs {
+        enabled true
+        reporterConfig project.file('config/findbugs.xml')
+    }
+    ktlint {
+        enabled true
+    }
+    androidLint {
+        enabled true
+        severity 'Error'
+    }
+}
+*/

@@ -1,4 +1,13 @@
 language: android
+# dist: trusty
+sudo: false
+
+env:
+# Token for Tomas Bejerre's Violation-Comments to Github Approach
+  - secure: "fUIcBXhf/zCQqcrYlyDXUlqhYRwHX6L7dotsCTmmzBE3B3PelFcHmLjk7xZo+kZKGnbAfzU0CvUZcbdIQ71sAvPpbkUZotgw7CtnYWFai87N7CRbQJuZSXSfP9w+8G6y/aYNkBgIoo1Vh0ML6qOW3vGelUMcPrPIjhx7pT/gO0J8d/MoPdOJDpUMyCaeoPmiTt2ReQZMEQlOkmUX/NfZJVdW0MPXW1FlWgAa1cxTIbJC8OaRjjli6g/UijnKeWDB/dAlzdaW/rg2t8ey4UNqx4TIOh43j2y57ruVMO9Y+WZ1qA9V+wihtqyBu+Lg6ado8uONZEZ8GNgyu70xxZTrRGTNc1TIWWXfubz1emmQiy3ob3S4weo13trMWvK788UbfHS7cpfi3HFkXCTugtsWbtc+QMKAa/8fwgQm91Xi5/p60DPbHbObxhSVdWWbDPvS+SBYo78DKiQZF6YBYUXBqcQjAYJF380FdvDV8Q6Um23OH3pEWw13dz++6PSCROyn1uqbakIUPNzMaw+fG20QGvzfD1m5DyPb+8UqkEeX0fGXRVrFKP+XXeNHe7H/JlSzp7Ye7fzCxNOK7URE92hXaBQChFHCG+0qLwzPuPk51K1xdX8w+2RDD052QejZUObA4y3yJk8ztL66n9ASJmUsRWFsapc17RZc1WtLx5eTpEw="
+
+# Token for GNAG approach
+#  - secure: fvKArEhnooc8DLMHoPmD+ZKq6Z+TJo8Csu8aP73Z44QB86KuBY2Zw6f8pQKvbd7jEHYHnFSH4ePcqhZtAKmcb7Udxlmyw3d/HXsKwo3+566tWS9ZgbH0BywfrXULMu7TNmwa/QCi8KVnh2zNfRU1w1M/F3XMPzBQPVdB2oGHKb0skr6cbINsS7ODvBxTPtwnjAyWOcuQHgdXfUTs9yyjeF2Du4q1cKdTP4CB+TYDKTPfQdxxNnS6BiVwDDXzfjvaJ9mWAWfjyZ1NGf9BjSXX3T61H/jhIJgw1QwmstI0F8153mFHVtsV0cWcOlHfYNRJD07mTIkE9Q8afxawEhrhE7nfd5ZXaCumy4axZjTer/hQyjjEorGjV2esmHidpyX9d+3SsEA08plapgeQVR4jCHCoKWpnZVqbc9aUtyLukdU8DbHDssuEmVop8otHchcgPuFbmq3I8P25b0ajn7gDDVgGLkcyQ9kR1eStiuyKa10/28c9EX6DkBpeTKgA1esBzqSAo8mGLJxpaixogKQTSmpnv8/sbzmOoMS01FXrnJkSG8C3R0H8/4RC7YjvrtLyG7hU4ZnG1QOk1YgSDTMcgpIvqMxUC6WjfYOjT+shBNhAyBBrVuhdCz8EzuCAlCHqjL5XyiY/H6i+1oqSCJ4m2mcWm/MH82tN8ZNZgskQXXo=
 
 before_install:
   - yes | sdkmanager "platforms;android-27"
@@ -9,6 +18,9 @@ android:
     - android-27
   licenses:
     - 'android-sdk-license-.+'
+
+jdk:
+    - oraclejdk8
 
 notifications:
     # travis update notifications for email on success and on failure
@@ -68,3 +80,23 @@ jobs:
         skip_cleanup: true
         on:
           tags: true
+
+# static analysis for pull requests introduction
+script:
+  - ./gradlew build violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_OAUTH2TOKEN=$GITHUB_OAUTH2TOKEN -i --stacktrace
+# branches:
+#    only:
+#    - master
+#    - develop
+#    - travis-static-analysis
+
+#script: "./travis-build.sh"
+
+#addons:
+#  sonarcloud:
+#    organization: "jadmalek"
+#    token:
+#      secure: "cUgr84qP5ay9X7rdAHcfCkjbSmsxbeybJRWj1EGsNM3QckaIjhEiR3we8vpzBYXsgdbIUeTc1pwxYzh7jqcK4hqRpsALq6jSvuO4VS2mo9YIC/8NScMZ3KjqmDnyO9eiRaL7evI0cBaKxOhTXsLZbundkkLCImkc1z+ayrqciorzB55ABwhQo6cVwmfhSBwFfb3OjB8OCspqMVn+KPqQnoTO2L0apzMAqNdqCDLS/IJ5eIa8Ply+3HdlrvO8vxVtgzuCyAYROCoDY/ChFSVQ64uDdEOFUcp8v8b2aY0jIi1h+JzeatQG6dKWkCQl/EBam3WcOHKPohMQFjGpLD2duJ8HsdyLcy98bAiGdFoJzjnxd96RX+ssj6cEDGAUruezz/tJ+U6tWEBS4ClJZ2BnMALAWg8t61692igaaUo+/cGsGLFP3eOHSKvNbbtE7rWlCgAf2o2oOVVLETp79h4Zitk2M6MeIAJU4IcEzU6TUEkny/kXmA4c34f7oZ/Cgcp8wLzlH5kTkpOvBqX2KQxcl0QG5qwnNtevZXOxPjEBnlxL+4VcLRFzBTRc5/wbWRooWZEjsKrF2nQO8kF7B3Mcuh/tgMWCg2vcG2ULDHl9mUkvqLYe4pqCNkZtifOHjKmejo3hk8aifetGRsdGLEvcoeUb4Bh1nCppIAd2fksK3P8="
+#script:
+  # other script steps might be done before running the actual analysis
+#  - sonar-scanner
