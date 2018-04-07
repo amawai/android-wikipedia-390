@@ -38,15 +38,5 @@ public class OnThisDayNotifications extends BroadcastReceiver {
         }
     }
 
-    //Will remove this upon confirmation of static analysis reporting
-    void testMethodForStaticAnalysis(String a, String b) {
-        if (a == null) {
-            System.out.println();
-            System.out.println();
-        } else {
-        }
-        a.length();
-    }
-
 }
 
