@@ -1,5 +1,3 @@
-//apply plugin: 'gnag'
-
 buildscript {
     repositories {
         jcenter()
@@ -9,45 +7,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.facebook.testing.screenshot:plugin:0.4.2'
         classpath 'com.google.android.gms:play-services-places:11.8.0'
-        //classpath 'com.btkelly:gnag:2.0.0'
     }
 }
-
-/*
-plugins {
-    id "com.btkelly.gnag" version "2.0.0"
-    id "com.jfrog.bintray" version "1.6"
-    id "com.github.hierynomus.license" version "0.12.1"
-}
-*/
-
-/*
-plugins {
-    id "se.bjurr.violations.violation-comments-to-github-gradle-plugin" version "1.40"
-}
-
-task violationCommentsToGitHub(type: se.bjurr.violations.comments.github.plugin.gradle.ViolationCommentsToGitHubTask) {
-    repositoryOwner = "tomasbjerre";
-    repositoryName = "violations-test"
-    pullRequestId = System.properties['GITHUB_PULLREQUESTID']
-    username = System.properties['GITHUB_USERNAME']
-    password = System.properties['GITHUB_PASSWORD']
-    oAuth2Token = System.properties['GITHUB_OAUTH2TOKEN']
-    gitHubUrl = "https://api.github.com/"
-    createCommentWithAllSingleFileComments = true
-    createSingleFileComments = true
-    commentOnlyChangedContent = false
-    minSeverity = se.bjurr.violations.lib.model.SEVERITY.INFO //ERROR, INFO, WARN
-*/
-//    violations = [
-//            ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$",   "Findbugs"],
-//            ["PMD",        ".", ".*/pmd/.*\\.xml\$",        "PMD"],
-//            ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$", "Checkstyle"],
-//            ["JSHINT",     ".", ".*/jshint/.*\\.xml\$",     "JSHint"],
-//            ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$",     "CssLint"]
-//    ]
-//}
-
 
 allprojects {
     repositories {
@@ -55,32 +16,3 @@ allprojects {
         google()
     }
 }
-
-/*
-gnag {
-    github {
-        repoName 'amawai/android-wikipedia-390'
-    }
-    enabled true
-    failOnError true
-    checkstyle {
-        enabled true
-        reporterConfig project.file('config/checkstyle.xml')
-    }
-    pmd {
-        enabled true
-        reporterConfig project.file('config/pmd.xml')
-    }
-    findbugs {
-        enabled true
-        reporterConfig project.file('config/findbugs.xml')
-    }
-    ktlint {
-        enabled true
-    }
-    androidLint {
-        enabled true
-        severity 'Error'
-    }
-}
-*/

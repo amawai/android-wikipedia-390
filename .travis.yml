@@ -1,13 +1,7 @@
 language: android
-#dist: trusty
-#sudo: false
 
 env:
-# Token for Tomas Bejerre's Violation-Comments to Github Approach
-#  - secure: "YU0gd/xRYYCj50t1ysRH8+AiWyHiAOv8d0xWkbvyzpYl8quoPQpBkteRSOjDAkkdNyPYN5VFl1quarxeUixpXzY6aJSyyV1Ubc430L4nopZl2xeswYaT9Ree5zkKNpcb7cQfxmUI/aPTEFyoO/aZ0zI0o7GI+gWFw4z1VsIkF9xY2PKZa4VaVYedb7XTB+BP3PceVvdVM6fCItrv5NziYQi0OZNaQmhGzqSvYn/KLfLqVPNGddbUYGtGse7RyztPtBdEiezhU2jAP3eYWXy6pporh9xVAPGqoQ/56KJRzoE6vFXo/NGFiGOscpohJVKxHw2GSZuFDKaGG5ICl8o3ONSk2C9zNS+tWtVI5Mbw4m/OQzE6SvGju15m1PQhsi5pmQ9VUU56V/SPelVRGS3+KcirdfCz2HG7P2DMJrg2XUMvvjvr3VPexu9BGbztEju5E6k9bOaW54UffGJZ+KhjiIhRFbBup1+sfiPapVFyHRaoD6kwHbuda++1KtMp/wfsGcuKQSw3HpqFzjAM1V6Le3chLpPAaQ5Gc+5+/MwniVRpoQ3Fk/LtbCGqH+dDhJPvD+1OYDob17ZeVGTV3SNEMjBrioovqhEGG8ooHngNMj20bFJiLXZtzRmC6D8/uYivDGqIxWVT/MKwk44baL7Z9wCru291wwzw1ostRt3rYZA="
-# Token for GNAG approach
-#  - secure: fvKArEhnooc8DLMHoPmD+ZKq6Z+TJo8Csu8aP73Z44QB86KuBY2Zw6f8pQKvbd7jEHYHnFSH4ePcqhZtAKmcb7Udxlmyw3d/HXsKwo3+566tWS9ZgbH0BywfrXULMu7TNmwa/QCi8KVnh2zNfRU1w1M/F3XMPzBQPVdB2oGHKb0skr6cbINsS7ODvBxTPtwnjAyWOcuQHgdXfUTs9yyjeF2Du4q1cKdTP4CB+TYDKTPfQdxxNnS6BiVwDDXzfjvaJ9mWAWfjyZ1NGf9BjSXX3T61H/jhIJgw1QwmstI0F8153mFHVtsV0cWcOlHfYNRJD07mTIkE9Q8afxawEhrhE7nfd5ZXaCumy4axZjTer/hQyjjEorGjV2esmHidpyX9d+3SsEA08plapgeQVR4jCHCoKWpnZVqbc9aUtyLukdU8DbHDssuEmVop8otHchcgPuFbmq3I8P25b0ajn7gDDVgGLkcyQ9kR1eStiuyKa10/28c9EX6DkBpeTKgA1esBzqSAo8mGLJxpaixogKQTSmpnv8/sbzmOoMS01FXrnJkSG8C3R0H8/4RC7YjvrtLyG7hU4ZnG1QOk1YgSDTMcgpIvqMxUC6WjfYOjT+shBNhAyBBrVuhdCz8EzuCAlCHqjL5XyiY/H6i+1oqSCJ4m2mcWm/MH82tN8ZNZgskQXXo=
-# Token for Codacy Plugin
+# CODACY_PROJECT_TOKEN token
   - secure: "OZh/LwaukUtuyPO477tzN+6E3RR2GljUR3V74wyTVYuBSMkwDv0kX5eHOd08kkWnq/JnCAb8Nq9QwyUHPPotpwnjxbcBnPMiMP9AIuWYr0IeCCdoJswwnZSt1dX0GLVLnJE6hEDMIb+ULxNGsxLZNlCa5xmODiYfSCndLByEqoh6IwaDjDxlW5qwTXXFmW4S8rzoTDgYMuiJeNyqqcAT59ZHpos79tYL4odTMRoFtxn/cxPBwQy7yI4zgkfFJHOEjAdQgpkMMQ2iYSbm0kk+IEPRnk6tiDfv6DmXkbQ3x0osVndJ9EFgLCLsm/uWblrJC2q+bJTOa7xc022HarKQxTQc868rvCMKeRTpY1nYf3W923m9vNLUmiKs9De5+i56/7/5P4YXLTBjW9p/7u35/4y4CIe6isi1rwmw+K7qVnt/ngQTAl6/fI35jTKUu0xhN6btmY8IxzPOFbdp+ZyW1VXZMLsPFeE+C4yQLyKs9kDy4k5KC3v51kQKlVZy6DYusfaGYaw50z3rYfeWYh4EOWEF3t7MY3sxMSNjR/Yjb1dfW+/0FmfGmJt0waGcwIG/HEGoyytzOUi0RxhcxieVeNAmxRzEHu46aSm9+SJg9+8KRd4X5Z+jaGtedmlux3cpFLF++/M+RjlrbWlXNy75n/Jb3KYGpckojNuoQ4O2quM="
 
 before_install:
@@ -86,23 +80,3 @@ jobs:
         skip_cleanup: true
         on:
           tags: true
-
-# static analysis for pull requests introduction
-#script:
-#  - ./gradlew build violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_OAUTH2TOKEN=$GITHUB_OAUTH2TOKEN -i --stacktrace
-#branches:
-#   only:
-#    - master
-#    - develop
-#    - travis-static-analysis
-
-#script: "./travis-build.sh"
-
-#addons:
-#  sonarcloud:
-#    organization: "jadmalek"
-#    token:
-#      secure: "cUgr84qP5ay9X7rdAHcfCkjbSmsxbeybJRWj1EGsNM3QckaIjhEiR3we8vpzBYXsgdbIUeTc1pwxYzh7jqcK4hqRpsALq6jSvuO4VS2mo9YIC/8NScMZ3KjqmDnyO9eiRaL7evI0cBaKxOhTXsLZbundkkLCImkc1z+ayrqciorzB55ABwhQo6cVwmfhSBwFfb3OjB8OCspqMVn+KPqQnoTO2L0apzMAqNdqCDLS/IJ5eIa8Ply+3HdlrvO8vxVtgzuCyAYROCoDY/ChFSVQ64uDdEOFUcp8v8b2aY0jIi1h+JzeatQG6dKWkCQl/EBam3WcOHKPohMQFjGpLD2duJ8HsdyLcy98bAiGdFoJzjnxd96RX+ssj6cEDGAUruezz/tJ+U6tWEBS4ClJZ2BnMALAWg8t61692igaaUo+/cGsGLFP3eOHSKvNbbtE7rWlCgAf2o2oOVVLETp79h4Zitk2M6MeIAJU4IcEzU6TUEkny/kXmA4c34f7oZ/Cgcp8wLzlH5kTkpOvBqX2KQxcl0QG5qwnNtevZXOxPjEBnlxL+4VcLRFzBTRc5/wbWRooWZEjsKrF2nQO8kF7B3Mcuh/tgMWCg2vcG2ULDHl9mUkvqLYe4pqCNkZtifOHjKmejo3hk8aifetGRsdGLEvcoeUb4Bh1nCppIAd2fksK3P8="
-#script:
-  # other script steps might be done before running the actual analysis
-#  - sonar-scanner
