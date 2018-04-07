@@ -25,14 +25,16 @@ task violationCommentsToGitHub(type: se.bjurr.violations.comments.github.plugin.
     password = System.properties['GITHUB_PASSWORD']
     oAuth2Token = System.properties['GITHUB_OAUTH2TOKEN']
     gitHubUrl = "https://api.github.com/"
-    createCommentWithAllSingleFileComments = false
+    createCommentWithAllSingleFileComments = true
     createSingleFileComments = true
+    commentOnlyChangedContent = false
+    minSeverity = se.bjurr.violations.lib.model.SEVERITY.INFO //ERROR, INFO, WARN
     violations = [
-            ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$"],
-            ["PMD",        ".", ".*/pmd/.*\\.xml\$"],
-            ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$"],
-            ["JSHINT",     ".", ".*/jshint/.*\\.xml\$"],
-            ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$"]
+            ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$",   "Findbugs"],
+            ["PMD",        ".", ".*/pmd/.*\\.xml\$",        "PMD"],
+            ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$", "Checkstyle"],
+            ["JSHINT",     ".", ".*/jshint/.*\\.xml\$",     "JSHint"],
+            ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$",     "CssLint"]
     ]
 }
 
