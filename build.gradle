@@ -13,6 +13,15 @@ buildscript {
     }
 }
 
+/*
+plugins {
+    id "com.btkelly.gnag" version "2.0.0"
+    id "com.jfrog.bintray" version "1.6"
+    id "com.github.hierynomus.license" version "0.12.1"
+}
+*/
+
+/*
 plugins {
     id "se.bjurr.violations.violation-comments-to-github-gradle-plugin" version "1.40"
 }
@@ -29,14 +38,16 @@ task violationCommentsToGitHub(type: se.bjurr.violations.comments.github.plugin.
     createSingleFileComments = true
     commentOnlyChangedContent = false
     minSeverity = se.bjurr.violations.lib.model.SEVERITY.INFO //ERROR, INFO, WARN
-    violations = [
-            ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$",   "Findbugs"],
-            ["PMD",        ".", ".*/pmd/.*\\.xml\$",        "PMD"],
-            ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$", "Checkstyle"],
-            ["JSHINT",     ".", ".*/jshint/.*\\.xml\$",     "JSHint"],
-            ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$",     "CssLint"]
-    ]
-}
+*/
+//    violations = [
+//            ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$",   "Findbugs"],
+//            ["PMD",        ".", ".*/pmd/.*\\.xml\$",        "PMD"],
+//            ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$", "Checkstyle"],
+//            ["JSHINT",     ".", ".*/jshint/.*\\.xml\$",     "JSHint"],
+//            ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$",     "CssLint"]
+//    ]
+//}
+
 
 allprojects {
     repositories {

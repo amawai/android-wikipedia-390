@@ -1,15 +1,19 @@
 language: android
-# dist: trusty
-sudo: false
+#dist: trusty
+#sudo: false
 
 env:
 # Token for Tomas Bejerre's Violation-Comments to Github Approach
-  - secure: "YU0gd/xRYYCj50t1ysRH8+AiWyHiAOv8d0xWkbvyzpYl8quoPQpBkteRSOjDAkkdNyPYN5VFl1quarxeUixpXzY6aJSyyV1Ubc430L4nopZl2xeswYaT9Ree5zkKNpcb7cQfxmUI/aPTEFyoO/aZ0zI0o7GI+gWFw4z1VsIkF9xY2PKZa4VaVYedb7XTB+BP3PceVvdVM6fCItrv5NziYQi0OZNaQmhGzqSvYn/KLfLqVPNGddbUYGtGse7RyztPtBdEiezhU2jAP3eYWXy6pporh9xVAPGqoQ/56KJRzoE6vFXo/NGFiGOscpohJVKxHw2GSZuFDKaGG5ICl8o3ONSk2C9zNS+tWtVI5Mbw4m/OQzE6SvGju15m1PQhsi5pmQ9VUU56V/SPelVRGS3+KcirdfCz2HG7P2DMJrg2XUMvvjvr3VPexu9BGbztEju5E6k9bOaW54UffGJZ+KhjiIhRFbBup1+sfiPapVFyHRaoD6kwHbuda++1KtMp/wfsGcuKQSw3HpqFzjAM1V6Le3chLpPAaQ5Gc+5+/MwniVRpoQ3Fk/LtbCGqH+dDhJPvD+1OYDob17ZeVGTV3SNEMjBrioovqhEGG8ooHngNMj20bFJiLXZtzRmC6D8/uYivDGqIxWVT/MKwk44baL7Z9wCru291wwzw1ostRt3rYZA="
+#  - secure: "YU0gd/xRYYCj50t1ysRH8+AiWyHiAOv8d0xWkbvyzpYl8quoPQpBkteRSOjDAkkdNyPYN5VFl1quarxeUixpXzY6aJSyyV1Ubc430L4nopZl2xeswYaT9Ree5zkKNpcb7cQfxmUI/aPTEFyoO/aZ0zI0o7GI+gWFw4z1VsIkF9xY2PKZa4VaVYedb7XTB+BP3PceVvdVM6fCItrv5NziYQi0OZNaQmhGzqSvYn/KLfLqVPNGddbUYGtGse7RyztPtBdEiezhU2jAP3eYWXy6pporh9xVAPGqoQ/56KJRzoE6vFXo/NGFiGOscpohJVKxHw2GSZuFDKaGG5ICl8o3ONSk2C9zNS+tWtVI5Mbw4m/OQzE6SvGju15m1PQhsi5pmQ9VUU56V/SPelVRGS3+KcirdfCz2HG7P2DMJrg2XUMvvjvr3VPexu9BGbztEju5E6k9bOaW54UffGJZ+KhjiIhRFbBup1+sfiPapVFyHRaoD6kwHbuda++1KtMp/wfsGcuKQSw3HpqFzjAM1V6Le3chLpPAaQ5Gc+5+/MwniVRpoQ3Fk/LtbCGqH+dDhJPvD+1OYDob17ZeVGTV3SNEMjBrioovqhEGG8ooHngNMj20bFJiLXZtzRmC6D8/uYivDGqIxWVT/MKwk44baL7Z9wCru291wwzw1ostRt3rYZA="
 # Token for GNAG approach
 #  - secure: fvKArEhnooc8DLMHoPmD+ZKq6Z+TJo8Csu8aP73Z44QB86KuBY2Zw6f8pQKvbd7jEHYHnFSH4ePcqhZtAKmcb7Udxlmyw3d/HXsKwo3+566tWS9ZgbH0BywfrXULMu7TNmwa/QCi8KVnh2zNfRU1w1M/F3XMPzBQPVdB2oGHKb0skr6cbINsS7ODvBxTPtwnjAyWOcuQHgdXfUTs9yyjeF2Du4q1cKdTP4CB+TYDKTPfQdxxNnS6BiVwDDXzfjvaJ9mWAWfjyZ1NGf9BjSXX3T61H/jhIJgw1QwmstI0F8153mFHVtsV0cWcOlHfYNRJD07mTIkE9Q8afxawEhrhE7nfd5ZXaCumy4axZjTer/hQyjjEorGjV2esmHidpyX9d+3SsEA08plapgeQVR4jCHCoKWpnZVqbc9aUtyLukdU8DbHDssuEmVop8otHchcgPuFbmq3I8P25b0ajn7gDDVgGLkcyQ9kR1eStiuyKa10/28c9EX6DkBpeTKgA1esBzqSAo8mGLJxpaixogKQTSmpnv8/sbzmOoMS01FXrnJkSG8C3R0H8/4RC7YjvrtLyG7hU4ZnG1QOk1YgSDTMcgpIvqMxUC6WjfYOjT+shBNhAyBBrVuhdCz8EzuCAlCHqjL5XyiY/H6i+1oqSCJ4m2mcWm/MH82tN8ZNZgskQXXo=
+# Token for Codacy Plugin
+  - secure: "R4yFhBQLHGk68d8/YRJcka+zBV7nv9oQWLDh9TJpx9dbbGU0wqQ3JkqwZgvf7s5nUiCojz8b9VkMxqWgqpxF8oDzaOX9NllqwYDsHios5enAAlNSH4XFqtFbhkRiFiUmuHUvYv76nr5osfcNwuEYZIF/VC1hnPPN6Ph6wom/327ExsL6x5gqdOytjwy1Mxk67BjvUyTNfgkdo5MVL5wn8X6ul/83aGQhaRSJ4k7cueORh9CZtzsTgWls8kwqKrGbH6Ba2OjeVSfSYWQUBg8Rf17iljESpvdI1FY2oZP4uRitGUGLkcp2rYIxq1OV9AZmYPbUS+tg/xyRy/zJ+XC1DB8VhrvuebLTVTaRIUsGiYn309QRbK21Vu04N+JKiZuzJ1e0Y6izh7K7OTLHfqX4yROW/rn2EWB9tgOtM4CQF00V0qBpVk/axYqfHvPSD9tOhr2kMCG1SI41Tvax1BcjK/ZxdszRkLOjVCgz9/cOL093s0yYvaOavOEJyBceESfMXdGWzsUXLzl/Eso9/Chdr7zHkAXNqQdM4p2iIBwGEgG8eIrVLICDGbfaYsd4ggDHDmAhIuplwyBL6/B5z1ypzcCSNGEQrWs43to0b+xO2v3bPDxgRFT9M4oR3DNnf9+aNcr7v9r6/lUHPuqt6bQEFEE+JZ4TeYuyT/yayeJrUrQ="
 
 before_install:
   - yes | sdkmanager "platforms;android-27"
+  - sudo apt-get install jq
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
 
 android:
   components:
@@ -20,6 +24,9 @@ android:
 
 jdk:
     - oraclejdk8
+
+after_success:
+  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
 
 notifications:
     # travis update notifications for email on success and on failure
@@ -81,10 +88,10 @@ jobs:
           tags: true
 
 # static analysis for pull requests introduction
-script:
-  - ./gradlew build violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_OAUTH2TOKEN=$GITHUB_OAUTH2TOKEN -i --stacktrace
-# branches:
-#    only:
+#script:
+#  - ./gradlew build violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_OAUTH2TOKEN=$GITHUB_OAUTH2TOKEN -i --stacktrace
+#branches:
+#   only:
 #    - master
 #    - develop
 #    - travis-static-analysis
