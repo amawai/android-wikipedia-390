@@ -1,7 +1,13 @@
 language: android
 
+env:
+# CODACY_PROJECT_TOKEN token
+  - secure: "IAgXYfS61pzYTqAslm3wpDmAxfQWJy/z6D/72xFhGlIRMED1X20s44UidUG2Wj5BL43gsYkIaYevMHQAHWmrzob1WUbQC4efRE1IcAKqPW9Y+4C6NRK8a38EGWhsAzArvkokQd2scjpZpuLSh3H2ZnpAVv3nhwcDGJKRJqzEgs0Mo0VsyH4i/xCbbXirV1AxGpw/mq1mxQeCbDpKGOIau+b1Rz1I5JF8cibLIaSZNaZbW4KmyKjXuyJ+YxhDP9JG6eNUvo5RxW0mPd98mn/F0rNf8wvJqCRkhjwJgDaskvFK/PBdEm4tnEz160gE/8lFI3Jv3bfqzjAqSuaukwyDxrQFbpaheS/GmVtiCtX2IxUPwGchDQ+dNkv/epBkH5Vi7OZ0TJQdNkzc3xwdI41i7wP6ZrUpdq8cv0jLDONZFcdOoBqCxxAfC4CqEWKjiJHFeAGSJfatr1XLaCd5OhtEA/kmcloRowagw9kouFM8a1R6/rWP9PHq5Du4C5n8Od8fOert6qA+qtQBv9jocYBh93jx+XRrmGgDdgCEk4xQDzvSLP6x95GMrhuDngRB1Yk18QOVsSI9J7wD1lfXoDeGUFfHAl7M1a8yG8o1iU3lxampOn8quDJ90u5haCRReMB1DTay420iwUvCkM1zwquDJevmVhR5fF9J0Vj7EQCtvLM="
+
 before_install:
   - yes | sdkmanager "platforms;android-27"
+  - sudo apt-get install jq
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
 
 android:
   components:
@@ -9,6 +15,12 @@ android:
     - android-27
   licenses:
     - 'android-sdk-license-.+'
+
+jdk:
+    - oraclejdk8
+
+after_success:
+  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
 
 notifications:
     # travis update notifications for email on success and on failure
@@ -48,8 +60,17 @@ jobs:
     - stage: Release 2 Tests
       language: android
       script: ./gradlew -p app/src/test/java/org/wikipedia/travel
-      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/travel
       script: ./gradlew -p app/src/androidTest/java/org/wikipedia/travel
+      # will build the release 3 tests added by our team
+    - stage: Release 3 Tests
+      language: android
+      script: ./gradlew -p app/src/test/java/org/wikipedia/translation
+      script: ./gradlew -p app/src/test/java/org/wikipedia/search
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/page
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/privateBrowsing
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/articleNote
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/translation
     # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
