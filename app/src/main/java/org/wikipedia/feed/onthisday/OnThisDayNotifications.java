@@ -59,5 +59,9 @@ public class OnThisDayNotifications extends BroadcastReceiver {
         return false;
     }
 
+    public void printTesting() {
+        System.out.println("Testing");
+    }
+
 }
 
