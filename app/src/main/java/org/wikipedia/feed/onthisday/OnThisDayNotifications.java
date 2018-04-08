@@ -38,26 +38,5 @@ public class OnThisDayNotifications extends BroadcastReceiver {
         }
     }
 
-    public int thisIsTested(int a, int b) {
-        if (a == 1 && b == 2) {
-            return 3;
-        }
-        return 0;
-    }
-
-    void npe2(String a, String b) {
-        if (a == null) {
-            System.out.println();
-        } else {
-
-        }
-        a.length();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return false;
-    }
-
 }
 
