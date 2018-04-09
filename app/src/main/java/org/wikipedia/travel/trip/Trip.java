@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import org.wikipedia.json.annotations.Required;
 import org.wikipedia.travel.database.DeprecatedDateAdapter;
+import org.wikipedia.travel.database.DestinationDatabaseTable;
 import org.wikipedia.travel.database.TripDatabaseTable;
 import org.wikipedia.travel.landmarkpicker.LandmarkCard;
 
@@ -27,6 +28,9 @@ public class Trip {
 
     //Initialization of database table for trips with single destinations
     public static final TripDatabaseTable DATABASE_TABLE = new TripDatabaseTable();
+
+    //Initialization of database table for destinations with single destinations
+    public static final DestinationDatabaseTable DESTINATION_DATABASE_TABLE = new DestinationDatabaseTable();
 
     //Parametrized constructor for a trip
     public Trip(String title, List<Destination> destinations, Date departureDate) {
