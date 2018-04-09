@@ -17,12 +17,20 @@
         android:contentDescription="@string/search_hint" />
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:text="@string/search_hint"
         android:textColor="?attr/material_theme_de_emphasised_color" />
+
+    <ImageView
+        android:id="@+id/search_image_button"
+        android:layout_width="13dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_image_gray_24dp" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/voice_search_button"
