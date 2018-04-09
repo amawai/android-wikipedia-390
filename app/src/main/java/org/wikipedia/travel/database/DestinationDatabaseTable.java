@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DestinationDatabaseTable extends DatabaseTable<Trip> {
 
-    private static final int DB_VER_INTRODUCED = 20;
+    private static final int DB_VER_INTRODUCED = 21;
 
     public DestinationDatabaseTable() {
         super(DestinationContract.TABLE, DestinationContract.URI);

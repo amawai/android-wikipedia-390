@@ -18,7 +18,7 @@ import org.wikipedia.util.log.L;
 
 public class Database extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "wikipedia.db";
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
     private final DatabaseTable<?>[] databaseTables = {
             HistoryEntry.DATABASE_TABLE,
@@ -30,6 +30,8 @@ public class Database extends SQLiteOpenHelper {
             ReadingListPage.DATABASE_TABLE,
             //Addition of trip databae table to the rest of database tables in app
             Trip.DATABASE_TABLE,
+            //Addition of destination table
+            Trip.DESTINATION_DATABASE_TABLE,
             //Addition of article + note tracking database table
             Article.DATABASE_TABLE,
             Note.DATABASE_TABLE

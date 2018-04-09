@@ -47,7 +47,7 @@ public class DestinationDbHelper {
         try {
             Trip protoList = new Trip(destination);
             long id = db.insertOrThrow(DestinationContract.TABLE, null,
-                    Trip.DATABASE_TABLE.toContentValues(protoList));
+                    Trip.DESTINATION_DATABASE_TABLE.toContentValues(protoList));
             db.setTransactionSuccessful();
             protoList.setId(id);
             return protoList;
@@ -76,7 +76,7 @@ public class DestinationDbHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            int result = db.update(DestinationContract.TABLE, Trip.DATABASE_TABLE.toContentValues(list),
+            int result = db.update(DestinationContract.TABLE, Trip.DESTINATION_DATABASE_TABLE.toContentValues(list),
                     DestinationContract.Col.ID.getName() + " = ?", new String[]{Long.toString(list.getId())});
             if (result != 1) {
                 L.w("Failed to update db entry for list " + list.getDestination().getDestinationName());

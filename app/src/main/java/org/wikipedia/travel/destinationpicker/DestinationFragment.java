@@ -43,13 +43,13 @@ public class DestinationFragment extends Fragment {
     private List<Trip> userDestinationList = new ArrayList<>();
     private SupportPlaceAutocompleteFragment autocompleteFragment;
 
-    @BindView(R.id.destination_text_view) TextView tvDestination;
     @BindView(R.id.destination_history_view_recycler) RecyclerView destinationList;
 
     Place destination;
 
     public interface Callback{
         void onPlaceSelected(Place place);
+        void onRequestDestinationListUpdate();
         String onRequestOpenDestinationName();
     }
 
@@ -75,9 +75,9 @@ public class DestinationFragment extends Fragment {
             @Override
             public void onPlaceSelected(Place place) {
                 destination = place;
-                updateDestinationText((String)place.getName());
                 if(getCallback() != null) {
                     getCallback().onPlaceSelected(place);
+                    updateUserTripList();
                 }
             }
 
@@ -92,14 +92,7 @@ public class DestinationFragment extends Fragment {
         destinationList.setAdapter(destinationAdapter);
 
         destinationList.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //There is no need to always display the search bar result everytime the view is created
-        //tvDestination.setText(getArguments().getString("DESTINATION"));
         return view;
-    }
-
-    private void updateDestinationText(String destination) {
-        tvDestination.setText(destination);
     }
 
     private AppCompatActivity getAppCompatActivity() {
@@ -111,12 +104,12 @@ public class DestinationFragment extends Fragment {
     }
 
     private void updateUserTripList() {
-//        if(getCallback() != null) {
-//            getCallback().onRequestTripListUpdate();
-//        }
+        if(getCallback() != null) {
+            getCallback().onRequestDestinationListUpdate();
+        }
     }
 
-    public void setUserTripList(List<Trip> trips) {
+    public void setUserDestinationList(List<Trip> trips) {
         if(destinationAdapter != null) {
             destinationAdapter.setUserDestination(trips);
         }

@@ -28,6 +28,7 @@ import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.page.PageActivity;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.concurrency.CallbackTask;
+import org.wikipedia.travel.database.DestinationDbHelper;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.datepicker.DateFragment;
 import org.wikipedia.travel.destinationpicker.DestinationFragment;
@@ -63,6 +64,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private Trip openTrip;
     private Unbinder unbinder;
     private List<Trip> userTripsList = new ArrayList<>();
+    private List<Trip> userDestinationList = new ArrayList<>();
 
     public static MainPlannerFragment newInstance() {
 
@@ -154,6 +156,11 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         updateUserTripList();
     }
 
+    @Override
+    public void onRequestDestinationListUpdate() {
+        updateUserDestinationList();
+    }
+
 
     @Override
     public void onDeleteTrip(long id) {
@@ -183,6 +190,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     @Override
     public void onPlaceSelected(Place destination) {
         openTrip.setDestinationName((String) destination.getAddress());
+        saveDestination();
     }
 
 
@@ -242,6 +250,24 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         });
     }
 
+    private void saveDestination() {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().createList(openTrip.getDestination()),  new CallbackTask.DefaultCallback<Object>(){
+            @Override
+            public void success(Object o) {
+                super.success(o);
+                userDestinationList.add(openTrip);
+                Toast.makeText(getActivity(),"Destination has been saved", Toast.LENGTH_SHORT).show();
+                //There is no need to go the lists page automatically
+                //goToHomePage();
+            }
+
+            @Override
+            public void failure(Throwable caught) {
+                super.failure(caught);
+            }
+        });
+    }
+
     public void updateUserTripList() {
         CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>() {
             @Override
@@ -251,6 +277,19 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
                 }
                 userTripsList = list;
                 adapter.getTripListFragment().setUserTripList(list);
+            }
+        });
+    }
+
+    public void updateUserDestinationList() {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>() {
+            @Override
+            public void success(List<Trip> list) {
+                if (getActivity() == null) {
+                    return;
+                }
+                userDestinationList = list;
+                adapter.getDestinationListFragment().setUserDestinationList(list);
             }
         });
     }

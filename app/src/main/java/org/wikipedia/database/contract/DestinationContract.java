@@ -9,9 +9,10 @@ import org.wikipedia.database.column.DestinationColumn;
 import org.wikipedia.database.column.IdColumn;
 import org.wikipedia.database.column.StrColumn;
 
+@SuppressWarnings("checkstyle:interfaceistype")
 public interface DestinationContract {
-    String TABLE = "destinations";
-    Uri URI = Uri.withAppendedPath(AppContentProviderContract.AUTHORITY_BASE, "/destination");
+    String TABLE = "destination";
+    Uri URI = Uri.withAppendedPath(AppContentProviderContract.AUTHORITY_BASE, "/travel");
 
     interface Col {
         IdColumn ID = new IdColumn(TABLE);
