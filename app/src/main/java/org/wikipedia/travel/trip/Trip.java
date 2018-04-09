@@ -42,6 +42,11 @@ public class Trip {
         this.departureDate = departureDate;
     }
 
+    //Parametrized constructor for a trip, only accounting for one destination (also will be constructor used for storage in destination database)
+    public Trip(Destination singleDestination) {
+        this.singleDestination = singleDestination;
+    }
+
     public Trip() {
         this("", new Destination(""), new DeprecatedDateAdapter());
     }
