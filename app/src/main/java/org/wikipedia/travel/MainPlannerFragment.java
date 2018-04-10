@@ -256,9 +256,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             public void success(Object o) {
                 super.success(o);
                 userDestinationList.add(openTrip);
-                Toast.makeText(getActivity(),"Destination has been saved", Toast.LENGTH_SHORT).show();
-                //There is no need to go the lists page automatically
-                //goToHomePage();
             }
 
             @Override

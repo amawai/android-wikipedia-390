@@ -28,6 +28,7 @@
         android:padding="0dp"
         android:scrollbars="vertical"
         tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="206dp" />
+        tools:layout_editor_absoluteY="206dp"
+        app:stackFromEnd="true" />
 
 </LinearLayout>

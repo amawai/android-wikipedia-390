@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -43,6 +44,7 @@ public class DestinationFragment extends Fragment {
     private List<Trip> userDestinationList = new ArrayList<>();
     private SupportPlaceAutocompleteFragment autocompleteFragment;
 
+    private LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
     @BindView(R.id.destination_history_view_recycler) RecyclerView destinationList;
 
     Place destination;
@@ -58,6 +60,7 @@ public class DestinationFragment extends Fragment {
         args.putString("DESTINATION", destination);
 
         DestinationFragment fragment = new DestinationFragment();
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +69,7 @@ public class DestinationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_travel_destination_picker, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -88,10 +92,14 @@ public class DestinationFragment extends Fragment {
         });
 
         updateUserTripList();
+
+        // Reverse the order of the destination history list
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
         destinationAdapter = new DestinationAdapter(getContext());
         destinationList.setAdapter(destinationAdapter);
-
-        destinationList.setLayoutManager(new LinearLayoutManager(getContext()));
+        destinationList.setLayoutManager(mLayoutManager);
         return view;
     }
 
@@ -144,6 +152,7 @@ public class DestinationFragment extends Fragment {
         public void setUserDestination(List<Trip> trips) {
             this.userDestinationList = trips;
             notifyDataSetChanged();
+            mLayoutManager.scrollToPositionWithOffset(userDestinationList.size()-1, 0);
         }
 
         // Remove a RecyclerView item containing a specified Data object, could be used in the future
