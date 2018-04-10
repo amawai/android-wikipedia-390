@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class DestinationFragment extends Fragment {
     public interface Callback{
         void onPlaceSelected(Place place);
         void onRequestDestinationListUpdate();
+        void onDeleteDestination(long list);
         String onRequestOpenDestinationName();
     }
 
@@ -81,7 +83,7 @@ public class DestinationFragment extends Fragment {
                 destination = place;
                 if(getCallback() != null) {
                     getCallback().onPlaceSelected(place);
-                    updateUserTripList();
+                    updateUserDestinationList();
                 }
             }
 
@@ -91,16 +93,44 @@ public class DestinationFragment extends Fragment {
             }
         });
 
-        updateUserTripList();
+        // Updates the userDestinationList
+        updateUserDestinationList();
 
         // Reverse the order of the destination history list
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
 
+        // Sets the destination history layout
         destinationAdapter = new DestinationAdapter(getContext());
         destinationList.setAdapter(destinationAdapter);
         destinationList.setLayoutManager(mLayoutManager);
+
+        // Adds event listener for when user swipes destination history left
+        onSwipeLeft();
+
         return view;
+    }
+
+    // Method is called to handle when a user swipes saved destination to the Left
+    private void onSwipeLeft() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                final long position = viewHolder.getAdapterPosition(); //get position which is swiped
+
+                // Removes destination from list when user swipes left
+                if (direction == ItemTouchHelper.LEFT) {
+                    getCallback().onDeleteDestination(position);
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(destinationList); //set swipe to destinationList
     }
 
     private AppCompatActivity getAppCompatActivity() {
@@ -111,7 +141,7 @@ public class DestinationFragment extends Fragment {
         return FragmentUtil.getCallback(this, Callback.class);
     }
 
-    private void updateUserTripList() {
+    private void updateUserDestinationList() {
         if(getCallback() != null) {
             getCallback().onRequestDestinationListUpdate();
         }
@@ -153,13 +183,6 @@ public class DestinationFragment extends Fragment {
             this.userDestinationList = trips;
             notifyDataSetChanged();
             mLayoutManager.scrollToPositionWithOffset(userDestinationList.size()-1, 0);
-        }
-
-        // Remove a RecyclerView item containing a specified Data object, could be used in the future
-        public void remove(Trip data) {
-            int position = userDestinationList.indexOf(data);
-            userDestinationList.remove(position);
-            notifyItemRemoved(position);
         }
 
         // Insert a new item to the RecyclerView on a predefined position, could be used in the future

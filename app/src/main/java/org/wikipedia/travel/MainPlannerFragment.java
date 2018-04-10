@@ -265,6 +265,22 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         });
     }
 
+    @Override
+    public void onDeleteDestination(long id) {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().deleteList(userDestinationList.get((int)id)),  new CallbackTask.DefaultCallback<Object>(){
+
+            @Override
+            public void success(Object result) {
+                updateUserDestinationList();
+            }
+
+            @Override
+            public void failure(Throwable caught) {
+                Toast.makeText(getActivity(), "Failed to delete the destination", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void updateUserTripList() {
         CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>() {
             @Override
