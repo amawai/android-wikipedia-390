@@ -22,6 +22,11 @@
             android:defaultValue="true"
             android:title="Daily Notifications"
             android:summary="Enable or disable on this day notifications" />
+        <SwitchPreferenceCompat
+            android:key="@string/preference_key_private_browsing"
+            android:defaultValue="false"
+            android:title="Private Browsing"
+            android:summary="Enable or disable private browsing mode" />
         <org.wikipedia.settings.PreferenceMultiLine
             android:key="@string/preference_key_color_theme"
             android:defaultValue="0"
