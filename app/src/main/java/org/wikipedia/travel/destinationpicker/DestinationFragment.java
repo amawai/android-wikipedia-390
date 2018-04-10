@@ -34,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.widget.LinearLayout.VERTICAL;
+
 /**
  * Created by abhandal on 3/3/2018.
  */
@@ -45,7 +47,6 @@ public class DestinationFragment extends Fragment {
     private List<Trip> userDestinationList = new ArrayList<>();
     private SupportPlaceAutocompleteFragment autocompleteFragment;
 
-    private LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
     @BindView(R.id.destination_history_view_recycler) RecyclerView destinationList;
 
     Place destination;
@@ -97,19 +98,29 @@ public class DestinationFragment extends Fragment {
         // Updates the userDestinationList
         updateUserDestinationList();
 
-        // Reverse the order of the destination history list
-        mLayoutManager.setReverseLayout(true);
-        mLayoutManager.setStackFromEnd(true);
-
         // Sets the destination history layout
         destinationAdapter = new DestinationAdapter(getContext());
         destinationList.setAdapter(destinationAdapter);
-        destinationList.setLayoutManager(mLayoutManager);
+        destinationList.setLayoutManager(new LinearLayoutManager(getContext(), VERTICAL, true));
 
         // Adds event listener for when user swipes destination history left
         onSwipeLeft();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserDestinationList();
+    }
+
+    @Override
+    public void onDestroyView() {
+        destinationList.setAdapter(null);
+        unbinder.unbind();
+        unbinder = null;
+        super.onDestroyView();
     }
 
     // Method is called to handle when a user swipes saved destination to the Left
@@ -183,7 +194,7 @@ public class DestinationFragment extends Fragment {
         public void setUserDestination(List<Trip> trips) {
             this.userDestinationList = trips;
             notifyDataSetChanged();
-            mLayoutManager.scrollToPositionWithOffset(userDestinationList.size()-1, 0);
+            destinationList.getLayoutManager().scrollToPosition(userDestinationList.size()-1);
         }
 
         // Insert a new item to the RecyclerView on a predefined position, could be used in the future
