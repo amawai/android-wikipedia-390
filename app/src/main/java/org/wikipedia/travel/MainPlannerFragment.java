@@ -193,6 +193,12 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         saveDestination();
     }
 
+    @Override
+    public void onDestinationnHistorySelected(int id) {
+        openTrip.setDestinationName((String) userDestinationList.get(id).getDestination().getDestinationName());
+        nextPage();
+    }
+
 
     @Override
     public void onDateChanged(int year, int month, int day) {

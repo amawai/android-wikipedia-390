@@ -54,6 +54,7 @@ public class DestinationFragment extends Fragment {
         void onPlaceSelected(Place place);
         void onRequestDestinationListUpdate();
         void onDeleteDestination(long list);
+        void onDestinationnHistorySelected(int id);
         String onRequestOpenDestinationName();
     }
 
@@ -206,11 +207,17 @@ public class DestinationFragment extends Fragment {
 
             unbinder = ButterKnife.bind(this, destinationView);
             destinationLayout.setOnClickListener(this);
+            destinationName.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+            int position = getAdapterPosition();
+            index = position;
 
+            if (getCallback() != null) {
+                getCallback().onDestinationnHistorySelected(index);
+            }
         }
 
         public void bindItem(Trip trip) {

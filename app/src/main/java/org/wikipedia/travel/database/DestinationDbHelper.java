@@ -72,23 +72,6 @@ public class DestinationDbHelper {
         return null;
     }
 
-    public Object updateList(@NonNull Trip list) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            int result = db.update(DestinationContract.TABLE, Trip.DESTINATION_DATABASE_TABLE.toContentValues(list),
-                    DestinationContract.Col.ID.getName() + " = ?", new String[]{Long.toString(list.getId())});
-            if (result != 1) {
-                L.w("Failed to update db entry for list " + list.getDestination().getDestinationName());
-            }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-        return null;
-    }
-
-
     private SQLiteDatabase getReadableDatabase() {
         return WikipediaApp.getInstance().getDatabase().getReadableDatabase();
     }

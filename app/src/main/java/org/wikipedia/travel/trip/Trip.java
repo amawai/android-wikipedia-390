@@ -3,6 +3,9 @@ package org.wikipedia.travel.trip;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.google.android.gms.location.places.Place;
+
 import org.wikipedia.json.annotations.Required;
 import org.wikipedia.travel.database.DeprecatedDateAdapter;
 import org.wikipedia.travel.database.DestinationDatabaseTable;
@@ -134,6 +137,7 @@ public class Trip {
     public static class Destination {
         @SuppressWarnings("unused,NullableProblems") @Required @Nullable private List<LandmarkCard> landmarks;
         @SuppressWarnings("unused,NullableProblems") @Required @NonNull private String destinationName;
+        @SuppressWarnings("unused,NullableProblems") @Required @NonNull private Place destinationPlace;
 
         public Destination() {
             this(new ArrayList<>(), "");
