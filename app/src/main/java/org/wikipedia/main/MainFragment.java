@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.BackPressedHandler;
@@ -235,6 +237,14 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         } catch (ActivityNotFoundException a) {
             FeedbackUtil.showMessage(this, R.string.error_voice_search_not_available);
         }
+    }
+
+    @Override
+    public void onFeedImageSearchRequested() {
+        Toast toast = Toast.makeText(getContext(), "Image Search", Toast.LENGTH_SHORT);
+        toast.show();
+//        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(takePicture, 0);
     }
 
     @Override public void onFeedSelectPage(HistoryEntry entry) {
