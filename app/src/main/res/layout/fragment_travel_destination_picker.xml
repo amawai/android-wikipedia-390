@@ -18,12 +18,24 @@
         android:layout_marginTop="10dp"
         android:background="@color/accent90" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destination Search History"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/accent10"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/destination_history_view_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="15dp"
+        android:layout_marginTop="0dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:layout_marginBottom="15dp"
         android:background="#EAECF0"
         android:padding="0dp"
         android:scrollbars="vertical"

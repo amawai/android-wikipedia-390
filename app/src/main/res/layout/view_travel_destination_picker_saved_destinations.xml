@@ -8,13 +8,19 @@
     android:layout_height="wrap_content"
     android:clickable="false"
     android:focusable="true"
-    android:padding="8dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="1dp">
 
     <RelativeLayout
         android:id="@+id/destination_view_list"
         android:layout_width="wrap_content"
         android:layout_height="75dp"
-        android:layout_margin="4dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="1dp"
         style="@style/App.Button.White"
         android:background="@color/base100"
         android:orientation="vertical"
