@@ -118,8 +118,9 @@ public class Trip {
             this.departureDate.setYear(year);
             this.departureDate.setMonth(month);
             this.departureDate.setDate(date);
-        } else
+        } else {
             System.out.println("A valid depature date has not been passed.");
+        }
     }
 
     //Checking if the trip actually has destinations

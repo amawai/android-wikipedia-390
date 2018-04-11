@@ -64,8 +64,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private PlannerFragmentPagerAdapter adapter;
     private Trip openTrip;
     private Unbinder unbinder;
-    private List <Trip> userTripsList = new ArrayList <>();
-    private List <Trip> userDestinationList = new ArrayList <>();
+    private List<Trip> userTripsList = new ArrayList<>();
+    private List<Trip> userDestinationList = new ArrayList<>();
 
     public static MainPlannerFragment newInstance() {
 
@@ -131,7 +131,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
     @Override
     public void onNewTrip() {
-        CallbackTask.execute(() -> TripDbHelper.instance().createList(), new CallbackTask.DefaultCallback <Trip>() {
+        CallbackTask.execute(() -> TripDbHelper.instance().createList(), new CallbackTask.DefaultCallback<Trip>() {
             @Override
             public void success(Trip trip) {
                 userTripsList.add(trip);
@@ -165,7 +165,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
     @Override
     public void onDeleteTrip(long id) {
-        CallbackTask.execute(() -> TripDbHelper.instance().deleteList(getTrip(id)), new CallbackTask.DefaultCallback <Object>() {
+        CallbackTask.execute(() -> TripDbHelper.instance().deleteList(getTrip(id)), new CallbackTask.DefaultCallback<Object>() {
             @Override
             public void success(Object result) {
                 updateUserTripList();
@@ -206,7 +206,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     //saves landmarks into trips, called in onclick
-    public void onSave(List <LandmarkCard> saveList) {
+    public void onSave(List<LandmarkCard> saveList) {
         for (LandmarkCard card : saveList) {
             openTrip.getDestination().getDestinationPlacesToVisit().add(card);
         }
@@ -239,7 +239,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
      */
     private void saveTrip(Trip trip) {
         bSave.setActivated(false);
-        CallbackTask.execute(() -> TripDbHelper.instance().updateList(trip), new CallbackTask.DefaultCallback <Object>() {
+        CallbackTask.execute(() -> TripDbHelper.instance().updateList(trip), new CallbackTask.DefaultCallback<Object>() {
             @Override
             public void success(Object o) {
                 super.success(o);
@@ -257,7 +257,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     private void saveDestination() {
-        CallbackTask.execute(() -> DestinationDbHelper.getInstance().createList(openTrip.getDestination()), new CallbackTask.DefaultCallback <Object>() {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().createList(openTrip.getDestination()), new CallbackTask.DefaultCallback<Object>() {
             @Override
             public void success(Object o) {
                 super.success(o);
@@ -273,7 +273,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
 
     @Override
     public void onDeleteDestination(long id) {
-        CallbackTask.execute(() -> DestinationDbHelper.getInstance().deleteList(userDestinationList.get((int) id)), new CallbackTask.DefaultCallback <Object>() {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().deleteList(userDestinationList.get((int) id)), new CallbackTask.DefaultCallback<Object>() {
 
             @Override
             public void success(Object result) {
@@ -288,9 +288,9 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     public void updateUserTripList() {
-        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback <List <Trip>>() {
+        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List <Trip>>() {
             @Override
-            public void success(List <Trip> list) {
+            public void success(List<Trip> list) {
                 if (getActivity() == null) {
                     return;
                 }
@@ -301,9 +301,9 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     public void updateUserDestinationList() {
-        CallbackTask.execute(() -> DestinationDbHelper.getInstance().getAllLists(), new CallbackTask.DefaultCallback <List <Trip>>() {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().getAllLists(), new CallbackTask.DefaultCallback<List <Trip>>() {
             @Override
-            public void success(List <Trip> list) {
+            public void success(List<Trip> list) {
                 if (getActivity() == null) {
                     return;
                 }
