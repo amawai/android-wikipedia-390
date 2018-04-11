@@ -42,7 +42,8 @@ public class DestinationDbHelper {
         return createList(db, destination);
     }
 
-    private Trip createList(SQLiteDatabase db, Destination destination) {
+    @NonNull
+    public Trip createList(SQLiteDatabase db, Destination destination) {
         db.beginTransaction();
         try {
             Trip protoList = new Trip(destination);
