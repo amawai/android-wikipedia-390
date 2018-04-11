@@ -20,15 +20,15 @@ public class DestinationDbHelperTest {
 
         // Test for list creation
         list.add(testTrip);
-        DestinationDbHelper.getInstance().createList(list.get(list.size()-1).getDestination());
+        DestinationDbHelper.getInstance().createList(list.get(list.size() - 1).getDestination());
         newSize = DestinationDbHelper.getInstance().getAllLists().size();
         predictedSize = list.size();
         assertEquals(predictedSize, newSize);
 
         // Test for list deletion
         list = DestinationDbHelper.getInstance().getAllLists();
-        DestinationDbHelper.getInstance().deleteList(list.get(list.size()-1));
-        list.remove(list.size()-1);
+        DestinationDbHelper.getInstance().deleteList(list.get(list.size() - 1));
+        list.remove(list.size() - 1);
         newSize = DestinationDbHelper.getInstance().getAllLists().size();
         predictedSize = list.size();
         assertEquals(predictedSize, newSize);
