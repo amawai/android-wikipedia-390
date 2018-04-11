@@ -24,6 +24,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @SdkSuppress(minSdkVersion = 18)
 public class DestinationHistoryEspressoTest {
@@ -77,7 +79,9 @@ public class DestinationHistoryEspressoTest {
         destinationHistory.check(matches(isDisplayed()));
 
         //Checks if destination history gets populated with matched search result
-        onView(withId(R.id.destination_history_view_recycler))
-                .check(matches(hasDescendant(withText("Montreal, QC, Canada"))));
+        ViewInteraction destinationName = onView(withId(R.id.destination_history_view_recycler));
+        destinationName.check(matches(hasDescendant(withText("Montreal, QC, Canada"))));
+
+        assertTrue(destinationName.check(matches(hasDescendant(withText("Montreal, QC, Canada")))) instanceof ViewInteraction);
     }
 }
