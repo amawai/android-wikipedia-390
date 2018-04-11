@@ -58,3 +58,4 @@ public class DestinationDbHelperTest {
         assertNull(mockDbHelper.createList(mockDb, mockDestination));
     }
 }
+
