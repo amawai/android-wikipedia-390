@@ -27,7 +27,6 @@ import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.page.PageActivity;
 import org.wikipedia.page.PageTitle;
-import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.travel.database.DestinationDbHelper;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.datepicker.DateFragment;
@@ -52,9 +51,7 @@ import butterknife.Unbinder;
 
 public class MainPlannerFragment extends Fragment implements BackPressedHandler, TripFragment.Callback,
         DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback{
-    public interface Callback {
-        void onLoadPage(PageTitle title, HistoryEntry entry);
-    }
+
     @BindView(R.id.fragment_travel_planner_view_pager) ViewPager viewPager;
     @BindView(R.id.planner_next) Button bNext;
     @BindView(R.id.planner_save) Button bSave;
@@ -65,6 +62,10 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private Unbinder unbinder;
     private List<Trip> userTripsList = new ArrayList<>();
     private List<Trip> userDestinationList = new ArrayList<>();
+
+    public interface Callback {
+        void onLoadPage(PageTitle title, HistoryEntry entry);
+    }
 
     public static MainPlannerFragment newInstance() {
 

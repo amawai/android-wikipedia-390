@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -44,19 +43,21 @@ public class DestinationFragment extends Fragment {
 
     private Unbinder unbinder;
     private DestinationAdapter destinationAdapter;
-    private List<Trip> userDestinationList = new ArrayList<>();
     private SupportPlaceAutocompleteFragment autocompleteFragment;
 
-    @BindView(R.id.destination_history_view_recycler) RecyclerView destinationList;
+    @BindView(R.id.destination_history_view_recycler)
+    RecyclerView destinationList;
 
     Place destination;
 
-    public interface Callback{
+    public interface Callback {
         void onPlaceSelected(Place place);
+
         void onRequestDestinationListUpdate();
+
         void onDeleteDestination(long list);
+
         void onDestinationnHistorySelected(int id);
-        String onRequestOpenDestinationName();
     }
 
     public static DestinationFragment newInstance(String destination) {
@@ -78,12 +79,12 @@ public class DestinationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_travel_destination_picker, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        autocompleteFragment = (SupportPlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.fragment_place_autocomplete);
+        autocompleteFragment = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.fragment_place_autocomplete);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 destination = place;
-                if(getCallback() != null) {
+                if (getCallback() != null) {
                     getCallback().onPlaceSelected(place);
                     updateUserDestinationList();
                 }
@@ -154,25 +155,25 @@ public class DestinationFragment extends Fragment {
     }
 
     private void updateUserDestinationList() {
-        if(getCallback() != null) {
+        if (getCallback() != null) {
             getCallback().onRequestDestinationListUpdate();
         }
     }
 
-    public void setUserDestinationList(List<Trip> trips) {
-        if(destinationAdapter != null) {
+    public void setUserDestinationList(List <Trip> trips) {
+        if (destinationAdapter != null) {
             destinationAdapter.setUserDestination(trips);
         }
     }
 
     // Adapter for the RecyclerView
-    public final class DestinationAdapter extends RecyclerView.Adapter<DestinationItemHolder> {
+    public final class DestinationAdapter extends RecyclerView.Adapter <DestinationItemHolder> {
         private Context context;
-        private List<Trip> userDestinationList;
+        private List <Trip> userDestinationList;
 
         public DestinationAdapter(Context context) {
             this.context = context;
-            this.userDestinationList = new ArrayList <>();
+            this.userDestinationList = new ArrayList<>();
         }
 
         @Override
@@ -191,10 +192,10 @@ public class DestinationFragment extends Fragment {
             return userDestinationList.size();
         }
 
-        public void setUserDestination(List<Trip> trips) {
+        public void setUserDestination(List <Trip> trips) {
             this.userDestinationList = trips;
             notifyDataSetChanged();
-            destinationList.getLayoutManager().scrollToPosition(userDestinationList.size()-1);
+            destinationList.getLayoutManager().scrollToPosition(userDestinationList.size() - 1);
         }
 
         // Insert a new item to the RecyclerView on a predefined position, could be used in the future
@@ -209,9 +210,12 @@ public class DestinationFragment extends Fragment {
         private int index;
         private long id;
 
-        @BindView(R.id.destination_view_list) RelativeLayout destinationLayout;
-        @BindView(R.id.destination_name_view_text) TextView destinationName;
-        @BindView(R.id.destination_item_icon) ImageView destinationIcon;
+        @BindView(R.id.destination_view_list)
+        RelativeLayout destinationLayout;
+        @BindView(R.id.destination_name_view_text)
+        TextView destinationName;
+        @BindView(R.id.destination_item_icon)
+        ImageView destinationIcon;
 
         public DestinationItemHolder(View destinationView) {
             super(destinationView);
@@ -236,6 +240,4 @@ public class DestinationFragment extends Fragment {
             id = trip.getId();
         }
     }
-
-
 }

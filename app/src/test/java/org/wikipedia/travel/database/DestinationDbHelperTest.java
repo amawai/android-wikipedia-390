@@ -10,13 +10,15 @@ import org.wikipedia.travel.trip.Trip;
 import java.lang.reflect.Field;
 
 import static junit.framework.Assert.assertNull;
-import static org.junit.Assert.*;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 public class DestinationDbHelperTest {
-    SQLiteDatabase mockDb;
-    DestinationDbHelper mockDbHelper;
-    Trip.Destination mockDestination;
+    private SQLiteDatabase mockDb;
+    private DestinationDbHelper mockDbHelper;
+    private Trip.Destination mockDestination;
 
     //makes sure each test starts with an uninitialized singleton and your tests are no longer affecting each other.
     @Before
@@ -28,6 +30,7 @@ public class DestinationDbHelperTest {
 
     @Before
     public void setUp() {
+        mockDb = mock(SQLiteDatabase.class);
         mockDbHelper = mock(DestinationDbHelper.class);
         mockDestination = mock(Trip.Destination.class);
     }

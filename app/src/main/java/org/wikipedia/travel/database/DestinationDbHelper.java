@@ -18,14 +18,14 @@ public class DestinationDbHelper {
     private static DestinationDbHelper INSTANCE;
 
     public static DestinationDbHelper getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new DestinationDbHelper();
         }
         return INSTANCE;
     }
 
-    public List<Trip> getAllLists() {
-        List<Trip> lists = new ArrayList<>();
+    public List <Trip> getAllLists() {
+        List <Trip> lists = new ArrayList <>();
         SQLiteDatabase db = getReadableDatabase();
         try (Cursor cursor = db.query(DestinationContract.TABLE, null, null, null, null, null, null)) {
             while (cursor.moveToNext()) {

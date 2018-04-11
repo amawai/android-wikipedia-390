@@ -3,11 +3,8 @@ package org.wikipedia.database.contract;
 import android.net.Uri;
 
 import org.wikipedia.database.DbUtil;
-import org.wikipedia.database.column.DateColumn;
-import org.wikipedia.database.column.DeprecatedDateAdapterColumn;
 import org.wikipedia.database.column.DestinationColumn;
 import org.wikipedia.database.column.IdColumn;
-import org.wikipedia.database.column.StrColumn;
 
 @SuppressWarnings("checkstyle:interfaceistype")
 public interface DestinationContract {
