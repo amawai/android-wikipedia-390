@@ -41,24 +41,12 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class DestinationFragment extends Fragment {
 
+    @BindView(R.id.destination_history_view_recycler)
+    RecyclerView destinationList;
+    Place destination;
     private Unbinder unbinder;
     private DestinationAdapter destinationAdapter;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
-
-    @BindView(R.id.destination_history_view_recycler)
-    RecyclerView destinationList;
-
-    Place destination;
-
-    public interface Callback {
-        void onPlaceSelected(Place place);
-
-        void onRequestDestinationListUpdate();
-
-        void onDeleteDestination(long list);
-
-        void onDestinationnHistorySelected(int id);
-    }
 
     public static DestinationFragment newInstance(String destination) {
         Bundle args = new Bundle();
@@ -160,16 +148,26 @@ public class DestinationFragment extends Fragment {
         }
     }
 
-    public void setUserDestinationList(List <Trip> trips) {
+    public void setUserDestinationList(List<Trip> trips) {
         if (destinationAdapter != null) {
             destinationAdapter.setUserDestination(trips);
         }
     }
 
+    public interface Callback {
+        void onPlaceSelected(Place place);
+
+        void onRequestDestinationListUpdate();
+
+        void onDeleteDestination(long list);
+
+        void onDestinationnHistorySelected(int id);
+    }
+
     // Adapter for the RecyclerView
-    public final class DestinationAdapter extends RecyclerView.Adapter <DestinationItemHolder> {
+    public final class DestinationAdapter extends RecyclerView.Adapter<DestinationItemHolder> {
         private Context context;
-        private List <Trip> userDestinationList;
+        private List<Trip> userDestinationList;
 
         public DestinationAdapter(Context context) {
             this.context = context;
@@ -192,7 +190,7 @@ public class DestinationFragment extends Fragment {
             return userDestinationList.size();
         }
 
-        public void setUserDestination(List <Trip> trips) {
+        public void setUserDestination(List<Trip> trips) {
             this.userDestinationList = trips;
             notifyDataSetChanged();
             destinationList.getLayoutManager().scrollToPosition(userDestinationList.size() - 1);
@@ -207,15 +205,14 @@ public class DestinationFragment extends Fragment {
 
     public final class DestinationItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private int index;
-        private long id;
-
         @BindView(R.id.destination_view_list)
         RelativeLayout destinationLayout;
         @BindView(R.id.destination_name_view_text)
         TextView destinationName;
         @BindView(R.id.destination_item_icon)
         ImageView destinationIcon;
+        private int index;
+        private long id;
 
         public DestinationItemHolder(View destinationView) {
             super(destinationView);

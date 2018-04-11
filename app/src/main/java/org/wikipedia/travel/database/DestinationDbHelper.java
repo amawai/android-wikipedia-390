@@ -24,8 +24,8 @@ public class DestinationDbHelper {
         return INSTANCE;
     }
 
-    public List <Trip> getAllLists() {
-        List <Trip> lists = new ArrayList <>();
+    public List<Trip> getAllLists() {
+        List<Trip> lists = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         try (Cursor cursor = db.query(DestinationContract.TABLE, null, null, null, null, null, null)) {
             while (cursor.moveToNext()) {

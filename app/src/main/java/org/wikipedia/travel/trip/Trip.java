@@ -18,6 +18,10 @@ import java.util.List;
 //and a departure date
 public class Trip {
 
+    //Initialization of database table for trips with single destinations
+    public static final TripDatabaseTable DATABASE_TABLE = new TripDatabaseTable();
+    //Initialization of database table for destinations with single destinations
+    public static final DestinationDatabaseTable DESTINATION_DATABASE_TABLE = new DestinationDatabaseTable();
     //trip id for database storage
     private long id;
     //trip title, also to be used to signfiy the germane list in the database
@@ -25,7 +29,7 @@ public class Trip {
     private String title;
     @SuppressWarnings("unused")
     @Nullable
-    private List <Destination> destinations;
+    private List<Destination> destinations;
     @SuppressWarnings("unused")
     @Nullable
     private Destination singleDestination;
@@ -33,14 +37,8 @@ public class Trip {
     @Nullable
     private Date departureDate;
 
-    //Initialization of database table for trips with single destinations
-    public static final TripDatabaseTable DATABASE_TABLE = new TripDatabaseTable();
-
-    //Initialization of database table for destinations with single destinations
-    public static final DestinationDatabaseTable DESTINATION_DATABASE_TABLE = new DestinationDatabaseTable();
-
     //Parametrized constructor for a trip
-    public Trip(String title, List <Destination> destinations, Date departureDate) {
+    public Trip(String title, List<Destination> destinations, Date departureDate) {
         this.title = title;
         this.destinations = destinations;
         this.departureDate = departureDate;
@@ -83,7 +81,7 @@ public class Trip {
 
     //Getter method for the list of destinations that the trip will entail
     @NonNull
-    public List <Destination> getTripDestinations() {
+    public List<Destination> getTripDestinations() {
         return (this.destinations != null) ? this.destinations : Collections.emptyList();
     }
 
@@ -102,8 +100,9 @@ public class Trip {
     public void addDestination(Destination destination) {
         if (destination != null) {
             destinations.add(destination);
-        } else
+        } else {
             System.out.println("The destination object could not be added.");
+        }
     }
 
     //Getter method for the trip's departure date
@@ -140,18 +139,18 @@ public class Trip {
         @SuppressWarnings("unused,NullableProblems")
         @Required
         @Nullable
-        private List <LandmarkCard> landmarks;
+        private List<LandmarkCard> landmarks;
         @SuppressWarnings("unused,NullableProblems")
         @Required
         @NonNull
         private String destinationName;
 
         public Destination() {
-            this(new ArrayList <>(), "");
+            this(new ArrayList<>(), "");
         }
 
         //Parametrized constructor for a destination
-        public Destination(List <LandmarkCard> placesToVisit, String destinationName) {
+        public Destination(List<LandmarkCard> placesToVisit, String destinationName) {
             this.landmarks = placesToVisit;
             this.destinationName = destinationName;
         }
@@ -163,7 +162,7 @@ public class Trip {
 
         //Getter method for the list of landmarks that a destination has
         @NonNull
-        public List <LandmarkCard> getDestinationPlacesToVisit() {
+        public List<LandmarkCard> getDestinationPlacesToVisit() {
             return (this.landmarks != null) ? this.landmarks : Collections.emptyList();
         }
 
