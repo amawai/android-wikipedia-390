@@ -41,7 +41,7 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class DestinationFragment extends Fragment {
 
-    @BindView(R.id.destination_history_view_recycler)
+    protected @BindView(R.id.destination_history_view_recycler)
     RecyclerView destinationList;
     Place destination;
     private Unbinder unbinder;
@@ -205,11 +205,11 @@ public class DestinationFragment extends Fragment {
 
     public final class DestinationItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.destination_view_list)
+        protected @BindView(R.id.destination_view_list)
         RelativeLayout destinationLayout;
-        @BindView(R.id.destination_name_view_text)
+        protected @BindView(R.id.destination_name_view_text)
         TextView destinationName;
-        @BindView(R.id.destination_item_icon)
+        protected @BindView(R.id.destination_item_icon)
         ImageView destinationIcon;
         private int index;
         private long id;

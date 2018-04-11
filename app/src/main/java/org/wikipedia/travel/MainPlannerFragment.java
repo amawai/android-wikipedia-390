@@ -52,13 +52,13 @@ import butterknife.Unbinder;
 public class MainPlannerFragment extends Fragment implements BackPressedHandler, TripFragment.Callback,
         DestinationFragment.Callback, DateFragment.Callback, LandmarkFragment.Callback {
 
-    @BindView(R.id.fragment_travel_planner_view_pager)
+    protected @BindView(R.id.fragment_travel_planner_view_pager)
     ViewPager viewPager;
-    @BindView(R.id.planner_next)
+    protected @BindView(R.id.planner_next)
     Button bNext;
-    @BindView(R.id.planner_save)
+    protected @BindView(R.id.planner_save)
     Button bSave;
-    @BindView(R.id.planner_title)
+    protected @BindView(R.id.planner_title)
     TextView tvTitle;
 
     private PlannerFragmentPagerAdapter adapter;
@@ -288,7 +288,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     public void updateUserTripList() {
-        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List <Trip>>() {
+        CallbackTask.execute(() -> TripDbHelper.instance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>() {
             @Override
             public void success(List<Trip> list) {
                 if (getActivity() == null) {
@@ -301,7 +301,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     public void updateUserDestinationList() {
-        CallbackTask.execute(() -> DestinationDbHelper.getInstance().getAllLists(), new CallbackTask.DefaultCallback<List <Trip>>() {
+        CallbackTask.execute(() -> DestinationDbHelper.getInstance().getAllLists(), new CallbackTask.DefaultCallback<List<Trip>>() {
             @Override
             public void success(List<Trip> list) {
                 if (getActivity() == null) {

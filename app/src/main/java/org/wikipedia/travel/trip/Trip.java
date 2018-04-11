@@ -171,8 +171,9 @@ public class Trip {
         public void addLandmark(LandmarkCard location) {
             if (location != null) {
                 landmarks.add(location);
-            } else
+            } else {
                 System.out.println("The landmark could not be added.");
+            }
         }
 
         //Getter method for the trip's departure date
