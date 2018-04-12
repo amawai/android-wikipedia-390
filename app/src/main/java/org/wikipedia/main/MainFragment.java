@@ -80,6 +80,7 @@ import butterknife.OnPageChange;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
+import static org.wikipedia.Constants.ACTIVITY_REQUEST_IMAGE_SEARCH;
 
 public class MainFragment extends Fragment implements BackPressedHandler, FeedFragment.Callback,
         NearbyFragment.Callback, HistoryFragment.Callback, SearchFragment.Callback,
@@ -171,7 +172,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         } else if (requestCode == Constants.ACTIVITY_REQUEST_LOGIN
                 && resultCode == LoginActivity.RESULT_LOGIN_SUCCESS) {
             FeedbackUtil.showMessage(this, R.string.login_success_toast);
-        } else if (requestCode == 5) {
+        } else if (requestCode == ACTIVITY_REQUEST_IMAGE_SEARCH) {
              final boolean isCamera;
                 if (data == null || data.getData() == null) {
                     isCamera = true;
@@ -309,7 +310,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         // Add the camera options
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
-        startActivityForResult(chooserIntent, 5);
+        startActivityForResult(chooserIntent, ACTIVITY_REQUEST_IMAGE_SEARCH);
     }
 
     @Override public void onFeedSelectPage(HistoryEntry entry) {
