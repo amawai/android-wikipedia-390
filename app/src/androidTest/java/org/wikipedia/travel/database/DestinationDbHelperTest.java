@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class DestinationDbHelperTest {
     private List<Trip> testList = DestinationDbHelper.getInstance().getAllLists();
-    private List<Trip> emptyList = new ArrayList <>(0);
+    private List<Trip> emptyList = new ArrayList<>(0);
     private Trip testTrip = new Trip(new Trip.Destination("Laval"));
     private Trip nullTrip = null;
     private long predictedSize;
@@ -37,7 +37,7 @@ public class DestinationDbHelperTest {
     @Test
     public void testDeleteList() {
         testList = DestinationDbHelper.getInstance().getAllLists();
-        DestinationDbHelper.getInstance().deleteList(testList.get(testList.size()-1));
+        DestinationDbHelper.getInstance().deleteList(testList.get(testList.size() - 1));
         testList.remove(testList.size() - 1);
         actualSize = DestinationDbHelper.getInstance().getAllLists().size();
         predictedSize = testList.size();
