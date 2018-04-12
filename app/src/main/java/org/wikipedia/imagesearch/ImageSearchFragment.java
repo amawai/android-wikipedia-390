@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +15,17 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.R;
-import org.wikipedia.search.SearchResultsFragment;
+import org.wikipedia.WikipediaApp;
+import org.wikipedia.history.HistoryEntry;
+import org.wikipedia.page.PageActivity;
+import org.wikipedia.page.PageTitle;
+import org.wikipedia.search.SearchFragment;
+import org.wikipedia.search.SearchInvokeSource;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,12 +37,29 @@ import butterknife.Unbinder;
  */
 
 public class ImageSearchFragment extends Fragment {
+    public static final String IMAGE_QUERY = "IMAGE_QUERY";
     private Unbinder unbinder;
-    private SearchResultsFragment searchResultsFragment;
     private ImageLabelAdapter imageLabelAdapter;
 
+    private WikipediaApp app;
 
     @BindView(R.id.image_search_list) RecyclerView labelList;
+
+    @NonNull public static ImageSearchFragment newInstance(List<String> labels) {
+        ImageSearchFragment fragment = new ImageSearchFragment();
+
+        Bundle args = new Bundle();
+        args.putStringArrayList(IMAGE_QUERY, (ArrayList<String>) labels);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        app = WikipediaApp.getInstance();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,22 +67,15 @@ public class ImageSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_imagesearch, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        FragmentManager childFragmentManager = getChildFragmentManager();
-        searchResultsFragment = (SearchResultsFragment)childFragmentManager.findFragmentById(
-                R.id.fragment_search_results);
-
         imageLabelAdapter = new ImageLabelAdapter(getContext());
         labelList.setAdapter(imageLabelAdapter);
-        List<String> mock = new ArrayList<String>();
-        mock.add("Apple");
-        mock.add("Banana");
-        mock.add("Dog");
-        mock.add("Kitten");
-        setImageLabelList(mock);
+
+        List<String> labels = getArguments().getStringArrayList(IMAGE_QUERY);
+        setImageLabelList(labels);
 
         labelList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        getAppCompatActivity().getSupportActionBar().setTitle("Trip Planner");
+        getAppCompatActivity().getSupportActionBar().setTitle("Image Search");
         return view;
     }
 
@@ -83,6 +99,10 @@ public class ImageSearchFragment extends Fragment {
         }
     }
 
+    //This function uses a callback to load the article corresponding to the title
+    private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
+        startActivity(PageActivity.newIntentForNewTab(getContext(), entry, title));
+    }
 
     public final class ImageLabelAdapter extends RecyclerView.Adapter<ImageSearchFragment.ImageLabelHolder> {
         private Context context;
@@ -142,8 +162,16 @@ public class ImageSearchFragment extends Fragment {
                 switch(view.getId()){
                     case R.id.imagesearch_label_holder:
                     case R.id.imagesearch_label_title:
-                        Log.d("imagesearch", "selecting article " + labelString);
-                        //searchResultsFragment.startSearch(labelString, false);
+                        //Perhaps allow user to see suggestions based on label, or article based on label
+                        //openSearchFragment(SearchInvokeSource.IMAGE_SEARCH, labelString);
+                        /*
+                        *  TODO: There is a problem where opening an article from the search brings the user
+                        *  back to the label page.. Problem: callback is null in SearchFragment, can't open article
+                        * */
+
+
+                        PageTitle title = new PageTitle(labelString, app.getWikiSite());
+                        onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_SEARCH));
                         break;
                 }
             }
@@ -153,4 +181,20 @@ public class ImageSearchFragment extends Fragment {
             labelText.setText(labelTitle);
         }
     }
+
+    private void openSearchFragment(@NonNull SearchInvokeSource source, @Nullable String query) {
+        Fragment fragment = searchFragment();
+        if (fragment == null) {
+            fragment = SearchFragment.newInstance(source, StringUtils.trim(query));
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_imagesearch, fragment)
+                    .commitNowAllowingStateLoss();
+        }
+    }
+
+    @Nullable private SearchFragment searchFragment() {
+        return (SearchFragment) getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+    }
+    
 }
