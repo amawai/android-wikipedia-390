@@ -1,12 +1,14 @@
 package org.wikipedia.imagesearch;
 
 import android.os.AsyncTask;
+import android.util.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -19,7 +21,9 @@ import java.net.URL;
 public class ImageLabeler extends AsyncTask<String, Void, String> {
     private final String KEY;
     private final String PATH;
-    private String imageURL;
+    private Encoder encoder;
+    private String imagePATH;
+    //private String[] labels = new String[5];
 
 
     public ImageLabeler() {
@@ -30,13 +34,16 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
     // calls to the API are made within this method
     @Override
     protected String doInBackground(String... strings) {//change to take strings[0] as imageURL
-        imageURL = strings[0];
+        imagePATH = strings[0];
+        File imageFile = new File(imagePATH);
+        String encodedString = encoder.encodeFileToBase64Binary(imageFile);
+
         BufferedReader reader = null;
         String response;
         String result = "";
 
-        //create JSON request, inputs
-        JSONObject url = new JSONObject();
+        //create JSON request body, called inputs
+        JSONObject base64 = new JSONObject();
         JSONObject image = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray inputsArr = new JSONArray();
@@ -45,8 +52,8 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
             inputs.put("inputs",  inputsArr);
                 inputsArr.put(data);
                     data.put("data", image);
-                        image.put("image", url);
-                            url.put("url", imageURL);
+                        image.put("image", base64);
+                            base64.put("url", encodedString);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -78,7 +85,6 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
                 response = sb.toString();
                 JSONObject jsonObject = new JSONObject(response);
 
-                // result = jsonObject.getJSONArray("text").getString(0);
                 JSONArray outputs = jsonObject.getJSONArray("outputs");
                 JSONArray concepts = outputs.getJSONObject(0).getJSONObject("data").getJSONArray("concepts");
 
@@ -89,6 +95,7 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
                     String name = concept.getString("name");
                     if (value>0.9){
                         result+=name+", ";
+                        //labels[i]=name;
                     }
                 }
             }
