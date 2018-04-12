@@ -7,10 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -64,11 +62,12 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setUseCaches(false);
             //add json as requestbody
-            OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
-            wr.write(inputs.toString());
+            OutputStream os = conn.getOutputStream();
+            os.write(inputs.toString().getBytes("UTF-8"));
+            os.close();
 
             int statusCode = conn.getResponseCode();
-            if (statusCode ==  10000) {
+            if (statusCode ==  200) {
                 reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));//inputstreamreader?
                 StringBuilder sb = new StringBuilder();
                 String line = null;
