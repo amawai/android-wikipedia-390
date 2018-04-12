@@ -1,16 +1,21 @@
 package org.wikipedia.main;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -65,12 +70,16 @@ import org.wikipedia.util.ShareUtil;
 import org.wikipedia.util.log.L;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnPageChange;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MainFragment extends Fragment implements BackPressedHandler, FeedFragment.Callback,
         NearbyFragment.Callback, HistoryFragment.Callback, SearchFragment.Callback,
@@ -81,6 +90,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     private ExclusiveBottomSheetPresenter bottomSheetPresenter = new ExclusiveBottomSheetPresenter();
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
     private MediaDownloadReceiverCallback downloadReceiverCallback = new MediaDownloadReceiverCallback();
+    private Uri outputFileUri;
 
     // The permissions request API doesn't take a callback, so in the event we have to
     // ask for permission to download a featured image from the feed, we'll have to hold
@@ -151,7 +161,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == Constants.ACTIVITY_REQUEST_VOICE_SEARCH
-                && resultCode == Activity.RESULT_OK && data != null
+                && resultCode == RESULT_OK && data != null
                 && data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) != null) {
             String searchQuery = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0);
             openSearchFragment(SearchInvokeSource.VOICE, searchQuery);
@@ -161,7 +171,26 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         } else if (requestCode == Constants.ACTIVITY_REQUEST_LOGIN
                 && resultCode == LoginActivity.RESULT_LOGIN_SUCCESS) {
             FeedbackUtil.showMessage(this, R.string.login_success_toast);
-        } else {
+        } else if (requestCode == 5) {
+             final boolean isCamera;
+                if (data == null || data.getData() == null) {
+                    isCamera = true;
+                 } else {
+                      final String action = data.getAction();
+                  if (action == null) {
+                      isCamera = false;
+                  } else {
+                    isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                }
+            }
+            Uri selectedImageUri;
+            if (isCamera) {
+                selectedImageUri = outputFileUri;
+            } else {
+                selectedImageUri = data == null ? null : data.getData();
+            }
+        }
+        else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -241,10 +270,46 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
 
     @Override
     public void onFeedImageSearchRequested() {
-        Toast toast = Toast.makeText(getContext(), "Image Search", Toast.LENGTH_SHORT);
-        toast.show();
-//        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(takePicture, 0);
+        //called from the onclick of the searchbar
+        openImageIntent();
+    }
+
+    private void openImageIntent() {
+
+        // Determine Uri of camera image to save.
+        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
+        root.mkdirs();
+        //avoids media collision
+        final String fname = "img_"+ System.currentTimeMillis() + ".jpg";
+        final File sdImageMainDirectory = new File(root, fname);
+        outputFileUri = Uri.fromFile(sdImageMainDirectory);
+
+        // Manages the camera intent
+        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        final PackageManager packageManager = getActivity().getPackageManager();
+        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for(ResolveInfo res : listCam) {
+            final String packageName = res.activityInfo.packageName;
+            final Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
+            intent.setPackage(packageName);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            cameraIntents.add(intent);
+        }
+
+        // Add the gallery option and limit to images
+        final Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_PICK);
+
+        // Chooser of filesystem options
+        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Image Search: Select Source");
+
+        // Add the camera options
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+
+        startActivityForResult(chooserIntent, 5);
     }
 
     @Override public void onFeedSelectPage(HistoryEntry entry) {

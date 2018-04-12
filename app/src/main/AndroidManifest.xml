@@ -42,6 +42,11 @@
     <!-- For keeping the device awake while performing background tasks, such as syncing offline articles. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!-- For Image Search feature -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!--
         Don't let Google Play filter out devices that just have fake touch
         (e.g. mouse and keyboard instead of a real touchscreen).
