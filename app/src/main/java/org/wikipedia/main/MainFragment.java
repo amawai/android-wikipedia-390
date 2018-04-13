@@ -202,8 +202,8 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
                 selectedImageUri = outputFileUri;
             } else {
                 selectedImageUri = data == null ? null : data.getData();
-                findImageLabels(selectedImageUri); //After this is complete, imageLabels is populated
             }
+            findImageLabels(selectedImageUri); //After this is complete, imageLabels is populated
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
