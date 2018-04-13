@@ -23,7 +23,6 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
     private final String PATH;
     private Encoder encoder;
     private String imagePATH;
-    //private String[] labels = new String[5];
 
 
     public ImageLabeler() {
@@ -33,7 +32,7 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
 
     // calls to the API are made within this method
     @Override
-    protected String doInBackground(String... strings) {//change to take strings[0] as imageURL
+    protected String doInBackground(String... strings) {
         imagePATH = strings[0];
         File imageFile = new File(imagePATH);
         String encodedString = encoder.encodeFileToBase64Binary(imageFile);
@@ -53,7 +52,7 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
                 inputsArr.put(data);
                     data.put("data", image);
                         image.put("image", base64);
-                            base64.put("url", encodedString);
+                            base64.put("base64", encodedString);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -94,8 +93,7 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
                     double value = concept.getDouble("value");
                     String name = concept.getString("name");
                     if (value>0.9){
-                        result+=name+", ";
-                        //labels[i]=name;
+                        result+=name+",";
                     }
                 }
             }
