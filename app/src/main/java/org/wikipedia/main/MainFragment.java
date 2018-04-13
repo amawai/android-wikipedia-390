@@ -49,6 +49,7 @@ import org.wikipedia.gallery.ImagePipelineBitmapGetter;
 import org.wikipedia.gallery.MediaDownloadReceiver;
 import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.history.HistoryFragment;
+import org.wikipedia.imagesearch.ImageLabeler;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.navtab.NavTabFragmentPagerAdapter;
@@ -71,6 +72,7 @@ import org.wikipedia.util.log.L;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -92,6 +94,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
     private MediaDownloadReceiverCallback downloadReceiverCallback = new MediaDownloadReceiverCallback();
     private Uri outputFileUri;
+    private ImageLabeler labeler;
 
     // The permissions request API doesn't take a callback, so in the event we have to
     // ask for permission to download a featured image from the feed, we'll have to hold
@@ -118,6 +121,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, view);
+        labeler = new ImageLabeler();
 
         viewPager.setAdapter(new NavTabFragmentPagerAdapter(getChildFragmentManager()));
         tabLayout.setOnNavigationItemSelectedListener(item -> {
@@ -554,6 +558,13 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
 
     private boolean lastPageViewedWithin(int days) {
         return TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - Prefs.pageLastShown()) < days;
+    }
+
+    private List<String> getLabelList(String imagePath) throws Exception{
+        ImageLabeler labeler = new ImageLabeler();
+        String appendedLabels = labeler.execute(imagePath).get();
+        List<String> labelList = new ArrayList<String>(Arrays.asList(appendedLabels.split(",")));
+        return labelList;
     }
 
     private void download(@NonNull FeaturedImage image) {
