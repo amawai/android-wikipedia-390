@@ -3,6 +3,7 @@ package org.wikipedia.imagesearch;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.wikipedia.BackPressedHandler;
 import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
+import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.history.HistoryEntry;
-import org.wikipedia.main.MainFragment;
-import org.wikipedia.page.PageActivity;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.search.SearchInvokeSource;
 import org.wikipedia.settings.Prefs;
@@ -34,7 +35,14 @@ import butterknife.Unbinder;
  * Created by amawai on 10/04/18.
  */
 
-public class ImageSearchFragment extends Fragment {
+public class ImageSearchFragment extends Fragment implements BackPressedHandler {
+    public interface Callback {
+        void switchToSearchFragment(ImageSearchFragment imageSearchFragment,
+                                    SearchInvokeSource source, String query);
+        void onLoadPage(PageTitle title, HistoryEntry entry);
+        void closeImageSearchFragment(@NonNull ImageSearchFragment fragment);
+    }
+
     public static final String IMAGE_QUERY = "IMAGE_QUERY";
     private Unbinder unbinder;
     private ImageLabelAdapter imageLabelAdapter;
@@ -85,6 +93,14 @@ public class ImageSearchFragment extends Fragment {
         super.onDestroyView();
     }
 
+    @Override
+    public boolean onBackPressed() {
+        Callback callback = callback();
+        callback.closeImageSearchFragment(getImageSearchFragment());
+
+        return true;
+    }
+
     //Setting the new list of labels
     public void setImageLabelList(List <String> imageLabels) {
         if(imageLabelAdapter != null) {
@@ -92,9 +108,9 @@ public class ImageSearchFragment extends Fragment {
         }
     }
 
-    //This function uses a callback to load the article corresponding to the title
-    private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
-        startActivity(PageActivity.newIntentForNewTab(getContext(), entry, title));
+    @Nullable
+    private Callback callback() {
+        return FragmentUtil.getCallback(this, ImageSearchFragment.Callback.class);
     }
 
     private ImageSearchFragment getImageSearchFragment() {
@@ -145,7 +161,7 @@ public class ImageSearchFragment extends Fragment {
 
         public ImageLabelHolder(View labelView) {
             super(labelView);
-            unbinder = ButterKnife.bind(this, labelView); //Can't tell if this is necessary
+            unbinder = ButterKnife.bind(this, labelView);
             labelLayout.setOnClickListener(this);
         }
 
@@ -154,17 +170,20 @@ public class ImageSearchFragment extends Fragment {
             int position = getAdapterPosition();
             index = position;
             String labelString;
+            Callback callback = callback();
             if (position >= 0) {
                 labelString = this.labelText.getText().toString();
                 switch(view.getId()){
                     case R.id.imagesearch_label_holder:
                     case R.id.imagesearch_label_title:
-                        if (Prefs.isImageSearchEnabled()){
-                            ((MainFragment) getParentFragment()).switchToSearchFragment(getImageSearchFragment(),
-                                    SearchInvokeSource.IMAGE_SEARCH, labelString);
-                        } else {
-                            PageTitle title = new PageTitle(labelString, app.getWikiSite());
-                            onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_SEARCH));
+                        if (callback != null) {
+                            if (Prefs.isImageSearchEnabled()){
+                                callback.switchToSearchFragment(getImageSearchFragment(),
+                                        SearchInvokeSource.IMAGE_SEARCH, labelString);
+                            } else {
+                                PageTitle title = new PageTitle(labelString, app.getWikiSite());
+                                callback.onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_SEARCH));
+                            }
                         }
                         break;
                 }

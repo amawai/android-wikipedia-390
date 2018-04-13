@@ -91,7 +91,7 @@ import static org.wikipedia.Constants.ACTIVITY_REQUEST_IMAGE_SEARCH;
 
 public class MainFragment extends Fragment implements BackPressedHandler, FeedFragment.Callback,
         NearbyFragment.Callback, HistoryFragment.Callback, SearchFragment.Callback,
-        LinkPreviewDialog.Callback {
+        LinkPreviewDialog.Callback, ImageSearchFragment.Callback {
     @BindView(R.id.fragment_main_view_pager) ViewPager viewPager;
     @BindView(R.id.fragment_main_nav_tab_layout) NavTabLayout tabLayout;
     private Unbinder unbinder;
@@ -555,9 +555,9 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         if (fragment instanceof BackPressedHandler && ((BackPressedHandler) fragment).onBackPressed()) {
             return true;
         }
-
+        //closes imagesearchfragment when back button is pressed
         ImageSearchFragment imageFragment = imageSearchFragment();
-        if (imageFragment != null) {
+        if (imageFragment != null && imageFragment.onBackPressed()) {
             return true;
         }
 
@@ -648,7 +648,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     }
 
     @SuppressLint("CommitTransaction")
-    private void closeImageSearchFragment(@NonNull ImageSearchFragment fragment) {
+    public void closeImageSearchFragment(@NonNull ImageSearchFragment fragment) {
         getChildFragmentManager()
                 .beginTransaction().remove(fragment).commitNowAllowingStateLoss();
     }
