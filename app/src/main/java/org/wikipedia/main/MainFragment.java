@@ -1,5 +1,6 @@
 package org.wikipedia.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
@@ -54,7 +55,6 @@ import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.history.HistoryFragment;
 import org.wikipedia.imagesearch.Encoder;
 import org.wikipedia.imagesearch.ImageLabeler;
-import org.wikipedia.imagesearch.ImageSearchActivity;
 import org.wikipedia.imagesearch.ImageSearchFragment;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
@@ -211,7 +211,11 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             } else {
                 selectedImageUri = data == null ? null : data.getData();
             }
-            findImageLabels(selectedImageUri); //After this is complete, imageLabels is populated
+            if (selectedImageUri != null) {
+                findImageLabels(selectedImageUri); //After this is complete, imageLabels is populated
+            } else {
+                Toast.makeText(getActivity(), "No image was selected", Toast.LENGTH_SHORT).show();
+            }
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -261,6 +265,11 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
                     L.i("Write permission was denied by user");
                     FeedbackUtil.showMessage(this,
                             R.string.gallery_save_image_write_permission_rationale);
+                }
+                break;
+            case ACTIVITY_REQUEST_IMAGE_SEARCH:
+                if (PermissionUtil.isPermitted(grantResults)) {
+                    openImageIntent();
                 }
                 break;
             default:
@@ -316,7 +325,13 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     @Override
     public void onFeedImageSearchRequested() {
         //called from the onclick of the searchbar
-        openImageIntent();
+        if (!PermissionUtil.hasCameraPermissions(getContext())){
+            //If user has not granted camera permission, ask for it from the user now
+            PermissionUtil.requestCameraPermission(this, ACTIVITY_REQUEST_IMAGE_SEARCH);
+        } else {
+            //If user already granted camera permission to Wikipedia, open the dialog right away
+            openImageIntent();
+        }
     }
 
     private void openImageIntent() {
@@ -328,7 +343,6 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         final File sdImageMainDirectory = new File(root, fname);
         outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
-        // Manages the camera intent
         final List <Intent> cameraIntents = new ArrayList <Intent>();
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getActivity().getPackageManager();
@@ -352,7 +366,6 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
 
         // Add the camera options
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
-
         startActivityForResult(chooserIntent, ACTIVITY_REQUEST_IMAGE_SEARCH);
     }
 
