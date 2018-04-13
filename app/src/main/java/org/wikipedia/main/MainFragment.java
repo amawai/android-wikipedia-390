@@ -556,6 +556,11 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             return true;
         }
 
+        ImageSearchFragment imageFragment = imageSearchFragment();
+        if (imageFragment != null) {
+            return true;
+        }
+
         return false;
     }
 
@@ -644,21 +649,38 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
 
     @SuppressLint("CommitTransaction")
     private void closeImageSearchFragment(@NonNull ImageSearchFragment fragment) {
-        getChildFragmentManager().beginTransaction().remove(fragment).commitNowAllowingStateLoss();
+        getChildFragmentManager()
+                .beginTransaction().remove(fragment).commitNowAllowingStateLoss();
     }
 
     @SuppressLint("CommitTransaction")
-    private void openImageSearchFragment(List<String> labels) {
-        Fragment fragment = ImageSearchFragment.newInstance(labels);
-        getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_main_container, fragment)
-                .commitNow();
+    private void openImageSearchFragment(List <String> labels) {
+        Fragment fragment = imageSearchFragment();
+        if (fragment == null) {
+            fragment = ImageSearchFragment.newInstance(labels);
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_main_container, fragment)
+                    .commitNowAllowingStateLoss();
+        }
     }
 
     @Nullable private SearchFragment searchFragment() {
-        return (SearchFragment) getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+        if (fragment instanceof SearchFragment) {
+            return (SearchFragment) fragment;
+        }
+        return null;
     }
+
+    @Nullable private ImageSearchFragment imageSearchFragment() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+        if (fragment instanceof ImageSearchFragment) {
+            return (ImageSearchFragment) fragment;
+        }
+        return null;
+    }
+
 
     private void cancelSearch() {
         SearchFragment fragment = searchFragment();

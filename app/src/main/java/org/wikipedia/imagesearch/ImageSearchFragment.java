@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,8 +19,11 @@ import org.wikipedia.main.MainFragment;
 import org.wikipedia.page.PageActivity;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.search.SearchInvokeSource;
+import org.wikipedia.settings.Prefs;
+import org.wikipedia.views.ViewUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,10 +74,8 @@ public class ImageSearchFragment extends Fragment {
 
         labelList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        getAppCompatActivity().getSupportActionBar().setTitle("Image Search");
         return view;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -83,10 +83,6 @@ public class ImageSearchFragment extends Fragment {
         unbinder.unbind();
         unbinder = null;
         super.onDestroyView();
-    }
-
-    private AppCompatActivity getAppCompatActivity() {
-        return (AppCompatActivity) getActivity();
     }
 
     //Setting the new list of labels
@@ -163,12 +159,13 @@ public class ImageSearchFragment extends Fragment {
                 switch(view.getId()){
                     case R.id.imagesearch_label_holder:
                     case R.id.imagesearch_label_title:
-
-                        ((MainFragment) getParentFragment()).switchToSearchFragment(getImageSearchFragment(),
-                                                                    SearchInvokeSource.IMAGE_SEARCH, labelString);
-
-                        //PageTitle title = new PageTitle(labelString, app.getWikiSite());
-                        //onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_SEARCH));
+                        if (Prefs.isImageSearchEnabled()){
+                            ((MainFragment) getParentFragment()).switchToSearchFragment(getImageSearchFragment(),
+                                    SearchInvokeSource.IMAGE_SEARCH, labelString);
+                        } else {
+                            PageTitle title = new PageTitle(labelString, app.getWikiSite());
+                            onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_SEARCH));
+                        }
                         break;
                 }
             }
