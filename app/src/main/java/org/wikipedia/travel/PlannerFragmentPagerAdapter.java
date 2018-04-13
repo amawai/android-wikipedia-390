@@ -73,7 +73,7 @@ public class PlannerFragmentPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public DestinationFragment getDestinationListFragment() {
-        return (DestinationFragment) destinationFragment;
+        return destinationFragment;
     }
 
     public void addDestinationFragment(String destination) {

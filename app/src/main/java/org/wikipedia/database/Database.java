@@ -13,6 +13,7 @@ import org.wikipedia.pageimages.PageImage;
 import org.wikipedia.readinglist.database.ReadingList;
 import org.wikipedia.readinglist.database.ReadingListPage;
 import org.wikipedia.search.RecentSearch;
+import org.wikipedia.travel.database.UserLandmark;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.log.L;
 
@@ -34,7 +35,8 @@ public class Database extends SQLiteOpenHelper {
             Trip.DESTINATION_DATABASE_TABLE,
             //Addition of article + note tracking database table
             Article.DATABASE_TABLE,
-            Note.DATABASE_TABLE
+            Note.DATABASE_TABLE,
+            UserLandmark.DATABASE_TABLE
     };
 
     public Database(Context context) {

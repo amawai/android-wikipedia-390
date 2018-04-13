@@ -3,14 +3,17 @@ package org.wikipedia.travel.landmarkpicker;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.activity.FragmentUtil;
+import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.dataclient.WikiSite;
 import org.wikipedia.dataclient.mwapi.MwQueryResponse;
 import org.wikipedia.history.HistoryEntry;
@@ -30,6 +34,9 @@ import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.travel.MainPlannerFragment;
+import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.travel.database.UserLandmark;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
@@ -40,6 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,21 +58,22 @@ import retrofit2.Call;
  * Created by mnhn3 on 2018-03-04.
  */
 
-public class LandmarkFragment extends Fragment implements View.OnClickListener {
+public class LandmarkFragment extends Fragment{
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
-        String onRequestOpenDestinationName();
-        void onSave(List<LandmarkCard> saveList);
+        Trip.Destination onRequestOpenDestination();
+        long onRequestOpenTripId();
+        void onSelectLandmark(LandmarkCard card);
+        void onRemoveLandmark(LandmarkCard card);
     }
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
-    private String destinationName;
+    private Trip.Destination destination;
     private LandmarkAdapter adapter;
     private NearbyResult lastResult;
 
-    //Landmarks selected (checked) by the user
-    private List<LandmarkCard> selectedLandmarks;
+
 
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
     @BindView(R.id.landmark_country_view_text) TextView destinationText;
@@ -86,7 +95,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         unbinder = ButterKnife.bind(this, view);
 
         //set, display and get results using desName
-        destinationName = getCallback().onRequestOpenDestinationName();
+        destination = onRequestOpenDestination();
+        String destinationName = destination.getDestinationName();
         destinationText.setText(destinationName);
 
         if (recyclerView != null) {
@@ -99,7 +109,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
         recyclerView.setAdapter(adapter);
         retrieveArticles(destinationName);
-        selectedLandmarks = new ArrayList<LandmarkCard>();
         return view;
     }
 
@@ -120,13 +129,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
-    public void onClick(View v) {
-        String message = "Your trip has been saved.";
-        FeedbackUtil.showMessage(getActivity(), message);
-        getCallback().onSave(selectedLandmarks);
-    }
-
 
     //This function uses a callback to load the article corresponding to the title
     private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
@@ -136,19 +138,33 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String onRequestOpenDestinationName(){
+    private Trip.Destination onRequestOpenDestination(){
         Callback callback = getCallback();
         if (callback != null) {
-            callback.onRequestOpenDestinationName();
+            return callback.onRequestOpenDestination();
         }
-            return "";
+        return null;
     }
 
-    //Saves list of selectedLandmarks
-    private void onSave(List<LandmarkCard> saveList){
-        Callback callback = getCallback();
-        if (callback != null) {
-            callback.onSave(saveList);
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void loadSelectedCards() {
+        if(this.destination != null) {
+            if(getCallback() != null) {
+                long tripId = getCallback().onRequestOpenTripId();
+
+                List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
+                for(LandmarkCard card: cardsList) {
+                    if(selected.stream().anyMatch(lm -> card.getTitle().equals(lm.getTitle()))) {
+                        card.setChecked(true);
+                        Log.d("Setting checked", "card.getTitle()");
+                    } else {
+                        card.setChecked(false);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -205,6 +221,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                         lastResult = result;
                         //Send over the list of NearbyPages to the next function
                         extractLandmarkArticles(result);
+                        loadSelectedCards();
                     }
 
                     @Override public void failure(@NonNull Call<MwQueryResponse> call,
@@ -217,8 +234,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                     }
                 });
     }
-
-
 
     @Nullable
     private Callback getCallback() {
@@ -311,11 +326,15 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                         //Adds the LandmarkCard object, comprised of card title and thumbUrl into list
                         if (card.getChecked()) {
                             card.setChecked(false);
-                            selectedLandmarks.remove(card);
+                            if(getCallback() != null) {
+                                getCallback().onRemoveLandmark(card);
+                            }
                         }
                         else  {
                             card.setChecked(true);
-                            selectedLandmarks.add(card);
+                            if(getCallback() != null) {
+                                getCallback().onSelectLandmark(card);
+                            }
                         }
                         break;
                 }
@@ -324,6 +343,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
             public void bindItem(LandmarkCard landmarkCard) {
                 textViewTitle.setText(landmarkCard.getTitle());
                 textViewDesc.setText(landmarkCard.getDesc());
+                checkBox.setChecked(landmarkCard.getChecked());
             }
 
         }

@@ -6,8 +6,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.wikipedia.database.DatabaseTable;
+import org.wikipedia.database.column.Column;
 import org.wikipedia.database.contract.UserLandmarkContract;
 import org.wikipedia.travel.landmarkpicker.LandmarkCard;
+
+import java.util.ArrayList;
 
 /**
  * Created by Artem on 2018-04-12.
@@ -31,9 +34,23 @@ public class UserLandmarkTable extends DatabaseTable <UserLandmark> {
     @Override
     protected ContentValues toContentValues(UserLandmark row) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(UserLandmarkContract.Col.ID.getName(), row.getId());
         contentValues.put(UserLandmarkContract.Col.TITLE.getName(), row.getTitle());
         return contentValues;
+    }
+
+    @NonNull
+    @Override
+    public Column<?>[] getColumnsAdded(int version) {
+        switch(version) {
+            case DB_VER_INTRODUCED:
+                ArrayList<Column<?>> cols = new ArrayList<>();
+                cols.add(UserLandmarkContract.Col.ID);
+                cols.add(UserLandmarkContract.Col.TITLE);
+                cols.add(UserLandmarkContract.Col.TRIPID);
+                return cols.toArray(new Column<?>[cols.size()]);
+            default:
+                return super.getColumnsAdded(version);
+        }
     }
 
     @Override
