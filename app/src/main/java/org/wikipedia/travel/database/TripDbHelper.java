@@ -1,5 +1,6 @@
 package org.wikipedia.travel.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.database.contract.TripContract;
+import org.wikipedia.database.contract.UserLandmarkContract;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.log.L;
 
@@ -112,6 +114,48 @@ public class TripDbHelper {
             return null;
         }
         return list;
+    }
+
+    public Void addUserLandmark(Trip trip, UserLandmark landmark) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues content = UserLandmark.DATABASE_TABLE.toContentValues(landmark);
+        content.put(UserLandmarkContract.Col.TRIPID.getName(), trip.getId());
+
+        db.beginTransaction();
+        try{
+            db.insertOrThrow(UserLandmarkContract.TABLE, null, content);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return null;
+    }
+
+    public Void deleteUserLandmark(UserLandmark landmark) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try{
+            db.delete(UserLandmarkContract.TABLE, UserLandmarkContract.Col.ID.getName() + " = ?", new String[]{Long.toString(landmark.getId())});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return null;
+    }
+
+    public List<UserLandmark> loadUserLandmarks(Trip trip) {
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<UserLandmark> result = new ArrayList<>();
+
+        try (Cursor cursor = db.query(UserLandmarkContract.TABLE, null, UserLandmarkContract.Col.TRIPID.getName() + " = ?", new String[]{Long.toString(trip.getId())}, null, null, null)) {
+            while (cursor.moveToNext()) {
+                UserLandmark landmark = UserLandmark.DATABASE_TABLE.fromCursor(cursor);
+                result.add(landmark);
+            }
+        }
+        return result;
     }
 
     private SQLiteDatabase getReadableDatabase() {
