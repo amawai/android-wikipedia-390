@@ -54,6 +54,7 @@ import org.wikipedia.history.HistoryFragment;
 import org.wikipedia.imagesearch.Encoder;
 import org.wikipedia.imagesearch.ImageLabeler;
 import org.wikipedia.imagesearch.ImageSearchActivity;
+import org.wikipedia.imagesearch.ImageSearchFragment;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.navtab.NavTabFragmentPagerAdapter;
@@ -172,6 +173,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         super.onDestroyView();
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == Constants.ACTIVITY_REQUEST_VOICE_SEARCH
@@ -221,7 +223,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             @Override
             public void success(List <String> list) {
                 imageLabels = list;
-                displayResults();
+                openImageSearchFragment(imageLabels);
             }
             @Override
             public void failure(Throwable caught) {
@@ -317,7 +319,6 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     }
 
     private void openImageIntent() {
-
         // Determine Uri of camera image to save.
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
@@ -633,6 +634,26 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     @SuppressLint("CommitTransaction")
     private void closeSearchFragment(@NonNull SearchFragment fragment) {
         getChildFragmentManager().beginTransaction().remove(fragment).commitNowAllowingStateLoss();
+    }
+
+    public void switchToSearchFragment(ImageSearchFragment fragment,
+                                       @NonNull SearchInvokeSource source, @Nullable String query){
+        closeImageSearchFragment(fragment);
+        openSearchFragment(source, query);
+    }
+
+    @SuppressLint("CommitTransaction")
+    private void closeImageSearchFragment(@NonNull ImageSearchFragment fragment) {
+        getChildFragmentManager().beginTransaction().remove(fragment).commitNowAllowingStateLoss();
+    }
+
+    @SuppressLint("CommitTransaction")
+    private void openImageSearchFragment(List<String> labels) {
+        Fragment fragment = ImageSearchFragment.newInstance(labels);
+        getChildFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_main_container, fragment)
+                .commitNow();
     }
 
     @Nullable private SearchFragment searchFragment() {
