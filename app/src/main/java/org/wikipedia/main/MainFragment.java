@@ -197,14 +197,16 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
              final boolean isCamera;
                 if (data == null || data.getData() == null) {
                     isCamera = true;
-                 } else {
-                      final String action = data.getAction();
-                  if (action == null) {
-                      isCamera = false;
-                  } else {
-                    isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 }
-            }
+                else {
+                    final String action = data.getAction();
+                    if (action == null) {
+                        isCamera = false;
+                    }
+                    else {
+                    isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
             Uri selectedImageUri;
             if (isCamera) {
                 selectedImageUri = outputFileUri;
