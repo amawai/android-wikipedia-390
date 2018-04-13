@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,6 @@ import org.wikipedia.history.HistoryFragment;
 import org.wikipedia.imagesearch.Encoder;
 import org.wikipedia.imagesearch.ImageLabeler;
 import org.wikipedia.imagesearch.ImageSearchActivity;
-import org.wikipedia.imagesearch.ImageLabeler;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.navtab.NavTabFragmentPagerAdapter;
@@ -215,19 +213,28 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     //This asynchronously calls the ImageLabeler to recognize the image and populates imageLabels with relevant labels
     private void findImageLabels(Uri selectedImageUri) {
         String encodedImage = imageEncoder.encodeUriToBase64Binary(getContext(), selectedImageUri);
+        updateImageLabels(getContext(), encodedImage);
+    }
+
+    private void updateImageLabels(Context context, String encodedImage) {
         CallbackTask.execute(() -> getLabelList(encodedImage), new CallbackTask.DefaultCallback<List <String>>() {
             @Override
             public void success(List <String> list) {
                 imageLabels = list;
-                for (String wtv : list) {
-                    Log.d("imagesearch", "lol: " + wtv);
-                }
+                displayResults();
             }
             @Override
             public void failure(Throwable caught) {
                 Toast.makeText(getActivity(), "Failed to find image labels", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void displayResults() {
+        Intent imageSearchDisplay = new Intent(getContext(), ImageSearchActivity.class);
+        imageSearchDisplay.putStringArrayListExtra(ImageSearchActivity.IMAGE_LABEL_ARGS,
+                                                        (ArrayList <String>) imageLabels);
+        startActivity(imageSearchDisplay);
     }
 
     @Override
