@@ -28,6 +28,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -54,7 +55,7 @@ public class ImageSearchTest {
     }
 
     @Test
-    public void imageSearchButtonExists() {
+    public void imageSearchButtonsExists() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -62,10 +63,46 @@ public class ImageSearchTest {
         }
 
         UiObject imageSearchButton = mDevice.findObject(new UiSelector()
-                .className("android.widget.ImageView").enabled(true).instance(2));
+                .className("android.widget.ImageView").enabled(true).instance(1));
 
         //tests that the image search button exists in the main feed
         assertTrue(imageSearchButton.exists());
+
+        try {
+            imageSearchButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        UiObject chooserDialog = mDevice.findObject(new UiSelector()
+                .text("Image Search: Select Source"));
+
+        // test that the dialog appears
+        assertTrue(chooserDialog.exists());
+
+        UiObject cameraButton = mDevice.findObject(new UiSelector()
+                .instance(1));
+
+        // test that the camera button exists
+        assertTrue(cameraButton.exists());
+
+        UiObject galleryButton = mDevice.findObject(new UiSelector()
+                .instance(2));
+
+        // test that the gallery button exists
+        assertTrue(galleryButton.exists());
+
+        UiObject photoButton = mDevice.findObject(new UiSelector()
+                .instance(3));
+        
+        // test that the photo button exists
+        assertTrue(photoButton.exists());
     }
 
 }
