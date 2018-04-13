@@ -31,7 +31,7 @@
             android:key="@string/preference_key_imagesearch_article_search"
             android:defaultValue="false"
             android:title="Advanced Image Search"
-            android:summary="Enable multiple article wearch for image" />
+            android:summary="Enable multiple article search for image" />
         <org.wikipedia.settings.PreferenceMultiLine
             android:key="@string/preference_key_color_theme"
             android:defaultValue="0"

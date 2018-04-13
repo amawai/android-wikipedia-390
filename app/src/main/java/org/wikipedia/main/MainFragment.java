@@ -27,6 +27,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +95,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         LinkPreviewDialog.Callback, ImageSearchFragment.Callback {
     @BindView(R.id.fragment_main_view_pager) ViewPager viewPager;
     @BindView(R.id.fragment_main_nav_tab_layout) NavTabLayout tabLayout;
+    @BindView(R.id.imagesearch_progress) ProgressBar progressBar;
     private Unbinder unbinder;
     private ExclusiveBottomSheetPresenter bottomSheetPresenter = new ExclusiveBottomSheetPresenter();
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
@@ -173,6 +175,10 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         super.onDestroyView();
     }
 
+    //Enables progress bar while image recognition processing takes place
+    public void onImageSearchProgressBar(boolean enabled) {
+        progressBar.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -214,6 +220,8 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
 
     //This asynchronously calls the ImageLabeler to recognize the image and populates imageLabels with relevant labels
     private void findImageLabels(Uri selectedImageUri) {
+        Toast.makeText(getActivity(), "Recognizing image...", Toast.LENGTH_SHORT).show();
+        onImageSearchProgressBar(true);
         String encodedImage = imageEncoder.encodeUriToBase64Binary(getContext(), selectedImageUri);
         updateImageLabels(getContext(), encodedImage);
     }
@@ -230,13 +238,6 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
                 Toast.makeText(getActivity(), "Failed to find image labels", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void displayResults() {
-        Intent imageSearchDisplay = new Intent(getContext(), ImageSearchActivity.class);
-        imageSearchDisplay.putStringArrayListExtra(ImageSearchActivity.IMAGE_LABEL_ARGS,
-                                                        (ArrayList <String>) imageLabels);
-        startActivity(imageSearchDisplay);
     }
 
     @Override

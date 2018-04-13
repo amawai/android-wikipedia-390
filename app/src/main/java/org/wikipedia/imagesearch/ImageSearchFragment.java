@@ -41,6 +41,7 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
                                     SearchInvokeSource source, String query);
         void onLoadPage(PageTitle title, HistoryEntry entry);
         void closeImageSearchFragment(@NonNull ImageSearchFragment fragment);
+        void onImageSearchProgressBar(boolean enabled);
     }
 
     public static final String IMAGE_QUERY = "IMAGE_QUERY";
@@ -185,6 +186,7 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
                                 callback.onLoadPage(title, new HistoryEntry(title, new Date(), HistoryEntry.SOURCE_SEARCH));
                             }
                         }
+                        callback.onImageSearchProgressBar(false);
                         break;
                 }
             }
