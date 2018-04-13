@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -37,6 +38,7 @@ import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.analytics.GalleryFunnel;
 import org.wikipedia.analytics.IntentFunnel;
 import org.wikipedia.analytics.LoginFunnel;
+import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.feed.FeedFragment;
 import org.wikipedia.feed.featured.FeaturedArticleCardView;
 import org.wikipedia.feed.image.FeaturedImage;
@@ -49,6 +51,9 @@ import org.wikipedia.gallery.ImagePipelineBitmapGetter;
 import org.wikipedia.gallery.MediaDownloadReceiver;
 import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.history.HistoryFragment;
+import org.wikipedia.imagesearch.Encoder;
+import org.wikipedia.imagesearch.ImageLabeler;
+import org.wikipedia.imagesearch.ImageSearchActivity;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.navtab.NavTabFragmentPagerAdapter;
@@ -71,6 +76,7 @@ import org.wikipedia.util.log.L;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -92,6 +98,8 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
     private MediaDownloadReceiverCallback downloadReceiverCallback = new MediaDownloadReceiverCallback();
     private Uri outputFileUri;
+    private List <String> imageLabels;
+    private Encoder imageEncoder;
 
     // The permissions request API doesn't take a callback, so in the event we have to
     // ask for permission to download a featured image from the feed, we'll have to hold
@@ -132,6 +140,8 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         if (savedInstanceState == null) {
             handleIntent(getActivity().getIntent());
         }
+
+        imageEncoder = new Encoder();
         return view;
     }
 
@@ -189,11 +199,27 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
                 selectedImageUri = outputFileUri;
             } else {
                 selectedImageUri = data == null ? null : data.getData();
+                findImageLabels(selectedImageUri); //After this is complete, imageLabels is populated
             }
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    //This asynchronously calls the ImageLabeler to recognize the image and populates imageLabels with relevant labels
+    private void findImageLabels(Uri selectedImageUri) {
+        String encodedImage = imageEncoder.encodeUriToBase64Binary(getContext(), selectedImageUri);
+        CallbackTask.execute(() -> getLabelList(encodedImage), new CallbackTask.DefaultCallback<List <String>>() {
+            @Override
+            public void success(List <String> list) {
+                imageLabels = list;
+            }
+            @Override
+            public void failure(Throwable caught) {
+                Toast.makeText(getActivity(), "Failed to find image labels", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -286,10 +312,10 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
         // Manages the camera intent
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final List <Intent> cameraIntents = new ArrayList <Intent>();
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getActivity().getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        final List <ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
         for(ResolveInfo res : listCam) {
             final String packageName = res.activityInfo.packageName;
             final Intent intent = new Intent(captureIntent);
