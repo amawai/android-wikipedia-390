@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,6 +27,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +39,7 @@ import org.wikipedia.activity.FragmentUtil;
 import org.wikipedia.analytics.GalleryFunnel;
 import org.wikipedia.analytics.IntentFunnel;
 import org.wikipedia.analytics.LoginFunnel;
+import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.feed.FeedFragment;
 import org.wikipedia.feed.featured.FeaturedArticleCardView;
 import org.wikipedia.feed.image.FeaturedImage;
@@ -49,6 +52,10 @@ import org.wikipedia.gallery.ImagePipelineBitmapGetter;
 import org.wikipedia.gallery.MediaDownloadReceiver;
 import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.history.HistoryFragment;
+import org.wikipedia.imagesearch.Encoder;
+import org.wikipedia.imagesearch.ImageLabeler;
+import org.wikipedia.imagesearch.ImageSearchActivity;
+import org.wikipedia.imagesearch.ImageSearchFragment;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.navtab.NavTabFragmentPagerAdapter;
@@ -71,6 +78,7 @@ import org.wikipedia.util.log.L;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -84,14 +92,18 @@ import static org.wikipedia.Constants.ACTIVITY_REQUEST_IMAGE_SEARCH;
 
 public class MainFragment extends Fragment implements BackPressedHandler, FeedFragment.Callback,
         NearbyFragment.Callback, HistoryFragment.Callback, SearchFragment.Callback,
-        LinkPreviewDialog.Callback {
+        LinkPreviewDialog.Callback, ImageSearchFragment.Callback {
     @BindView(R.id.fragment_main_view_pager) ViewPager viewPager;
     @BindView(R.id.fragment_main_nav_tab_layout) NavTabLayout tabLayout;
+    @BindView(R.id.imagesearch_progress) ProgressBar progressBar;
     private Unbinder unbinder;
     private ExclusiveBottomSheetPresenter bottomSheetPresenter = new ExclusiveBottomSheetPresenter();
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
     private MediaDownloadReceiverCallback downloadReceiverCallback = new MediaDownloadReceiverCallback();
     private Uri outputFileUri;
+    private List <String> imageLabels;
+    private Encoder imageEncoder;
+    private ImageLabeler labeler;
 
     // The permissions request API doesn't take a callback, so in the event we have to
     // ask for permission to download a featured image from the feed, we'll have to hold
@@ -118,6 +130,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, view);
+        labeler = new ImageLabeler();
 
         viewPager.setAdapter(new NavTabFragmentPagerAdapter(getChildFragmentManager()));
         tabLayout.setOnNavigationItemSelectedListener(item -> {
@@ -132,6 +145,9 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         if (savedInstanceState == null) {
             handleIntent(getActivity().getIntent());
         }
+
+        imageEncoder = new Encoder();
+        labeler = new ImageLabeler();
         return view;
     }
 
@@ -157,6 +173,11 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         unbinder.unbind();
         unbinder = null;
         super.onDestroyView();
+    }
+
+    //Enables progress bar while image recognition processing takes place
+    public void onImageSearchProgressBar(boolean enabled) {
+        progressBar.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -192,10 +213,33 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             } else {
                 selectedImageUri = data == null ? null : data.getData();
             }
+            findImageLabels(selectedImageUri); //After this is complete, imageLabels is populated
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    //This asynchronously calls the ImageLabeler to recognize the image and populates imageLabels with relevant labels
+    private void findImageLabels(Uri selectedImageUri) {
+        Toast.makeText(getActivity(), "Recognizing image...", Toast.LENGTH_SHORT).show();
+        onImageSearchProgressBar(true);
+        String encodedImage = imageEncoder.encodeUriToBase64Binary(getContext(), selectedImageUri);
+        updateImageLabels(getContext(), encodedImage);
+    }
+
+    private void updateImageLabels(Context context, String encodedImage) {
+        CallbackTask.execute(() -> getLabelList(encodedImage), new CallbackTask.DefaultCallback<List <String>>() {
+            @Override
+            public void success(List <String> list) {
+                imageLabels = list;
+                openImageSearchFragment(imageLabels);
+            }
+            @Override
+            public void failure(Throwable caught) {
+                Toast.makeText(getActivity(), "Failed to find image labels", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -278,7 +322,6 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     }
 
     private void openImageIntent() {
-
         // Determine Uri of camera image to save.
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
@@ -288,10 +331,10 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
         // Manages the camera intent
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final List <Intent> cameraIntents = new ArrayList <Intent>();
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getActivity().getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        final List <ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
         for(ResolveInfo res : listCam) {
             final String packageName = res.activityInfo.packageName;
             final Intent intent = new Intent(captureIntent);
@@ -515,6 +558,11 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         if (fragment instanceof BackPressedHandler && ((BackPressedHandler) fragment).onBackPressed()) {
             return true;
         }
+        //closes imagesearchfragment when back button is pressed
+        ImageSearchFragment imageFragment = imageSearchFragment();
+        if (imageFragment != null && imageFragment.onBackPressed()) {
+            return true;
+        }
 
         return false;
     }
@@ -558,6 +606,12 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         return TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - Prefs.pageLastShown()) < days;
     }
 
+    private List <String> getLabelList(String imagePath) throws Exception{
+        String appendedLabels = labeler.execute(imagePath).get();
+        List <String> labelList = new ArrayList <String>(Arrays.asList(appendedLabels.split(",")));
+        return labelList;
+    }
+
     private void download(@NonNull FeaturedImage image) {
         setPendingDownload(null);
         downloadReceiver.download(getContext(), image);
@@ -590,9 +644,46 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         getChildFragmentManager().beginTransaction().remove(fragment).commitNowAllowingStateLoss();
     }
 
-    @Nullable private SearchFragment searchFragment() {
-        return (SearchFragment) getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+    public void switchToSearchFragment(ImageSearchFragment fragment,
+                                       @NonNull SearchInvokeSource source, @Nullable String query){
+        closeImageSearchFragment(fragment);
+        openSearchFragment(source, query);
     }
+
+    @SuppressLint("CommitTransaction")
+    public void closeImageSearchFragment(@NonNull ImageSearchFragment fragment) {
+        getChildFragmentManager()
+                .beginTransaction().remove(fragment).commitNowAllowingStateLoss();
+    }
+
+    @SuppressLint("CommitTransaction")
+    private void openImageSearchFragment(List <String> labels) {
+        Fragment fragment = imageSearchFragment();
+        if (fragment == null) {
+            fragment = ImageSearchFragment.newInstance(labels);
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_main_container, fragment)
+                    .commitNowAllowingStateLoss();
+        }
+    }
+
+    @Nullable private SearchFragment searchFragment() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+        if (fragment instanceof SearchFragment) {
+            return (SearchFragment) fragment;
+        }
+        return null;
+    }
+
+    @Nullable private ImageSearchFragment imageSearchFragment() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragment_main_container);
+        if (fragment instanceof ImageSearchFragment) {
+            return (ImageSearchFragment) fragment;
+        }
+        return null;
+    }
+
 
     private void cancelSearch() {
         SearchFragment fragment = searchFragment();

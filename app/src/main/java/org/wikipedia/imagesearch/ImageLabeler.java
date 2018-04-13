@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -21,8 +20,6 @@ import java.net.URL;
 public class ImageLabeler extends AsyncTask<String, Void, String> {
     private final String KEY;
     private final String PATH;
-    private Encoder encoder;
-    private String imagePATH;
 
 
     public ImageLabeler() {
@@ -33,10 +30,8 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
     // calls to the API are made within this method
     @Override
     protected String doInBackground(String... strings) {
-        imagePATH = strings[0];
-        File imageFile = new File(imagePATH);
-        String encodedString = encoder.encodeFileToBase64Binary(imageFile);
 
+        String encodedString = strings[0];
         BufferedReader reader = null;
         String response;
         String result = "";

@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_imagesearch"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#EAECF0">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/image_search_list"
         android:layout_width="398dp"
-        android:layout_height="588dp"
+        android:layout_height="538dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
