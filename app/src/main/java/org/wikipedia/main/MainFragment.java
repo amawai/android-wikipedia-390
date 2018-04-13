@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ import org.wikipedia.history.HistoryFragment;
 import org.wikipedia.imagesearch.Encoder;
 import org.wikipedia.imagesearch.ImageLabeler;
 import org.wikipedia.imagesearch.ImageSearchActivity;
+import org.wikipedia.imagesearch.ImageLabeler;
 import org.wikipedia.login.LoginActivity;
 import org.wikipedia.navtab.NavTab;
 import org.wikipedia.navtab.NavTabFragmentPagerAdapter;
@@ -100,6 +102,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     private Uri outputFileUri;
     private List <String> imageLabels;
     private Encoder imageEncoder;
+    private ImageLabeler labeler;
 
     // The permissions request API doesn't take a callback, so in the event we have to
     // ask for permission to download a featured image from the feed, we'll have to hold
@@ -126,6 +129,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, view);
+        labeler = new ImageLabeler();
 
         viewPager.setAdapter(new NavTabFragmentPagerAdapter(getChildFragmentManager()));
         tabLayout.setOnNavigationItemSelectedListener(item -> {
@@ -142,6 +146,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         }
 
         imageEncoder = new Encoder();
+        labeler = new ImageLabeler();
         return view;
     }
 
@@ -214,6 +219,9 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             @Override
             public void success(List <String> list) {
                 imageLabels = list;
+                for (String wtv : list) {
+                    Log.d("imagesearch", "lol: " + wtv);
+                }
             }
             @Override
             public void failure(Throwable caught) {
@@ -580,6 +588,12 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
 
     private boolean lastPageViewedWithin(int days) {
         return TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - Prefs.pageLastShown()) < days;
+    }
+
+    private List <String> getLabelList(String imagePath) throws Exception{
+        String appendedLabels = labeler.execute(imagePath).get();
+        List <String> labelList = new ArrayList <String>(Arrays.asList(appendedLabels.split(",")));
+        return labelList;
     }
 
     private void download(@NonNull FeaturedImage image) {
