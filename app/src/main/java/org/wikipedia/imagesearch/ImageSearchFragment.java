@@ -45,11 +45,11 @@ public class ImageSearchFragment extends Fragment {
 
     @BindView(R.id.image_search_list) RecyclerView labelList;
 
-    @NonNull public static ImageSearchFragment newInstance(List<String> labels) {
+    @NonNull public static ImageSearchFragment newInstance(List <String> labels) {
         ImageSearchFragment fragment = new ImageSearchFragment();
 
         Bundle args = new Bundle();
-        args.putStringArrayList(IMAGE_QUERY, (ArrayList<String>) labels);
+        args.putStringArrayList(IMAGE_QUERY, (ArrayList <String>) labels);
 
         fragment.setArguments(args);
         return fragment;
@@ -70,7 +70,7 @@ public class ImageSearchFragment extends Fragment {
         imageLabelAdapter = new ImageLabelAdapter(getContext());
         labelList.setAdapter(imageLabelAdapter);
 
-        List<String> labels = getArguments().getStringArrayList(IMAGE_QUERY);
+        List <String> labels = getArguments().getStringArrayList(IMAGE_QUERY);
         setImageLabelList(labels);
 
         labelList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -93,7 +93,7 @@ public class ImageSearchFragment extends Fragment {
     }
 
     //Setting the new list of labels
-    public void setImageLabelList(List<String> imageLabels) {
+    public void setImageLabelList(List <String> imageLabels) {
         if(imageLabelAdapter != null) {
             imageLabelAdapter.setLabelList(imageLabels);
         }
@@ -106,11 +106,11 @@ public class ImageSearchFragment extends Fragment {
 
     public final class ImageLabelAdapter extends RecyclerView.Adapter<ImageSearchFragment.ImageLabelHolder> {
         private Context context;
-        List<String> labelTitleList;
+        List <String> labelTitleList;
 
         public ImageLabelAdapter(Context context) {
             this.context = context;
-            this.labelTitleList = new ArrayList<String>();
+            this.labelTitleList = new ArrayList <String>();
         }
 
         @Override
@@ -134,7 +134,7 @@ public class ImageSearchFragment extends Fragment {
             notifyItemInserted(position);
         }
 
-        public void setLabelList(List<String> imageLabels) {
+        public void setLabelList(List <String> imageLabels) {
             this.labelTitleList = imageLabels;
             notifyDataSetChanged();
         }
