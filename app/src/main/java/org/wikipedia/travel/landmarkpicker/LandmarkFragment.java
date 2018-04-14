@@ -327,7 +327,7 @@ public class LandmarkFragment extends Fragment{
                         //Adds the LandmarkCard object, comprised of card title and thumbUrl into list
                         if (card.getChecked()) {
                             card.setChecked(false);
-                            if(getCallback() != null) {
+                            if (getCallback() != null) {
                                 getCallback().onRemoveLandmark(card);
                             }
                         }
