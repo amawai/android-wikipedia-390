@@ -51,7 +51,7 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
                     data.put("data", image);
                         image.put("image", base64);
                             base64.put("base64", encodedString);
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -86,14 +86,14 @@ public class ImageLabeler extends AsyncTask<String, Void, String> {
                 JSONArray concepts = outputs.getJSONObject(0).getJSONObject("data").getJSONArray("concepts");
 
                 for (int i = 0; i < concepts.length(); i++) { //parses through json for concepts with high correlation
-                    if(i==MAXLABELS) {
+                    if (i == MAXLABELS) {
                         break;
                     }
                     JSONObject concept = concepts.getJSONObject(i);
                     double value = concept.getDouble("value");
                     String name = concept.getString("name");
-                    if (value >LABELTHRESHHOLD){
-                        result +=name+",";
+                    if (value > LABELTHRESHHOLD) {
+                        result += name + ",";
                     }
                 }
             }
