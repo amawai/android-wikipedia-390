@@ -94,7 +94,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
     protected @BindView(R.id.fragment_main_view_pager) ViewPager viewPager;
     protected @BindView(R.id.fragment_main_nav_tab_layout) NavTabLayout tabLayout;
     protected @BindView(R.id.imagesearch_progress) ProgressBar progressBar;
-    
+
     private Unbinder unbinder;
     private ExclusiveBottomSheetPresenter bottomSheetPresenter = new ExclusiveBottomSheetPresenter();
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
@@ -199,8 +199,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
                 final String action = data.getAction();
                 if (action == null) {
                     isCamera = false;
-                }
-                else {
+                } else {
                     isCamera = action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
                 }
             }
@@ -215,8 +214,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             } else {
                 Toast.makeText(getActivity(), "No image was selected", Toast.LENGTH_SHORT).show();
             }
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
