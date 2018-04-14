@@ -266,8 +266,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             TripDbHelper.instance().addUserLandmarks(openTrip.getId(), addedLandmarks);
             TripDbHelper.instance().deleteUserLandmarks(openTrip.getId(), removedLandmarks);
             return null;
-        }
-        ,new CallbackTask.DefaultCallback<Void>() {
+        }, new CallbackTask.DefaultCallback<Void>() {
             @Override
             public void success(Void o) {
                 super.success(o);

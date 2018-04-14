@@ -2,7 +2,6 @@ package org.wikipedia.espresso.travel;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
@@ -19,14 +18,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.*;
 
 public class LandmarkCheckboxTest {
     private UiDevice mDevice;
@@ -68,10 +63,11 @@ public class LandmarkCheckboxTest {
                 allOf(withId(R.id.landmark_country_view_text)));
         destinationDisplay.check(matches(withText("Montreal, QC, Canada")));
 
+        assertNotNull(destinationDisplay);
     }
 
     @Test
-    public void checkBoxIsChecked() throws UiObjectNotFoundException{
+    public void checkBoxIsChecked() throws UiObjectNotFoundException {
         // landmark_check_box
         UiObject landmarkObject = mDevice.findObject(new UiSelector()
                 .className(android.widget.CheckBox.class)
@@ -81,7 +77,7 @@ public class LandmarkCheckboxTest {
         assertNotNull(landmarkObject);
     }
 
-    private void selectDestination() throws UiObjectNotFoundException{
+    private void selectDestination() throws UiObjectNotFoundException {
         ViewInteraction layout = onView(withId(R.id.fragment_place_autocomplete));
 
         layout.perform(click());

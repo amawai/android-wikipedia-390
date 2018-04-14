@@ -140,8 +140,8 @@ public class TripDbHelper {
     public Void deleteUserLandmarks(long tripId, List<LandmarkCard> landmarks) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        try{
-            for(LandmarkCard lm: landmarks) {
+        try {
+            for (LandmarkCard lm: landmarks) {
 
                 db.delete(UserLandmarkContract.TABLE,
                         UserLandmarkContract.Col.TITLE.getName() + " = ? AND "

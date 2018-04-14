@@ -3,11 +3,9 @@ package org.wikipedia.travel.landmarkpicker;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -25,7 +23,6 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import org.wikipedia.R;
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.activity.FragmentUtil;
-import org.wikipedia.concurrency.CallbackTask;
 import org.wikipedia.dataclient.WikiSite;
 import org.wikipedia.dataclient.mwapi.MwQueryResponse;
 import org.wikipedia.history.HistoryEntry;
@@ -33,11 +30,9 @@ import org.wikipedia.nearby.NearbyClient;
 import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
 import org.wikipedia.page.PageTitle;
-import org.wikipedia.travel.MainPlannerFragment;
 import org.wikipedia.travel.database.TripDbHelper;
 import org.wikipedia.travel.database.UserLandmark;
 import org.wikipedia.travel.trip.Trip;
-import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
 
@@ -58,6 +53,9 @@ import retrofit2.Call;
  */
 
 public class LandmarkFragment extends Fragment{
+
+    private Trip.Destination destination;
+
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
         Trip.Destination onRequestOpenDestination();
@@ -68,7 +66,6 @@ public class LandmarkFragment extends Fragment{
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
-    private Trip.Destination destination;
     private LandmarkAdapter adapter;
     private NearbyResult lastResult;
 
@@ -137,7 +134,7 @@ public class LandmarkFragment extends Fragment{
         }
     }
 
-    private Trip.Destination onRequestOpenDestination(){
+    private Trip.Destination onRequestOpenDestination() {
         Callback callback = getCallback();
         if (callback != null) {
             return callback.onRequestOpenDestination();
@@ -146,27 +143,26 @@ public class LandmarkFragment extends Fragment{
     }
 
     private void loadSelectedCards() {
-        if(this.destination != null) {
-            if(getCallback() != null) {
-                long tripId = getCallback().onRequestOpenTripId();
+        if (this.destination != null && getCalback() != null) {
+            long tripId = getCallback().onRequestOpenTripId();
 
-                List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
-                for(LandmarkCard card: cardsList) {
-                    if(listHasLandmark(selected, card)) {
-                        card.setChecked(true);
-                        Log.d("Setting checked", "card.getTitle()");
-                    } else {
-                        card.setChecked(false);
-                    }
+            List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
+            for (LandmarkCard card : cardsList) {
+                if (listHasLandmark(selected, card)) {
+                    card.setChecked(true);
+                    Log.d("Setting checked", "card.getTitle()");
+                } else {
+                    card.setChecked(false);
                 }
-                adapter.notifyDataSetChanged();
             }
+
+            adapter.notifyDataSetChanged();
         }
     }
 
     private static boolean listHasLandmark(List<UserLandmark> selected, LandmarkCard card) {
-        for(UserLandmark lm: selected) {
-            if(lm.getTitle().equals(card.getTitle())) {
+        for (UserLandmark lm: selected) {
+            if (lm.getTitle().equals(card.getTitle())) {
                 return true;
             }
         }
@@ -204,8 +200,8 @@ public class LandmarkFragment extends Fragment{
         try {
             List<Address> addresses= gc.getFromLocationName(location, 5);
             List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
-            for(Address a : addresses){
-                if(a.hasLatitude() && a.hasLongitude()){
+            for (Address a : addresses){
+                if (a.hasLatitude() && a.hasLongitude()){
                     lat = a.getLatitude();
                     longi = a.getLongitude();
                 }
