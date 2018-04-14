@@ -45,5 +45,14 @@ public final class PermissionUtil {
         // once permission is granted/denied it will continue with onRequestPermissionsResult
     }
 
+    public static boolean hasCameraPermissions(@NonNull Context context) {
+        return ContextCompat.checkSelfPermission(context,
+                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestCameraPermission(Fragment fragment, int requestCode) {
+        fragment.requestPermissions(new String[]{Manifest.permission.CAMERA}, requestCode);
+    }
+
     private PermissionUtil() { }
 }
