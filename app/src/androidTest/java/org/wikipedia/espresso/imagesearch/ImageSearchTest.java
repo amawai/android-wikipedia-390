@@ -7,11 +7,12 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.wikipedia.main.MainActivity;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by SunXP on 2018-04-12.
@@ -19,27 +20,23 @@ import static junit.framework.Assert.assertTrue;
 
 public class ImageSearchTest {
     private UiDevice mDevice;
-    private int timeForButtonToAppear;
-    private int cameraPosition;
-    private int galleryPosition;
-    private int photoPosition;
+    private static final int TIME_FOR_BUTTON_TO_APPEAR = 2000;
+    private static final int CAMERA_POSITION = 1;
+    private static final int GALLERY_POSITION = 2;
+    private static final int PHOTO_POSITION = 3;
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
 
     @Before
     public void setUp() throws UiObjectNotFoundException {
-        cameraPosition = 1;
-        galleryPosition = 2;
-        photoPosition = 3;
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        timeForButtonToAppear = 2000;
     }
 
     @Test
     public void imageSearchButtonsExists() {
         try {
-            Thread.sleep(timeForButtonToAppear);
+            Thread.sleep(TIME_FOR_BUTTON_TO_APPEAR);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -57,7 +54,7 @@ public class ImageSearchTest {
         }
 
         try {
-            Thread.sleep(timeForButtonToAppear);
+            Thread.sleep(TIME_FOR_BUTTON_TO_APPEAR);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -81,19 +78,19 @@ public class ImageSearchTest {
         assertTrue(chooserDialog.exists());
 
         UiObject cameraButton = mDevice.findObject(new UiSelector()
-                .instance(cameraPosition));
+                .instance(CAMERA_POSITION));
 
         // test that the camera button exists
         assertTrue(cameraButton.exists());
 
         UiObject galleryButton = mDevice.findObject(new UiSelector()
-                .instance(galleryPosition));
+                .instance(GALLERY_POSITION));
 
         // test that the gallery button exists
         assertTrue(galleryButton.exists());
 
         UiObject photoButton = mDevice.findObject(new UiSelector()
-                .instance(photoPosition));
+                .instance(PHOTO_POSITION));
 
         // test that the photo button exists
         assertTrue(photoButton.exists());
