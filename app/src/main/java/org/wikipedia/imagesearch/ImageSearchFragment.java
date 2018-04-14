@@ -1,6 +1,5 @@
 package org.wikipedia.imagesearch;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +20,6 @@ import org.wikipedia.history.HistoryEntry;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.search.SearchInvokeSource;
 import org.wikipedia.settings.Prefs;
-import org.wikipedia.views.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +34,13 @@ import butterknife.Unbinder;
  */
 
 public class ImageSearchFragment extends Fragment implements BackPressedHandler {
+    public static final String IMAGE_QUERY = "IMAGE_QUERY";
+    private Unbinder unbinder;
+    private ImageLabelAdapter imageLabelAdapter;
+    private WikipediaApp app;
+
+    protected @BindView(R.id.image_search_list) RecyclerView labelList;
+
     public interface Callback {
         void switchToSearchFragment(ImageSearchFragment imageSearchFragment,
                                     SearchInvokeSource source, String query);
@@ -44,19 +49,12 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
         void onImageSearchProgressBar(boolean enabled);
     }
 
-    public static final String IMAGE_QUERY = "IMAGE_QUERY";
-    private Unbinder unbinder;
-    private ImageLabelAdapter imageLabelAdapter;
 
-    private WikipediaApp app;
-
-    @BindView(R.id.image_search_list) RecyclerView labelList;
-
-    @NonNull public static ImageSearchFragment newInstance(List <String> labels) {
+    @NonNull public static ImageSearchFragment newInstance(List<String> labels) {
         ImageSearchFragment fragment = new ImageSearchFragment();
 
         Bundle args = new Bundle();
-        args.putStringArrayList(IMAGE_QUERY, (ArrayList <String>) labels);
+        args.putStringArrayList(IMAGE_QUERY, (ArrayList<String>) labels);
 
         fragment.setArguments(args);
         return fragment;
@@ -75,10 +73,10 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
         View view = inflater.inflate(R.layout.fragment_imagesearch, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        imageLabelAdapter = new ImageLabelAdapter(getContext());
+        imageLabelAdapter = new ImageLabelAdapter();
         labelList.setAdapter(imageLabelAdapter);
 
-        List <String> labels = getArguments().getStringArrayList(IMAGE_QUERY);
+        List<String> labels = getArguments().getStringArrayList(IMAGE_QUERY);
         setImageLabelList(labels);
 
         labelList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -103,8 +101,8 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
     }
 
     //Setting the new list of labels
-    public void setImageLabelList(List <String> imageLabels) {
-        if(imageLabelAdapter != null) {
+    public void setImageLabelList(List<String> imageLabels) {
+        if (imageLabelAdapter != null) {
             imageLabelAdapter.setLabelList(imageLabels);
         }
     }
@@ -119,12 +117,10 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
     }
 
     public final class ImageLabelAdapter extends RecyclerView.Adapter<ImageSearchFragment.ImageLabelHolder> {
-        private Context context;
-        List <String> labelTitleList;
+        private List<String> labelTitleList;
 
-        public ImageLabelAdapter(Context context) {
-            this.context = context;
-            this.labelTitleList = new ArrayList <String>();
+        public ImageLabelAdapter() {
+            this.labelTitleList = new ArrayList<String>();
         }
 
         @Override
@@ -148,7 +144,7 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
             notifyItemInserted(position);
         }
 
-        public void setLabelList(List <String> imageLabels) {
+        public void setLabelList(List<String> imageLabels) {
             this.labelTitleList = imageLabels;
             notifyDataSetChanged();
         }
@@ -157,8 +153,8 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
     public final class ImageLabelHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private int index;
 
-        @BindView(R.id.imagesearch_label_holder) RelativeLayout labelLayout;
-        @BindView(R.id.imagesearch_label_title) TextView labelText;
+        protected @BindView(R.id.imagesearch_label_holder) RelativeLayout labelLayout;
+        protected @BindView(R.id.imagesearch_label_title) TextView labelText;
 
         public ImageLabelHolder(View labelView) {
             super(labelView);
@@ -174,11 +170,11 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
             Callback callback = callback();
             if (position >= 0) {
                 labelString = this.labelText.getText().toString();
-                switch(view.getId()){
+                switch (view.getId()) {
                     case R.id.imagesearch_label_holder:
                     case R.id.imagesearch_label_title:
                         if (callback != null) {
-                            if (Prefs.isImageSearchEnabled()){
+                            if (Prefs.isImageSearchEnabled()) {
                                 callback.switchToSearchFragment(getImageSearchFragment(),
                                         SearchInvokeSource.IMAGE_SEARCH, labelString);
                             } else {
@@ -187,6 +183,8 @@ public class ImageSearchFragment extends Fragment implements BackPressedHandler 
                             }
                         }
                         callback.onImageSearchProgressBar(false);
+                        break;
+                    default:
                         break;
                 }
             }

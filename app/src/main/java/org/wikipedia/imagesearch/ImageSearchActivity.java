@@ -3,7 +3,6 @@ package org.wikipedia.imagesearch;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 
 import org.wikipedia.activity.SingleFragmentActivity;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  * Created by amawai on 11/04/18.
  */
 
-public class ImageSearchActivity extends SingleFragmentActivity<ImageSearchFragment>{
+public class ImageSearchActivity extends SingleFragmentActivity<ImageSearchFragment> {
     public static final String IMAGE_LABEL_ARGS = "IMAGE_LABEL_ARGS";
 
     public static Intent newIntent(@NonNull Context context) {
