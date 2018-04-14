@@ -131,8 +131,6 @@ public class LandmarkFragment extends Fragment{
         adapter.setLandmarkCardList(landmarks);
     }
 
-
-
     //This function uses a callback to load the article corresponding to the title
     private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
         Callback callback = getCallback();
@@ -206,8 +204,8 @@ public class LandmarkFragment extends Fragment{
         try {
             List<Address> addresses= gc.getFromLocationName(location, 5);
             List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
-            for(Address a : addresses){
-                if(a.hasLatitude() && a.hasLongitude()){
+            for (Address a : addresses) {
+                if (a.hasLatitude() && a.hasLongitude()) {
                     lat = a.getLatitude();
                     longi = a.getLongitude();
                 }

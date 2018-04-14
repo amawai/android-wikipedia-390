@@ -96,6 +96,6 @@ public class LandmarkCheckboxTest {
         mDevice.findObject(new UiSelector()
                 .text("QC, Canada")).click();
 
+        //onView(withId(R.id.landmark_check_box)).perform(click());
     }
 }
-

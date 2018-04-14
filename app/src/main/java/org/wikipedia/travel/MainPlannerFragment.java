@@ -139,6 +139,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             public void success(Trip trip) {
                 userTripsList.add(trip);
                 openTrip(trip.getId());
+                Toast.makeText(getActivity(), "Default trip (no destination, present date and no landmarks) added to list and can now be planned", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -198,7 +199,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     @Override
-    public void onDestinationnHistorySelected(int id) {
+    public void onDestinationHistorySelected(int id) {
         openTrip.setDestinationName((String) userDestinationList.get(id).getDestination().getDestinationName());
         nextPage();
     }
@@ -380,7 +381,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private void goToHomePage() {
         goToPage(0);
         bSave.setActivated(true);
-        //TODO: Prompt user to save unsaved changes
         openTrip = null;
     }
 
