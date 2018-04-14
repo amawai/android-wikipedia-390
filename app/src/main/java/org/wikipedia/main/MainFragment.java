@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -92,15 +91,15 @@ import static org.wikipedia.Constants.ACTIVITY_REQUEST_IMAGE_SEARCH;
 public class MainFragment extends Fragment implements BackPressedHandler, FeedFragment.Callback,
         NearbyFragment.Callback, HistoryFragment.Callback, SearchFragment.Callback,
         LinkPreviewDialog.Callback, ImageSearchFragment.Callback {
-    @BindView(R.id.fragment_main_view_pager) ViewPager viewPager;
-    @BindView(R.id.fragment_main_nav_tab_layout) NavTabLayout tabLayout;
-    @BindView(R.id.imagesearch_progress) private ProgressBar progressBar;
+    protected @BindView(R.id.fragment_main_view_pager) ViewPager viewPager;
+    protected @BindView(R.id.fragment_main_nav_tab_layout) NavTabLayout tabLayout;
+    protected @BindView(R.id.imagesearch_progress) ProgressBar progressBar;
+    
     private Unbinder unbinder;
     private ExclusiveBottomSheetPresenter bottomSheetPresenter = new ExclusiveBottomSheetPresenter();
     private MediaDownloadReceiver downloadReceiver = new MediaDownloadReceiver();
     private MediaDownloadReceiverCallback downloadReceiverCallback = new MediaDownloadReceiverCallback();
     private Uri outputFileUri;
-    private List<String> imageLabels;
     private Encoder imageEncoder;
     private ImageLabeler labeler;
 
@@ -196,8 +195,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
             final boolean isCamera;
             if (data == null || data.getData() == null) {
                 isCamera = true;
-            }
-            else {
+            } else {
                 final String action = data.getAction();
                 if (action == null) {
                     isCamera = false;
@@ -235,8 +233,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         CallbackTask.execute(() -> getLabelList(encodedImage), new CallbackTask.DefaultCallback<List<String>>() {
             @Override
             public void success(List<String> list) {
-                imageLabels = list;
-                openImageSearchFragment(imageLabels);
+                openImageSearchFragment(list);
             }
             @Override
             public void failure(Throwable caught) {
@@ -342,7 +339,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
         final File sdImageMainDirectory = new File(root, fname);
         outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
-        final List<Intent> cameraIntents = new ArrayList <Intent>();
+        final List<Intent> cameraIntents = new ArrayList<Intent>();
         final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getActivity().getPackageManager();
         final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
