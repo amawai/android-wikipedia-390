@@ -173,15 +173,6 @@ public class LandmarkFragment extends Fragment{
         return false;
     }
 
-    private static boolean listHasLandmark(List<UserLandmark> selected, LandmarkCard card) {
-        for (UserLandmark lm: selected) {
-            if (lm.getTitle().equals(card.getTitle())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //Provide the adapter with new landmark data to display
     private void fillList(Map<String, String> landMarkList){
         //clear the list to prevent duplicates
