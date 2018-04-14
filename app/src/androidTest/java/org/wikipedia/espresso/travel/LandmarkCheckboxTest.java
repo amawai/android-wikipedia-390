@@ -35,7 +35,7 @@ public class LandmarkCheckboxTest {
     public ActivityTestRule<TravelPlannerActivity> dActivityTestRule = new ActivityTestRule<>(TravelPlannerActivity.class);
 
     @Before
-    public void setUp() throws UiObjectNotFoundException{
+    public void setUp() throws UiObjectNotFoundException {
         //Allows testing of components outside of testing context, in this case: destination
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -71,7 +71,7 @@ public class LandmarkCheckboxTest {
     }
 
     @Test
-    public void checkBoxIsChecked() throws UiObjectNotFoundException{
+    public void checkBoxIsChecked() throws UiObjectNotFoundException {
         // landmark_check_box
         UiObject landmarkObject = mDevice.findObject(new UiSelector()
                 .className(android.widget.CheckBox.class)
@@ -81,7 +81,7 @@ public class LandmarkCheckboxTest {
         assertNotNull(landmarkObject);
     }
 
-    private void selectDestination() throws UiObjectNotFoundException{
+    private void selectDestination() throws UiObjectNotFoundException {
         ViewInteraction layout = onView(withId(R.id.fragment_place_autocomplete));
 
         layout.perform(click());
@@ -99,8 +99,6 @@ public class LandmarkCheckboxTest {
         //Select one of the options from the dropdpown
         mDevice.findObject(new UiSelector()
                 .text("QC, Canada")).click();
-
-        //onView(withId(R.id.landmark_check_box)).perform(click());
 
     }
 }
