@@ -71,6 +71,10 @@ jobs:
       script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/privateBrowsing
       script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/articleNote
       script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/translation
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/travel
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/travel/database
+      script: ./gradlew -p app/src/androidTest/java/org/wikipedia/espresso/imagesearch
+      script: ./gradlew -p app/src/test/java/org/wikipedia/imagesearch
     # will inspect deploy build without skipping on tagged commits for releases
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
