@@ -353,7 +353,7 @@ public class LandmarkFragment extends Fragment{
                 textViewTitle.setText(landmarkCard.getTitle());
                 textViewDesc.setText(landmarkCard.getDesc());
                 checkBox.setChecked(landmarkCard.getChecked());
-                int semiTransparentWhite = Color.argb(ALPHA, RED, GREEN , BLUE);
+                int semiTransparentWhite = Color.argb(ALPHA, RED, GREEN, BLUE);
                 //Apply a filter to the image for readability
                 landmarkImage.setColorFilter(semiTransparentWhite, PorterDuff.Mode.SRC_ATOP);
                 if (landmarkCard.getThumbUrl() != null) {
