@@ -47,7 +47,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,9 +145,6 @@ public class LandmarkFragment extends Fragment{
         return null;
     }
 
-
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void loadSelectedCards() {
         if(this.destination != null) {
             if(getCallback() != null) {
@@ -156,7 +152,7 @@ public class LandmarkFragment extends Fragment{
 
                 List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
                 for(LandmarkCard card: cardsList) {
-                    if(selected.stream().anyMatch(lm -> card.getTitle().equals(lm.getTitle()))) {
+                    if(listHasLandmark(selected, card)) {
                         card.setChecked(true);
                         Log.d("Setting checked", "card.getTitle()");
                     } else {
@@ -166,6 +162,15 @@ public class LandmarkFragment extends Fragment{
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private static boolean listHasLandmark(List<UserLandmark> selected, LandmarkCard card) {
+        for(UserLandmark lm: selected) {
+            if(lm.getTitle().equals(card.getTitle())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Provide the adapter with new landmark data to display
