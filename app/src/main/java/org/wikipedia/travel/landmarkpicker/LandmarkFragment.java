@@ -41,7 +41,6 @@ import org.wikipedia.util.log.L;
 import org.wikipedia.views.FaceAndColorDetectImageView;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,6 +59,7 @@ import retrofit2.Call;
 public class LandmarkFragment extends Fragment{
 
     private Trip.Destination destination;
+    static final int ALPHA = 80;
 
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
@@ -147,21 +147,19 @@ public class LandmarkFragment extends Fragment{
     }
 
     private void loadSelectedCards() {
-        if (this.destination != null) {
-            if (getCallback() != null) {
-                long tripId = getCallback().onRequestOpenTripId();
+        if (this.destination != null && getCallback() != null) {
+            long tripId = getCallback().onRequestOpenTripId();
 
-                List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
-                for(LandmarkCard card: cardsList) {
-                    if(listHasLandmark(selected, card)) {
-                        card.setChecked(true);
-                        Log.d("Setting checked", "card.getTitle()");
-                    } else {
-                        card.setChecked(false);
-                    }
+            List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
+            for (LandmarkCard card : cardsList) {
+                if (listHasLandmark(selected, card)) {
+                    card.setChecked(true);
+                    Log.d("Setting checked", "card.getTitle()");
+                } else {
+                    card.setChecked(false);
                 }
-                adapter.notifyDataSetChanged();
             }
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -352,7 +350,7 @@ public class LandmarkFragment extends Fragment{
                 textViewTitle.setText(landmarkCard.getTitle());
                 textViewDesc.setText(landmarkCard.getDesc());
                 checkBox.setChecked(landmarkCard.getChecked());
-                int semiTransparentWhite = Color.argb(80,255,255, 255);
+                int semiTransparentWhite = Color.argb(ALPHA, 255, 255, 255);
                 //Apply a filter to the image for readability
                 landmarkImage.setColorFilter(semiTransparentWhite, PorterDuff.Mode.SRC_ATOP);
                 if (landmarkCard.getThumbUrl() != null) {

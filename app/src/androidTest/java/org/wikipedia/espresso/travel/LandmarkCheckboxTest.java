@@ -62,6 +62,8 @@ public class LandmarkCheckboxTest {
         ViewInteraction destinationDisplay = onView(
                 allOf(withId(R.id.landmark_country_view_text)));
         destinationDisplay.check(matches(withText("Montreal, QC, Canada")));
+
+        assertNotNull(destinationDisplay);
     }
 
     @Test
