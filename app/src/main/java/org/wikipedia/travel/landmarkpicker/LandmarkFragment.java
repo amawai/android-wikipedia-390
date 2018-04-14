@@ -143,7 +143,7 @@ public class LandmarkFragment extends Fragment{
     }
 
     private void loadSelectedCards() {
-        if (this.destination != null && getCalback() != null) {
+        if (this.destination != null && getCallback() != null) {
             long tripId = getCallback().onRequestOpenTripId();
 
             List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
@@ -200,8 +200,8 @@ public class LandmarkFragment extends Fragment{
         try {
             List<Address> addresses= gc.getFromLocationName(location, 5);
             List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
-            for (Address a : addresses){
-                if (a.hasLatitude() && a.hasLongitude()){
+            for (Address a : addresses) {
+                if (a.hasLatitude() && a.hasLongitude()) {
                     lat = a.getLatitude();
                     longi = a.getLongitude();
                 }
@@ -333,7 +333,7 @@ public class LandmarkFragment extends Fragment{
                         }
                         else  {
                             card.setChecked(true);
-                            if(getCallback() != null) {
+                            if (getCallback() != null) {
                                 getCallback().onSelectLandmark(card);
                             }
                         }

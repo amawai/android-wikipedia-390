@@ -30,7 +30,7 @@ public class LandmarkCheckboxTest {
     public ActivityTestRule<TravelPlannerActivity> dActivityTestRule = new ActivityTestRule<>(TravelPlannerActivity.class);
 
     @Before
-    public void setUp() throws UiObjectNotFoundException{
+    public void setUp() throws UiObjectNotFoundException {
         //Allows testing of components outside of testing context, in this case: destination
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -57,7 +57,7 @@ public class LandmarkCheckboxTest {
     }
 
     @Test
-    public void ensureThatCorrectDestinationIsDisplayed() throws UiObjectNotFoundException{
+    public void ensureThatCorrectDestinationIsDisplayed() throws UiObjectNotFoundException {
         //Check that the correct destination is displayed
         ViewInteraction destinationDisplay = onView(
                 allOf(withId(R.id.landmark_country_view_text)));

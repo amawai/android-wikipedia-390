@@ -121,7 +121,7 @@ public class TripDbHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
-        try{
+        try {
             for (LandmarkCard lm: landmarks) {
                 // Extract just the relevant fields
                 UserLandmark toSave = new UserLandmark(lm.getTitle());
