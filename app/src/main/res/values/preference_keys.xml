@@ -72,4 +72,5 @@
     <string name="preference_key_feed_customize_onboarding_card_enabled">feedCustomizeOnboardingCardEnabled</string>
     <string name="preference_key_add_articles">addArticles</string>
     <string name="preference_key_add_reading_lists">addReadingLists</string>
+    <string name="preference_key_imagesearch_article_search">imageSearchArticleSearch</string>
 </resources>
