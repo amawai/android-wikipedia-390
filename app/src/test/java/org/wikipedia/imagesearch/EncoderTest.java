@@ -7,9 +7,11 @@ import android.net.Uri;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static junit.framework.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -25,6 +27,7 @@ public class EncoderTest {
     private Uri mUri;
     private ContentResolver mContentResolver;
     private InputStream mInputStream;
+
 
     @Before
     public void setUp() throws IOException {
@@ -46,10 +49,14 @@ public class EncoderTest {
         encoder.encodeUriToBase64Binary(mContext, mUri);
 
         verify(mContext).getContentResolver();
-        verify(mContentResolver).openInputStream(mUri);
-        verify(mUri).getScheme();
         verify(mUri).getPath();
+        verify(mUri).getPath();
+        verify(mContentResolver).openInputStream(mUri);
         verify(mInputStream).read(any());
     }
 
+    @Test
+    public void testEncoderWithNullValues() throws FileNotFoundException {
+        assertNull(encoder.encodeUriToBase64Binary(null, null));
+    }
 }

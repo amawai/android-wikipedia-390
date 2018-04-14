@@ -38,31 +38,35 @@ public class Encoder {
     public String encodeUriToBase64Binary(Context context, Uri uri) {
         String encodedFile = null;
         InputStream inputStream;
-        File file = new File(getPath(context, uri));
-        try {
-            inputStream = context.getContentResolver().openInputStream(uri);
-            byte[] bytes = new byte[(int)file.length()];
-            inputStream.read(bytes);
-            encodedFile = Base64.encodeToString(bytes, Base64.NO_WRAP);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String pathOfFile = getPath(context, uri);
+        if (pathOfFile != null) {
+            File file = new File(pathOfFile);
+            try {
+                inputStream = context.getContentResolver().openInputStream(uri);
+                byte[] bytes = new byte[(int)file.length()];
+                inputStream.read(bytes);
+                encodedFile = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
         return encodedFile;
     }
 
     //Retrieves the file path given a uri
     private String getPath(Context context, Uri uri) {
         String filePath = null;
-        if (uri != null && "content".equals(uri.getScheme())) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[] {android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-            cursor.moveToFirst();
-            filePath = cursor.getString(0);
-            cursor.close();
-        } else {
-            filePath = uri.getPath();
+        if (context != null && uri != null) {
+            if ("content".equals(uri.getScheme())) {
+                Cursor cursor = context.getContentResolver().query(uri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
+                cursor.moveToFirst();
+                filePath = cursor.getString(0);
+                cursor.close();
+            } else {
+                filePath = uri.getPath();
+            }
         }
         return filePath;
     }
