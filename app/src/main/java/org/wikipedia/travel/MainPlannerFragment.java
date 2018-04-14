@@ -11,6 +11,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,8 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private Unbinder unbinder;
     private List<Trip> userTripsList = new ArrayList<>();
     private List<Trip> userDestinationList = new ArrayList<>();
+    private List<LandmarkCard> addedLandmarks = new ArrayList<>();
+    private List<LandmarkCard> removedLandmarks = new ArrayList<>();
 
     public static MainPlannerFragment newInstance() {
 
@@ -87,7 +90,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         unbinder = ButterKnife.bind(this, view);
         getAppCompatActivity().getSupportActionBar().setTitle(getString(R.string.view_travel_card_title));
         adapter = new PlannerFragmentPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter((PagerAdapter) adapter);
+        viewPager.setAdapter(adapter);
         adapter.setTripListFragment(TripFragment.newInstance());
         setupButtonListeners();
         updateUserTripList();
@@ -205,21 +208,39 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
         openTrip.setTripDepartureDate(year, month, day);
     }
 
-    //saves landmarks into trips, called in onclick
-    public void onSave(List<LandmarkCard> saveList) {
-        for (LandmarkCard card : saveList) {
-            openTrip.getDestination().getDestinationPlacesToVisit().add(card);
-        }
-    }
-
     @Override
     public Date onRequestOpenDate() {
         return openTrip.getTripDepartureDate();
     }
 
     @Override
-    public String onRequestOpenDestinationName() {
-        return openTrip.getDestination().getDestinationName();
+    public Trip.Destination onRequestOpenDestination() {
+        return openTrip.getDestination();
+    }
+
+    @Override
+    public long onRequestOpenTripId() {
+        return openTrip.getId();
+    }
+
+    @Override
+    public void onSelectLandmark(LandmarkCard card) {
+        Log.d("Adding landmark", card.getTitle());
+        if (removedLandmarks.contains(card)) {
+            removedLandmarks.remove(card);
+        } else {
+            addedLandmarks.add(card);
+        }
+    }
+
+    @Override
+    public void onRemoveLandmark(LandmarkCard card) {
+        Log.d("Removing landmark", card.getTitle());
+        if (addedLandmarks.contains(card)) {
+            addedLandmarks.remove(card);
+        } else {
+            removedLandmarks.add(card);
+        }
     }
 
     /*
@@ -239,11 +260,20 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
      */
     private void saveTrip(Trip trip) {
         bSave.setActivated(false);
-        CallbackTask.execute(() -> TripDbHelper.instance().updateList(trip), new CallbackTask.DefaultCallback<Object>() {
+        CallbackTask.execute(() -> {
+            TripDbHelper.instance().updateList(trip);
+            TripDbHelper.instance().addUserLandmarks(openTrip.getId(), addedLandmarks);
+            TripDbHelper.instance().deleteUserLandmarks(openTrip.getId(), removedLandmarks);
+            return null;
+        }, new CallbackTask.DefaultCallback<Void>() {
             @Override
-            public void success(Object o) {
+            public void success(Void o) {
                 super.success(o);
+                //Reset lists which track added and removed cards
+                addedLandmarks.clear();
+                removedLandmarks.clear();
                 Toast.makeText(getActivity(), "Trip has been saved", Toast.LENGTH_SHORT).show();
+                bSave.setActivated(true);
                 //There is no need to go the lists page automatically
                 //goToHomePage();
             }
