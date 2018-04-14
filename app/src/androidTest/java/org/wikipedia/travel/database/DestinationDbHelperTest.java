@@ -93,3 +93,4 @@ public class DestinationDbHelperTest {
         assertEquals(predictedSize, actualSize);
     }
 }
+

@@ -23,7 +23,7 @@ public class UserLandmark {
         this.title = title;
     }
 
-    public long getId(){
+    public long getId() {
         return this.id;
     }
 

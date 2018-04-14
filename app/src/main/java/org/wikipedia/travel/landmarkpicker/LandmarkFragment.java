@@ -59,7 +59,10 @@ import retrofit2.Call;
 public class LandmarkFragment extends Fragment{
 
     private Trip.Destination destination;
-    static final int ALPHA = 80;
+    private static final int ALPHA = 80;
+    private static final int RED = 255;
+    private static final int GREEN = 255;
+    private static final int BLUE = 255;
 
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
@@ -332,13 +335,13 @@ public class LandmarkFragment extends Fragment{
                         //Adds the LandmarkCard object, comprised of card title and thumbUrl into list
                         if (card.getChecked()) {
                             card.setChecked(false);
-                            if(getCallback() != null) {
+                            if (getCallback() != null) {
                                 getCallback().onRemoveLandmark(card);
                             }
                         }
                         else  {
                             card.setChecked(true);
-                            if(getCallback() != null) {
+                            if (getCallback() != null) {
                                 getCallback().onSelectLandmark(card);
                             }
                         }
@@ -350,7 +353,7 @@ public class LandmarkFragment extends Fragment{
                 textViewTitle.setText(landmarkCard.getTitle());
                 textViewDesc.setText(landmarkCard.getDesc());
                 checkBox.setChecked(landmarkCard.getChecked());
-                int semiTransparentWhite = Color.argb(ALPHA, 255, 255, 255);
+                int semiTransparentWhite = Color.argb(ALPHA, RED, GREEN , BLUE);
                 //Apply a filter to the image for readability
                 landmarkImage.setColorFilter(semiTransparentWhite, PorterDuff.Mode.SRC_ATOP);
                 if (landmarkCard.getThumbUrl() != null) {
