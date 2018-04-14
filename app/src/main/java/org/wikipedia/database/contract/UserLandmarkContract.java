@@ -14,7 +14,6 @@ public interface UserLandmarkContract {
     String TABLE = "usertriplandmarks";
     Uri URI = Uri.withAppendedPath(AppContentProviderContract.AUTHORITY_BASE, "/localtriplandmark");
 
-
     interface Col {
         IdColumn ID = new IdColumn(TABLE);
         StrColumn TITLE = new StrColumn(TABLE, "landmarktitle", "text");

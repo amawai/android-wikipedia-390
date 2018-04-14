@@ -13,6 +13,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class DestinationDbHelperTest {
+  
     private List<Trip> testList = DestinationDbHelper.getInstance().getAllLists();
     private List<Trip> emptyList = new ArrayList<>(0);
     private Trip testTrip = new Trip(new Trip.Destination("Laval"));
@@ -92,4 +93,5 @@ public class DestinationDbHelperTest {
         actualSize = DestinationDbHelper.getInstance().getAllLists().size();
         assertEquals(predictedSize, actualSize);
     }
+
 }

@@ -1,8 +1,11 @@
 package org.wikipedia.travel.landmarkpicker;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +38,7 @@ import org.wikipedia.travel.database.UserLandmark;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
+import org.wikipedia.views.FaceAndColorDetectImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,6 +59,10 @@ import retrofit2.Call;
 public class LandmarkFragment extends Fragment{
 
     private Trip.Destination destination;
+    private static final int ALPHA = 80;
+    private static final int RED = 255;
+    private static final int GREEN = 255;
+    private static final int BLUE = 255;
 
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
@@ -63,13 +71,12 @@ public class LandmarkFragment extends Fragment{
         void onSelectLandmark(LandmarkCard card);
         void onRemoveLandmark(LandmarkCard card);
     }
+
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
     private LandmarkAdapter adapter;
     private NearbyResult lastResult;
-
-
 
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
     @BindView(R.id.landmark_country_view_text) TextView destinationText;
@@ -124,8 +131,6 @@ public class LandmarkFragment extends Fragment{
         adapter.setLandmarkCardList(landmarks);
     }
 
-
-
     //This function uses a callback to load the article corresponding to the title
     private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
         Callback callback = getCallback();
@@ -155,9 +160,17 @@ public class LandmarkFragment extends Fragment{
                     card.setChecked(false);
                 }
             }
-
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private static boolean listHasLandmark(List<UserLandmark> selected, LandmarkCard card) {
+        for (UserLandmark lm: selected) {
+            if (lm.getTitle().equals(card.getTitle())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean listHasLandmark(List<UserLandmark> selected, LandmarkCard card) {
@@ -297,6 +310,7 @@ public class LandmarkFragment extends Fragment{
             private TextView textViewTitle;
             private TextView textViewDesc;
             private CheckBox checkBox;
+            private FaceAndColorDetectImageView landmarkImage;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -305,6 +319,7 @@ public class LandmarkFragment extends Fragment{
                 textViewTitle = (TextView) itemView.findViewById(R.id.landmark_title_text_view);
                 textViewDesc = (TextView) itemView.findViewById(R.id.landmark_desc_text_view);
                 checkBox = (CheckBox) itemView.findViewById(R.id.landmark_check_box);
+                landmarkImage = (FaceAndColorDetectImageView) itemView.findViewById(R.id.landmark_background);
 
                 cv.setOnClickListener(this);
                 checkBox.setOnClickListener(this);
@@ -345,6 +360,15 @@ public class LandmarkFragment extends Fragment{
                 textViewTitle.setText(landmarkCard.getTitle());
                 textViewDesc.setText(landmarkCard.getDesc());
                 checkBox.setChecked(landmarkCard.getChecked());
+                int semiTransparentWhite = Color.argb(ALPHA, RED, GREEN, BLUE);
+                //Apply a filter to the image for readability
+                landmarkImage.setColorFilter(semiTransparentWhite, PorterDuff.Mode.SRC_ATOP);
+                if (landmarkCard.getThumbUrl() != null) {
+                    landmarkImage.setVisibility(View.VISIBLE);
+                    landmarkImage.loadImage(Uri.parse(landmarkCard.getThumbUrl()));
+                } else {
+                    landmarkImage.setVisibility(View.GONE);
+                }
             }
 
         }
