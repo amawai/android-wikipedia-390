@@ -68,6 +68,7 @@ android {
             }
         }
     }
+
     // Test Logging
     tasks.withType(Test) {
         testLogging {
@@ -181,7 +182,7 @@ dependencies {
     // app/src/main/java/okhttp3
     String retrofitVersion = '2.3.0'
     String supportVersion = '27.0.2'
-    String espressoVersion = '2.2.2'
+    String espressoVersion = '3.0.1'
     String butterKnifeVersion = '8.8.1'
     String frescoVersion = '1.5.0' // When updating this version, resync file copies under
     // app/src/main/java/com/facebook
@@ -258,7 +259,10 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$testingSupportVersion"
     // Android JUnit Runner
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
-
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:2.1.1"
+    compile 'com.mcxiaoke.volley:library:1.0.19'
 }
 
 private setSigningConfigKey(config, Properties props) {

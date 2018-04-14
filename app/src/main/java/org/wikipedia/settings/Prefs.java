@@ -587,6 +587,16 @@ public final class Prefs {
         setBoolean(R.string.preference_key_on_this_day_notifications, enabled);
     }
 
+    //PrivateBrowsingMode Setting Check
+    public static boolean isPrivateBrowsingEnabled() {
+        return getBoolean(R.string.preference_key_private_browsing, true);
+    }
+
+    //PrivateBrowsingModeEnabled Setter
+    public static void setPrivateBrowsingEnabled(boolean enabled) {
+        setBoolean(R.string.preference_key_private_browsing, enabled);
+    }
+
     public static boolean preferOfflineContent() {
         return getBoolean(R.string.preference_key_prefer_offline_content, false);
     }

@@ -37,6 +37,9 @@ public class MainActivity extends SingleFragmentToolbarActivity<MainFragment>
         //When the app is initially launched, the notification will either be enabled or disabled.
         onThisDayNotificationTransition();
 
+        //As with the OnThisDayNotification transition, when the app is launched, incognito mode will be either
+        //enabled or disabled
+        privateBrowsingTransition();
     }
 
     @Override protected MainFragment createFragment() {

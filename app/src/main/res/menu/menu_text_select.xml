@@ -7,6 +7,10 @@
           android:icon="@drawable/ic_content_copy_themed_24dp"
           app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/menu_text_select_translate"
+        android:icon="@drawable/ic_mode_edit_themed_24dp"
+        android:title="@string/menu_text_select_translate" />
     <item android:id="@+id/menu_text_select_share"
           android:title="@string/menu_text_select_share"
           android:icon="@drawable/ic_share_themed_24dp"

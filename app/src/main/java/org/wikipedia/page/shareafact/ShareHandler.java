@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import org.wikipedia.page.PageFragment;
 import org.wikipedia.page.PageProperties;
 import org.wikipedia.page.PageTitle;
 import org.wikipedia.settings.Prefs;
+import org.wikipedia.translation.TranslationDialog;
 import org.wikipedia.util.FeedbackUtil;
 import org.wikipedia.util.ShareUtil;
 import org.wikipedia.util.StringUtil;
@@ -52,6 +54,7 @@ public class ShareHandler {
     private static final String PAYLOAD_PURPOSE_SHARE = "share";
     private static final String PAYLOAD_PURPOSE_DEFINE = "define";
     private static final String PAYLOAD_PURPOSE_EDIT_HERE = "edit_here";
+    private static final String PAYLOAD_PURPOSE_TRANSLATE = "translate";
     private static final String PAYLOAD_TEXT_KEY = "text";
 
     @NonNull private final PageFragment fragment;
@@ -84,10 +87,18 @@ public class ShareHandler {
                 case PAYLOAD_PURPOSE_EDIT_HERE:
                     onEditHerePayload(messagePayload.optInt("sectionID", 0), text);
                     break;
+                case PAYLOAD_PURPOSE_TRANSLATE:
+                    onTranslatePayload(text);
+                    break;
                 default:
                     L.d("Unknown purpose=" + purpose);
             }
         });
+    }
+
+    //create a new instance of the translation dialog
+    private void onTranslatePayload(String text) {
+        fragment.showBottomSheet(TranslationDialog.newInstance(text));
     }
 
     private void onHighlightText() {
@@ -164,11 +175,26 @@ public class ShareHandler {
         handleSelection(menu, shareItem);
     }
 
+    // Adds functionality when translate button is pressed
+//    private void showTranslateResult() {
+//        FeedbackUtil.showMessage(fragment.getActivity(), "Text has been translated");
+//    }
+
     private void handleSelection(Menu menu, MenuItem shareItem) {
         if (PrefsOnboardingStateMachine.getInstance().isShareTutorialEnabled()) {
             postShowShareToolTip(shareItem);
             PrefsOnboardingStateMachine.getInstance().setShareTutorial();
         }
+
+        // Listener for translate button
+        MenuItem translateItem = menu.findItem(R.id.menu_text_select_translate);
+        translateItem.setVisible(true);
+        translateItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_TRANSLATE));
+//        translateItem.setOnMenuItemClickListener((MenuItem menuItem) -> {
+//            onTranslatePayload();
+//            leaveActionMode();
+//            return true;
+//        });
 
         // Provide our own listeners for the copy, define, and share buttons.
         shareItem.setOnMenuItemClickListener(new RequestTextSelectOnMenuItemClickListener(PAYLOAD_PURPOSE_SHARE));

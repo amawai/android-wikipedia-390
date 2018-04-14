@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_page_share"
+        android:enabled="false"
+        android:title="@string/menu_page_share"
+        app:showAsAction="never" />
     <item android:id="@+id/menu_page_other_languages"
           android:title="@string/menu_page_other_languages"
           app:showAsAction="never"
           android:enabled="false" />
-    <item android:id="@+id/menu_page_share"
-          android:title="@string/menu_page_share"
+    <item android:id="@+id/menu_add_note"
+          android:title="@string/menu_page_article_notes"
           app:showAsAction="never"
           android:enabled="false" />
     <item android:id="@+id/menu_page_add_to_list"
