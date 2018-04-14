@@ -11,9 +11,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SearchCardView extends DefaultFeedCardView<SearchCard> {
+
     public interface Callback {
         void onSearchRequested();
         void onVoiceSearchRequested();
+        void onImageSearchRequested();
     }
 
     public SearchCardView(Context context) {
@@ -24,15 +26,24 @@ public class SearchCardView extends DefaultFeedCardView<SearchCard> {
         FeedbackUtil.setToolbarButtonLongPressToast(findViewById(R.id.voice_search_button));
     }
 
-    @OnClick(R.id.search_container) void onSearchClick() {
+    @OnClick(R.id.search_container)
+    protected void onSearchClick() {
         if (getCallback() != null) {
             getCallback().onSearchRequested();
         }
     }
 
-    @OnClick(R.id.voice_search_button) void onVoiceSearchClick() {
+    @OnClick(R.id.voice_search_button)
+    protected void onVoiceSearchClick() {
         if (getCallback() != null) {
             getCallback().onVoiceSearchRequested();
+        }
+    }
+
+    @OnClick(R.id.search_image_button)
+    protected void onImageSearchClick() {
+        if (getCallback() != null) {
+            getCallback().onImageSearchRequested();
         }
     }
 }

@@ -55,6 +55,10 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
         findPreference(R.string.preference_key_private_browsing)
                 .setOnPreferenceChangeListener(new PrivateBrowsingListener());
 
+        //Mimicking Workflow of PrivateBrowsingModer Listener
+        findPreference(R.string.preference_key_imagesearch_article_search)
+                .setOnPreferenceChangeListener(new ImageSearchListener());
+
         Preference eventLoggingOptInPref = findPreference(R.string.preference_key_eventlogging_opt_in);
         eventLoggingOptInPref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (!((boolean) newValue)) {
@@ -186,6 +190,20 @@ class SettingsPreferenceLoader extends BasePreferenceLoader {
                 ((SwitchPreferenceCompat) preference).setChecked(false);
                 Prefs.setPrivateBrowsingEnabled(false);
                 ((BaseActivity) getActivity()).privateBrowsingTransition();
+            }
+            return true;
+        }
+    }
+
+    private final class ImageSearchListener implements Preference.OnPreferenceChangeListener {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if (newValue == Boolean.TRUE) {
+                ((SwitchPreferenceCompat) preference).setChecked(true);
+                Prefs.setImageSearchEnabled(true);
+            }
+            else {
+                ((SwitchPreferenceCompat) preference).setChecked(false);
+                Prefs.setImageSearchEnabled(false);
             }
             return true;
         }

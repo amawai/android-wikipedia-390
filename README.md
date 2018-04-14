@@ -2,6 +2,7 @@
 
 This repository contains the source code for the official Wikipedia Android application as well as additional features implemented by Software Engineering students from Concordia University.
 
+
 ### Documentation
 
 All documentation is kept on the [official Wikimedia wiki](https://www.mediawiki.org/wiki/Wikimedia_Apps/Team/Wikipedia_Android_app_hacking). The documentation pertaining to the android-wikipedia-390 team's contributions is kept in [our wiki](https://github.com/amawai/android-wikipedia-390/wiki). Check it out!
