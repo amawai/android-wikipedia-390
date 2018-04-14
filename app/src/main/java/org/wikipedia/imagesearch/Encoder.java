@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 public class Encoder {
 
-    public String encodeFileToBase64Binary(File file){
+    public String encodeFileToBase64Binary(File file) {
         String encodedFile = null;
         try {
             FileInputStream fileInputStreamReader = new FileInputStream(file);
@@ -35,7 +35,7 @@ public class Encoder {
     }
 
     //Encodes a file given a content Uri as input
-    public String encodeUriToBase64Binary(Context context, Uri uri){
+    public String encodeUriToBase64Binary(Context context, Uri uri) {
         String encodedFile = null;
         InputStream inputStream;
         File file = new File(getPath(context, uri));
@@ -54,10 +54,10 @@ public class Encoder {
     }
 
     //Retrieves the file path given a uri
-    private String getPath(Context context, Uri uri ) {
+    private String getPath(Context context, Uri uri) {
         String filePath = null;
         if (uri != null && "content".equals(uri.getScheme())) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+            Cursor cursor = context.getContentResolver().query(uri, new String[] {android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
             cursor.moveToFirst();
             filePath = cursor.getString(0);
             cursor.close();
