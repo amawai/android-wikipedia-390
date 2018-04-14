@@ -1,41 +1,18 @@
 package org.wikipedia.espresso.imagesearch;
 
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.DataInteraction;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
+
+import static junit.framework.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.wikipedia.R;
 import org.wikipedia.main.MainActivity;
-import org.wikipedia.main.MainFragment;
-
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertFalse;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by SunXP on 2018-04-12.
@@ -43,6 +20,10 @@ import static junit.framework.Assert.assertTrue;
 
 public class ImageSearchTest {
     private UiDevice mDevice;
+    private static final int TIME_FOR_BUTTON_TO_APPEAR = 2000;
+    private static final int CAMERA_POSITION = 1;
+    private static final int GALLERY_POSITION = 2;
+    private static final int PHOTO_POSITION = 3;
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
@@ -50,14 +31,12 @@ public class ImageSearchTest {
     @Before
     public void setUp() throws UiObjectNotFoundException {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-
-        ViewInteraction imageSearchButton = onView(allOf(withId(R.id.search_image_button)));
     }
 
     @Test
     public void imageSearchButtonsExists() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(TIME_FOR_BUTTON_TO_APPEAR);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -75,7 +54,7 @@ public class ImageSearchTest {
         }
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(TIME_FOR_BUTTON_TO_APPEAR);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -85,7 +64,7 @@ public class ImageSearchTest {
 
         try {
             //Dismiss permission if it exists
-            if (denyPermission.exists()){
+            if (denyPermission.exists()) {
                 denyPermission.click();
             }
         } catch (UiObjectNotFoundException e) {
@@ -99,22 +78,21 @@ public class ImageSearchTest {
         assertTrue(chooserDialog.exists());
 
         UiObject cameraButton = mDevice.findObject(new UiSelector()
-                .instance(1));
+                .instance(CAMERA_POSITION));
 
         // test that the camera button exists
         assertTrue(cameraButton.exists());
 
         UiObject galleryButton = mDevice.findObject(new UiSelector()
-                .instance(2));
+                .instance(GALLERY_POSITION));
 
         // test that the gallery button exists
         assertTrue(galleryButton.exists());
 
         UiObject photoButton = mDevice.findObject(new UiSelector()
-                .instance(3));
-        
+                .instance(PHOTO_POSITION));
+
         // test that the photo button exists
         assertTrue(photoButton.exists());
     }
-
 }
