@@ -226,7 +226,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     @Override
     public void onSelectLandmark(LandmarkCard card) {
         Log.d("Adding landmark", card.getTitle());
-        if(removedLandmarks.contains(card)) {
+        if (removedLandmarks.contains(card)) {
             removedLandmarks.remove(card);
         } else {
             addedLandmarks.add(card);
@@ -266,7 +266,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             TripDbHelper.instance().deleteUserLandmarks(openTrip.getId(), removedLandmarks);
             return null;
         }
-        , new CallbackTask.DefaultCallback<Void>() {
+        ,new CallbackTask.DefaultCallback<Void>() {
             @Override
             public void success(Void o) {
                 super.success(o);

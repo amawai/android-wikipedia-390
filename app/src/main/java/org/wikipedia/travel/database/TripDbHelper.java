@@ -122,7 +122,7 @@ public class TripDbHelper {
         db.beginTransaction();
 
         try {
-            for(LandmarkCard lm: landmarks) {
+            for (LandmarkCard lm: landmarks) {
                 // Extract just the relevant fields
                 UserLandmark toSave = new UserLandmark(lm.getTitle());
                 ContentValues content = UserLandmark.DATABASE_TABLE.toContentValues(toSave);
@@ -140,8 +140,8 @@ public class TripDbHelper {
     public Void deleteUserLandmarks(long tripId, List<LandmarkCard> landmarks) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        try{
-            for(LandmarkCard lm: landmarks) {
+        try {
+            for (LandmarkCard lm: landmarks) {
 
                 db.delete(UserLandmarkContract.TABLE,
                         UserLandmarkContract.Col.TITLE.getName() + " = ? AND "
