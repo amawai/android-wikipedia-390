@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
 
     <fragment
         android:id="@+id/fragment_place_autocomplete"
         android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
-        android:layout_width="360dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="420dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        style="@style/App.Button.White"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/accent90" />
 
     <TextView
-        android:id="@+id/destination_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destination Search History"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/accent10"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/destination_history_view_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/fragment_place_autocomplete"
-        android:layout_margin="16dp"
-        android:textSize="16dp" />
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="#EAECF0"
+        android:padding="0dp"
+        android:scrollbars="vertical"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="206dp"
+        app:stackFromEnd="true" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

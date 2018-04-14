@@ -1,5 +1,6 @@
 package org.wikipedia.travel.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -7,6 +8,8 @@ import android.support.annotation.Nullable;
 
 import org.wikipedia.WikipediaApp;
 import org.wikipedia.database.contract.TripContract;
+import org.wikipedia.database.contract.UserLandmarkContract;
+import org.wikipedia.travel.landmarkpicker.LandmarkCard;
 import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.log.L;
 
@@ -112,6 +115,58 @@ public class TripDbHelper {
             return null;
         }
         return list;
+    }
+
+    public Void addUserLandmarks(long tripId, List<LandmarkCard> landmarks) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        try {
+            for (LandmarkCard lm: landmarks) {
+                // Extract just the relevant fields
+                UserLandmark toSave = new UserLandmark(lm.getTitle());
+                ContentValues content = UserLandmark.DATABASE_TABLE.toContentValues(toSave);
+                content.put(UserLandmarkContract.Col.TRIPID.getName(), tripId);
+                db.insertOrThrow(UserLandmarkContract.TABLE, null, content);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return null;
+    }
+
+    public Void deleteUserLandmarks(long tripId, List<LandmarkCard> landmarks) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            for (LandmarkCard lm: landmarks) {
+
+                db.delete(UserLandmarkContract.TABLE,
+                        UserLandmarkContract.Col.TITLE.getName() + " = ? AND "
+                                + UserLandmarkContract.Col.TRIPID.getName() + " = ?",
+                        new String[]{lm.getTitle(), Long.toString(tripId)});
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return null;
+    }
+
+    public List<UserLandmark> loadUserLandmarks(long tripId) {
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<UserLandmark> result = new ArrayList<>();
+
+        try (Cursor cursor = db.query(UserLandmarkContract.TABLE, null, UserLandmarkContract.Col.TRIPID.getName() + " = ?", new String[]{Long.toString(tripId)}, null, null, null)) {
+            while (cursor.moveToNext()) {
+                UserLandmark landmark = UserLandmark.DATABASE_TABLE.fromCursor(cursor);
+                result.add(landmark);
+            }
+        }
+        return result;
     }
 
     private SQLiteDatabase getReadableDatabase() {

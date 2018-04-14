@@ -1,8 +1,11 @@
 package org.wikipedia.travel.landmarkpicker;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +33,12 @@ import org.wikipedia.nearby.NearbyClient;
 import org.wikipedia.nearby.NearbyPage;
 import org.wikipedia.nearby.NearbyResult;
 import org.wikipedia.page.PageTitle;
-import org.wikipedia.travel.MainPlannerFragment;
-import org.wikipedia.util.FeedbackUtil;
+import org.wikipedia.travel.database.TripDbHelper;
+import org.wikipedia.travel.database.UserLandmark;
+import org.wikipedia.travel.trip.Trip;
 import org.wikipedia.util.ThrowableUtil;
 import org.wikipedia.util.log.L;
+import org.wikipedia.views.FaceAndColorDetectImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,21 +56,27 @@ import retrofit2.Call;
  * Created by mnhn3 on 2018-03-04.
  */
 
-public class LandmarkFragment extends Fragment implements View.OnClickListener {
+public class LandmarkFragment extends Fragment{
+
+    private Trip.Destination destination;
+    private static final int ALPHA = 80;
+    private static final int RED = 255;
+    private static final int GREEN = 255;
+    private static final int BLUE = 255;
+
     public interface Callback {
         void onLoadPage(PageTitle title, HistoryEntry entry);
-        String onRequestOpenDestinationName();
-        void onSave(List<LandmarkCard> saveList);
+        Trip.Destination onRequestOpenDestination();
+        long onRequestOpenTripId();
+        void onSelectLandmark(LandmarkCard card);
+        void onRemoveLandmark(LandmarkCard card);
     }
+
     private Unbinder unbinder;
     private RecyclerView.LayoutManager linearLayoutManager;
     private List<LandmarkCard> cardsList = new ArrayList<>();
-    private String destinationName;
     private LandmarkAdapter adapter;
     private NearbyResult lastResult;
-
-    //Landmarks selected (checked) by the user
-    private List<LandmarkCard> selectedLandmarks;
 
     @BindView(R.id.landmark_view_recycler) RecyclerView recyclerView;
     @BindView(R.id.landmark_country_view_text) TextView destinationText;
@@ -86,7 +98,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         unbinder = ButterKnife.bind(this, view);
 
         //set, display and get results using desName
-        destinationName = getCallback().onRequestOpenDestinationName();
+        destination = onRequestOpenDestination();
+        String destinationName = destination.getDestinationName();
         destinationText.setText(destinationName);
 
         if (recyclerView != null) {
@@ -99,7 +112,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
 
         recyclerView.setAdapter(adapter);
         retrieveArticles(destinationName);
-        selectedLandmarks = new ArrayList<LandmarkCard>();
         return view;
     }
 
@@ -119,15 +131,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         adapter.setLandmarkCardList(landmarks);
     }
 
-
-    @Override
-    public void onClick(View v) {
-        String message = "Your trip has been saved.";
-        FeedbackUtil.showMessage(getActivity(), message);
-        getCallback().onSave(selectedLandmarks);
-    }
-
-
     //This function uses a callback to load the article corresponding to the title
     private void onLoadPage(@NonNull PageTitle title, HistoryEntry entry) {
         Callback callback = getCallback();
@@ -136,20 +139,38 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String onRequestOpenDestinationName(){
+    private Trip.Destination onRequestOpenDestination() {
         Callback callback = getCallback();
         if (callback != null) {
-            callback.onRequestOpenDestinationName();
+            return callback.onRequestOpenDestination();
         }
-            return "";
+        return null;
     }
 
-    //Saves list of selectedLandmarks
-    private void onSave(List<LandmarkCard> saveList){
-        Callback callback = getCallback();
-        if (callback != null) {
-            callback.onSave(saveList);
+    private void loadSelectedCards() {
+        if (this.destination != null && getCallback() != null) {
+            long tripId = getCallback().onRequestOpenTripId();
+
+            List<UserLandmark> selected = TripDbHelper.instance().loadUserLandmarks(tripId);
+            for (LandmarkCard card : cardsList) {
+                if (listHasLandmark(selected, card)) {
+                    card.setChecked(true);
+                    Log.d("Setting checked", "card.getTitle()");
+                } else {
+                    card.setChecked(false);
+                }
+            }
+            adapter.notifyDataSetChanged();
         }
+    }
+
+    private static boolean listHasLandmark(List<UserLandmark> selected, LandmarkCard card) {
+        for (UserLandmark lm: selected) {
+            if (lm.getTitle().equals(card.getTitle())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Provide the adapter with new landmark data to display
@@ -183,8 +204,8 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
         try {
             List<Address> addresses= gc.getFromLocationName(location, 5);
             List<LatLng> ll = new ArrayList<LatLng>(addresses.size()); // A list to save the coordinates if they are available
-            for(Address a : addresses){
-                if(a.hasLatitude() && a.hasLongitude()){
+            for (Address a : addresses) {
+                if (a.hasLatitude() && a.hasLongitude()) {
                     lat = a.getLatitude();
                     longi = a.getLongitude();
                 }
@@ -205,6 +226,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                         lastResult = result;
                         //Send over the list of NearbyPages to the next function
                         extractLandmarkArticles(result);
+                        loadSelectedCards();
                     }
 
                     @Override public void failure(@NonNull Call<MwQueryResponse> call,
@@ -217,8 +239,6 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                     }
                 });
     }
-
-
 
     @Nullable
     private Callback getCallback() {
@@ -281,6 +301,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
             private TextView textViewTitle;
             private TextView textViewDesc;
             private CheckBox checkBox;
+            private FaceAndColorDetectImageView landmarkImage;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -289,6 +310,7 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                 textViewTitle = (TextView) itemView.findViewById(R.id.landmark_title_text_view);
                 textViewDesc = (TextView) itemView.findViewById(R.id.landmark_desc_text_view);
                 checkBox = (CheckBox) itemView.findViewById(R.id.landmark_check_box);
+                landmarkImage = (FaceAndColorDetectImageView) itemView.findViewById(R.id.landmark_background);
 
                 cv.setOnClickListener(this);
                 checkBox.setOnClickListener(this);
@@ -311,11 +333,15 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
                         //Adds the LandmarkCard object, comprised of card title and thumbUrl into list
                         if (card.getChecked()) {
                             card.setChecked(false);
-                            selectedLandmarks.remove(card);
+                            if (getCallback() != null) {
+                                getCallback().onRemoveLandmark(card);
+                            }
                         }
                         else  {
                             card.setChecked(true);
-                            selectedLandmarks.add(card);
+                            if (getCallback() != null) {
+                                getCallback().onSelectLandmark(card);
+                            }
                         }
                         break;
                 }
@@ -324,6 +350,16 @@ public class LandmarkFragment extends Fragment implements View.OnClickListener {
             public void bindItem(LandmarkCard landmarkCard) {
                 textViewTitle.setText(landmarkCard.getTitle());
                 textViewDesc.setText(landmarkCard.getDesc());
+                checkBox.setChecked(landmarkCard.getChecked());
+                int semiTransparentWhite = Color.argb(ALPHA, RED, GREEN, BLUE);
+                //Apply a filter to the image for readability
+                landmarkImage.setColorFilter(semiTransparentWhite, PorterDuff.Mode.SRC_ATOP);
+                if (landmarkCard.getThumbUrl() != null) {
+                    landmarkImage.setVisibility(View.VISIBLE);
+                    landmarkImage.loadImage(Uri.parse(landmarkCard.getThumbUrl()));
+                } else {
+                    landmarkImage.setVisibility(View.GONE);
+                }
             }
 
         }

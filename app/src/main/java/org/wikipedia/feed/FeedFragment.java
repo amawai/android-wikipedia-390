@@ -76,6 +76,7 @@ public class FeedFragment extends Fragment implements BackPressedHandler {
         void onFeedTabListRequested();
         void onFeedSearchRequested();
         void onFeedVoiceSearchRequested();
+        void onFeedImageSearchRequested();
         void onFeedSelectPage(HistoryEntry entry);
         void onFeedSelectPageFromExistingTab(HistoryEntry entry);
         void onFeedAddPageToList(HistoryEntry entry);
@@ -89,6 +90,7 @@ public class FeedFragment extends Fragment implements BackPressedHandler {
         void onLoginRequested();
         @NonNull View getOverflowMenuAnchor();
         void updateToolbarElevation(boolean elevate);
+
     }
 
     @NonNull public static FeedFragment newInstance() {
@@ -376,6 +378,13 @@ public class FeedFragment extends Fragment implements BackPressedHandler {
         public void onVoiceSearchRequested() {
             if (getCallback() != null) {
                 getCallback().onFeedVoiceSearchRequested();
+            }
+        }
+
+        @Override
+        public void onImageSearchRequested() {
+            if (getCallback() != null) {
+                getCallback().onFeedImageSearchRequested();
             }
         }
 

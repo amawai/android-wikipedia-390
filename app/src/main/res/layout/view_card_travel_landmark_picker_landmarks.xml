@@ -11,6 +11,14 @@
     app:cardCornerRadius="@dimen/activity_vertical_margin"
     app:cardElevation="@dimen/activity_vertical_margin">
 
+    <org.wikipedia.views.FaceAndColorDetectImageView
+        style="@style/SimpleDraweeViewPlaceholder"
+        android:id="@+id/landmark_background"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        app:actualImageScaleType="centerCrop" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:text="Title"
+            android:textColor="@android:color/black"
             android:textSize="30sp" />
 
         <TextView
@@ -29,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/landmark_title_text_view"
+            android:textColor="@android:color/black"
             android:text="Description" />
 
         <CheckBox
