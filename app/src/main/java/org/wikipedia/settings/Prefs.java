@@ -597,6 +597,14 @@ public final class Prefs {
         setBoolean(R.string.preference_key_private_browsing, enabled);
     }
 
+    public static boolean isImageSearchEnabled() {
+        return getBoolean(R.string.preference_key_imagesearch_article_search, true);
+    }
+
+    public static void setImageSearchEnabled(boolean enabled) {
+        setBoolean(R.string.preference_key_imagesearch_article_search, enabled);
+    }
+
     public static boolean preferOfflineContent() {
         return getBoolean(R.string.preference_key_prefer_offline_content, false);
     }
