@@ -80,6 +80,18 @@ public class ImageSearchTest {
             e.printStackTrace();
         }
 
+        UiObject denyPermission = mDevice.findObject(new UiSelector()
+                .text("DENY"));
+
+        try {
+            //Dismiss permission if it exists
+            if (denyPermission.exists()){
+                denyPermission.click();
+            }
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
         UiObject chooserDialog = mDevice.findObject(new UiSelector()
                 .text("Image Search: Select Source"));
 

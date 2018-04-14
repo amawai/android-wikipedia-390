@@ -270,9 +270,7 @@ public class MainFragment extends Fragment implements BackPressedHandler, FeedFr
                 }
                 break;
             case ACTIVITY_REQUEST_IMAGE_SEARCH:
-                if (PermissionUtil.isPermitted(grantResults)) {
-                    openImageIntent();
-                }
+                openImageIntent();
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
