@@ -139,6 +139,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             public void success(Trip trip) {
                 userTripsList.add(trip);
                 openTrip(trip.getId());
+                Toast.makeText(getActivity(), "Default trip (no destination, present date and no landmarks) added to list and can now be planned", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -198,7 +199,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     }
 
     @Override
-    public void onDestinationnHistorySelected(int id) {
+    public void onDestinationHistorySelected(int id) {
         openTrip.setDestinationName((String) userDestinationList.get(id).getDestination().getDestinationName());
         nextPage();
     }
@@ -226,7 +227,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     @Override
     public void onSelectLandmark(LandmarkCard card) {
         Log.d("Adding landmark", card.getTitle());
-        if(removedLandmarks.contains(card)) {
+        if (removedLandmarks.contains(card)) {
             removedLandmarks.remove(card);
         } else {
             addedLandmarks.add(card);
@@ -236,7 +237,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     @Override
     public void onRemoveLandmark(LandmarkCard card) {
         Log.d("Removing landmark", card.getTitle());
-        if(addedLandmarks.contains(card)) {
+        if (addedLandmarks.contains(card)) {
             addedLandmarks.remove(card);
         } else {
             removedLandmarks.add(card);
@@ -266,7 +267,7 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
             TripDbHelper.instance().deleteUserLandmarks(openTrip.getId(), removedLandmarks);
             return null;
         }
-        , new CallbackTask.DefaultCallback<Void>() {
+        ,new CallbackTask.DefaultCallback<Void>() {
             @Override
             public void success(Void o) {
                 super.success(o);
@@ -381,7 +382,6 @@ public class MainPlannerFragment extends Fragment implements BackPressedHandler,
     private void goToHomePage() {
         goToPage(0);
         bSave.setActivated(true);
-        //TODO: Prompt user to save unsaved changes
         openTrip = null;
     }
 

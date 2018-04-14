@@ -161,7 +161,7 @@ public class DestinationFragment extends Fragment {
 
         void onDeleteDestination(long list);
 
-        void onDestinationnHistorySelected(int id);
+        void onDestinationHistorySelected(int id);
     }
 
     // Adapter for the RecyclerView
@@ -228,7 +228,7 @@ public class DestinationFragment extends Fragment {
             index = position;
 
             if (getCallback() != null) {
-                getCallback().onDestinationnHistorySelected(index);
+                getCallback().onDestinationHistorySelected(index);
             }
         }
 
