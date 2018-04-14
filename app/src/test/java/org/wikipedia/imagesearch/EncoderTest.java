@@ -20,11 +20,11 @@ import static org.mockito.Mockito.when;
  */
 
 public class EncoderTest {
-    Encoder encoder;
-    Context mContext;
-    Uri mUri;
-    ContentResolver mContentResolver;
-    InputStream mInputStream;
+    private Encoder encoder;
+    private Context mContext;
+    private Uri mUri;
+    private ContentResolver mContentResolver;
+    private InputStream mInputStream;
 
     @Before
     public void setUp() throws IOException {
