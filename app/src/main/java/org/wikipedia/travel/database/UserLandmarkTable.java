@@ -2,13 +2,11 @@ package org.wikipedia.travel.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.wikipedia.database.DatabaseTable;
 import org.wikipedia.database.column.Column;
 import org.wikipedia.database.contract.UserLandmarkContract;
-import org.wikipedia.travel.landmarkpicker.LandmarkCard;
 
 import java.util.ArrayList;
 
@@ -16,7 +14,7 @@ import java.util.ArrayList;
  * Created by Artem on 2018-04-12.
  */
 
-public class UserLandmarkTable extends DatabaseTable <UserLandmark> {
+public class UserLandmarkTable extends DatabaseTable<UserLandmark> {
 
     private static final int DB_VER_INTRODUCED = 22;
 
@@ -55,7 +53,9 @@ public class UserLandmarkTable extends DatabaseTable <UserLandmark> {
 
     @Override
     protected String[] getUnfilteredPrimaryKeySelectionArgs(@NonNull UserLandmark row) {
-        return new String[] { String.valueOf(row.getId()) };
+        return new String[] {
+                String.valueOf(row.getId())
+        };
     }
 
     @Override
